@@ -1,0 +1,4 @@
+1. Provera modela
+2. Vezivanje sertifikata sa role base accessom ?
+3. Sertifikati kao putanja ili binarno u bazi?
+4. Cuvanje HASH (koji algoritam?) passworda, pina, cvca? 
