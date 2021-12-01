@@ -175,8 +175,22 @@ class BankNumbers:
         return cvc
 
 
-    def GeneratePIN()-> str:
-        pass
+    def GeneratePIN(
+        cardNumber: str, accountNumber: str
+    )-> str:
+        cn = int(cardNumber.replace(' ', '', -1)) 
+        an = int(accountNumber.replace('-', '', -1))
+        randLower = pow(10, 6)
+        randHigher = pow(10, 7) - 1
+        randHash = hash(random.randint(
+            randLower, randHigher
+        ))
+
+        pin = str(
+            (cn + an + randHash) % 10000
+        ).zfill(4)
+
+        return pin
 
     def GenerateTransactionID()-> int:
         # extract next number from db

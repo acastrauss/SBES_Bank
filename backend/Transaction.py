@@ -7,14 +7,56 @@
 # Original author: acast
 # 
 #######################################################
-import Account
-import ITransactionReport
 
-class Transaction:
-    report= ITransactionReport()
+from TransactionAccountInfo import *
+from TransactionReports import *
+from datetime import datetime
+from Shared.BankConfig import BankConfigParser
 
-    def GetFileReport():
-        pass
 
-    def GetTextReport():
-        pass
+class Transaction():
+    def __init__(
+        self,
+        accountFrom: TransactionAccountFromInfo,
+        accountTo: TransactionAccountToInfo,
+        amount: float,
+        id: int,
+        modelCode: int,
+        paymentCode: tuple[int, str],
+        paymentPurpose: str,
+        referenceNumber: str
+        ) -> None:
+        self.preciseTime = datetime.today()
+        config = BankConfigParser()
+        self.provision = config.ProvisionPercentage * amount
+        self.accountFrom = accountFrom
+        self.accountTo = accountTo
+        self.id = id
+        self.modelCode = modelCode
+        self.paymentCode = paymentCode
+        self.paymentPurpose = paymentPurpose
+        self.referenceNumber = referenceNumber
+        self.report: ITransactionReport = None
+
+    def GetFileReport(self)-> str:
+        """
+            Returns file path of report
+        """
+        return f"""
+            Id, {self.id}
+            
+        """
+
+    def GetTextReport(self):
+        """
+            Returns text report
+        """
+        if(self.report):
+            return self.report.WriteReportText(self)
+        else:
+            raise Exception(
+                "Report type not set"
+            )
+
+    def SetReport(self, report: ITransactionReport):
+        self.report = report
