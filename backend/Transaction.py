@@ -8,10 +8,11 @@
 # 
 #######################################################
 
+from TransactionClientInfo import *
 from TransactionAccountInfo import *
-from TransactionReports import *
 from datetime import datetime
 from Shared.BankConfig import BankConfigParser
+import os
 
 
 class Transaction():
@@ -31,32 +32,55 @@ class Transaction():
         self.provision = config.ProvisionPercentage * amount
         self.accountFrom = accountFrom
         self.accountTo = accountTo
+        self.amount = amount
         self.id = id
         self.modelCode = modelCode
         self.paymentCode = paymentCode
         self.paymentPurpose = paymentPurpose
         self.referenceNumber = referenceNumber
-        self.report: ITransactionReport = None
 
     def GetFileReport(self)-> str:
         """
             Returns file path of report
         """
-        return f"""
-            Id, {self.id}
-            
-        """
+        text = self.GetTextReport()
+        dateStr = self.preciseTime.strftime("%Y%m%d-%H%M%S")
 
-    def GetTextReport(self):
+        _path = os.path.join(
+            os.getcwd(), "Reports", f"""{self.id} on {dateStr}.csv"""
+        )
+
+        f = open(_path, "w")
+        f.write(text)
+        f.close()
+
+        return _path
+
+    def GetTextReport(self)-> str:
         """
             Returns text report
         """
-        if(self.report):
-            return self.report.WriteReportText(self)
-        else:
-            raise Exception(
-                "Report type not set"
-            )
+        return f"""
+Id, {self.id}
+# Account FROM information
+Account number, {self.accountFrom.accountNumber}
+Client name, {self.accountFrom.clientInfo.fullName}
+Client address, {self.accountFrom.clientInfo.billingAddress}
+Balance before, {self.accountFrom.balanceBefore}
+Balance after, {self.accountFrom.balanceAfter}
+Currency used, {Currency(self.accountFrom.currency).name}
 
-    def SetReport(self, report: ITransactionReport):
-        self.report = report
+# Account TO information
+Account number, {self.accountTo.accountNumber}
+Client name, {self.accountTo.clientInfo.fullName}
+Client address, {self.accountTo.clientInfo.billingAddress}
+
+# Transaction information
+Amount, {self.amount}
+Provision paid, {self.provision}
+Model code, {self.modelCode}
+Payment Code, {self.paymentCode[0]} - {self.paymentCode[1]}
+Payment Purpose, {self.paymentPurpose}
+Precise Time, {self.preciseTime.isoformat()}
+Reference number, {self.referenceNumber}
+        """

@@ -13,7 +13,7 @@ from datetime import (
     date
 )
 
-from Enums import (
+from Shared.Enums import (
     Gender, UserType
 )
 

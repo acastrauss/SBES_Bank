@@ -9,7 +9,12 @@
 #######################################################
 
 
-class TransactionClientInfo:
-    """Information about client for one transaction.
-    """
-    pass
+class TransactionClientInfo():
+    def __init__(
+        self, 
+        billingAddress: str,
+        fullName: str
+        ) -> None:
+        
+        self.billingAddress = billingAddress
+        self.fullName = fullName

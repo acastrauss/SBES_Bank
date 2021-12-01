@@ -1,0 +1,22 @@
+
+            Id, 1
+            # Account from info
+            Account number, 123123123123123123
+            Client name, pera peric
+            Client address, asdasdsad
+            Balance before, 123
+            Balance after, 123
+            Currency used, EUR
+            # Account to info
+            Account number, 678678678678
+            Client name, marko markovic
+            Client address, zxczxczcxxcz
+
+            Amount, 444
+            Provision paid, 13.32
+            Model code, 33
+            Payment Code, 1 - aaaaaa
+            Payment Purpose, tytrytry
+            Precise Time, 2021-12-01T11:38:03.592426
+            Reference number, 5676424523
+        
