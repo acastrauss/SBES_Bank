@@ -33,7 +33,7 @@ def insertCert(cert,user):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(postgres_insert, (cert.cerPath,cert.pfxPath,cert.pvkPath,user,cert.authorityName,cert.certificateName,))
+        cur.execute(postgres_insert, (cert.cerPath,cert.pfxPath,cert.pvkPath,user.id,cert.authorityName,cert.certificateName,))
         # commit the changes to the database
         conn.commit()
         # close communication with the database
