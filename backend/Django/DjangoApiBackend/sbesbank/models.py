@@ -9,7 +9,6 @@ from datetime import (
     datetime
 )
 
-# Create your models here.
 
 class IUser(models.Model):
     fullName = models.CharField(max_length = 50, unique=False)
@@ -23,8 +22,10 @@ class IUser(models.Model):
     userTypes = {('admin'),('client')}
     userType = models.CharField(choices = userTypes)
 
+
 class Client(models.Model):
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
+
 
 class Certificate(models.Model):
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
@@ -33,6 +34,7 @@ class Certificate(models.Model):
     pxfPath = models.CharField(max_length = 200, unique = True)
     pvkPath = models.CharField(max_length = 200, unique = True)
     certificateName = models.CharField(max_length = 100, unique = True)
+
 
 class Currency(Enum):
     USD = "USA Dollar"
@@ -45,8 +47,6 @@ class Currency(Enum):
     AUD = "Australian dollar"
     RSD = "Serbian dinar"
 
-# Create your models here.
-
 
 class PaymentCode(models.Model):
     """
@@ -58,15 +58,11 @@ class PaymentCode(models.Model):
     """
     
     code = models.PositiveSmallIntegerField(
-        blank=False,
-        null=False,
         max_length=3,
         primary_key=True
     )
 
     description = models.CharField(
-        blank=False,
-        null=False,
         max_length=100
     )
 
@@ -84,15 +80,10 @@ class ExchangeRate(models.Model):
         choices=[
             (tag, tag.value) for tag in Currency
         ],
-        blank=False,
-        null=False,
         primary_key=True
     )
 
-    rateInDinar = models.FloatField(
-        blank=False,
-        null=False
-    )
+    rateInDinar = models.FloatField()
 
 
 class TrAcTransferInfo(models.Model):
@@ -103,20 +94,14 @@ class TrAcTransferInfo(models.Model):
     """
 
     accountNumber = models.CharField(
-        blank=False,
-        null=False,
         max_length=20
     )
 
     billingAddress = models.CharField(
-        blank=False,
-        null=False,
         max_length=50
     )
 
     fullName = models.CharField(
-        blank=False,
-        null=False,
         max_length=50
     )
 
@@ -128,31 +113,19 @@ class TrMyAccountInfo(models.Model):
         If client is receiving money, this is TARGET account
     """
 
-    balanceBefore = models.FloatField(
-        blank=False,
-        null=False
-    )
+    balanceBefore = models.FloatField()
 
-    balanceAfter = models.FloatField(
-        blank=False,
-        null=False
-    )
+    balanceAfter = models.FloatField()
 
     accountNumber = models.CharField(
-        blank=False,
-        null=False,
         max_length=20
     )
 
     billingAddress = models.CharField(
-        blank=False,
-        null=False,
         max_length=50
     )
 
     fullName = models.CharField(
-        blank=False,
-        null=False,
         max_length=50
     )
 
