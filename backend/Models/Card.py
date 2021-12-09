@@ -8,12 +8,12 @@
 # 
 #######################################################
 
-from Enums import (
+from Shared.Enums import (
     CardType,
     CreditCardProcessor
 )
 
-from SharedMethods import (
+from Shared.BankNumbers import (
     BankNumbers
 )
 
@@ -25,8 +25,9 @@ class Card():
         cardProcessor: CreditCardProcessor
     ) -> None:
         self.cardHolder = cardHolder
-        self.cardNumber = BankNumbers.BankNumbers.GenerateCardNumber()
-        self.cardType = cardType
-        self.cvc = BankNumbers.BankNumbers.GenerateCVC()
-        self.pin = BankNumbers.BankNumbers.GeneratePIN()
         self.cardProcessor = cardProcessor
+        self.cardType = cardType
+        self.cardNumber = BankNumbers.BankNumbers.GenerateCardNumber(
+            self.cardProcessor
+        )
+        self.cvc = BankNumbers.BankNumbers.GenerateCVC()

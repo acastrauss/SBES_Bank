@@ -7,12 +7,23 @@
 # Original author: acast
 # 
 #######################################################
-import Card
-import CardCreateInfo
+from Card import (
+    Card
+)
+from CardCreateInfo import(
+    CardCreateInfo
+)
+
 
 class CardBuilder:
-    def Build():
-        pass
+    def __init__(
+        self,
+        cardInfo: CardCreateInfo) -> None:
+        self.cardInfo = cardInfo
 
-    def CardBuilder(cardInfo):
-        pass
+    def Build(self)-> Card:
+        return Card(
+            self.cardInfo.cardHolder,
+            self.cardInfo.cardType,
+            self.cardInfo.cardProcessor
+        )

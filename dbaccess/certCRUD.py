@@ -3,6 +3,10 @@ import psycopg2
 #from Certificate import Certificate
 from config import config
 
+from backend.Models.Account import (
+    Account
+)
+
 def connect():
     """ Connect to the PostgreSQL database server """
     conn = None

@@ -10,8 +10,11 @@
 
 from TransactionClientInfo import *
 from TransactionAccountInfo import *
-from datetime import datetime
+from datetime import date, datetime
 from Shared.BankConfig import BankConfigParser
+from Shared.Enums.TransactionType import (
+    TransactionType
+)
 import os
 
 
@@ -25,9 +28,11 @@ class Transaction():
         modelCode: int,
         paymentCode: tuple[int, str],
         paymentPurpose: str,
-        referenceNumber: str
+        referenceNumber: str,
+        transactionType: TransactionType,
+        preciseTime:datetime = datetime.today()
         ) -> None:
-        self.preciseTime = datetime.today()
+        self.preciseTime = preciseTime
         config = BankConfigParser()
         self.provision = config.ProvisionPercentage * amount
         self.accountFrom = accountFrom
@@ -38,8 +43,9 @@ class Transaction():
         self.paymentCode = paymentCode
         self.paymentPurpose = paymentPurpose
         self.referenceNumber = referenceNumber
+        self.transactionType = transactionType
 
-    def GetFileReport(self)-> str:
+    def GetCSVFileReport(self)-> str:
         """
             Returns file path of report
         """
@@ -47,7 +53,7 @@ class Transaction():
         dateStr = self.preciseTime.strftime("%Y%m%d-%H%M%S")
 
         _path = os.path.join(
-            os.getcwd(), "Reports", f"""{self.id} on {dateStr}.csv"""
+            os.getcwd(), "Reports", "Transactions", f"""{self.id} on {dateStr}.csv"""
         )
 
         f = open(_path, "w")
@@ -56,12 +62,13 @@ class Transaction():
 
         return _path
 
-    def GetTextReport(self)-> str:
+    def GetCSVReport(self)-> str:
         """
             Returns text report
         """
         return f"""
 Id, {self.id}
+Type, {TransactionType(self.transactionType).name}
 # Account FROM information
 Account number, {self.accountFrom.accountNumber}
 Client name, {self.accountFrom.clientInfo.fullName}

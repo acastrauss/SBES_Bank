@@ -9,7 +9,7 @@
 #######################################################
 import Certificate
 
-class CertificateGenerator:
+class CertificateGenerator:  
     def GenerateCertificate(
         certificateName: str,
         authorityName: str

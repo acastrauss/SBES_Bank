@@ -7,31 +7,74 @@
 # Original author: acast
 # 
 #######################################################
+from Account import Account
+from CardCreateInfo import CardCreateInfo
 import IUser
-import Certificate
+from Certificate import Certificate
 import AccountBuilder
-import CardBuilder
+from CardBuilder import CardBuilder
+from Shared.Enums.Currency import Currency
 import UserBuilder
+from Shared.Enums.Gender import (
+    Gender
+)
+from Shared.Enums.UserType import (
+    UserType
+)
+from datetime import date
+from Client import (
+    Client
+)
+from AccountBuilder import AccountBuilder
 
 class ClientBuilder(UserBuilder):
-    accountBuilder= AccountBuilder()
+    def __init__(
+        self,
+        billingAddress: str,
+        birthDate: date,
+        email: str,
+        fullName: str,
+        gender: Gender,
+        jmbg: int,
+        username: str,
+        password: str,
+        id: int = None, 
+        certificate: Certificate = None,
+        accountsInfo: list[Currency] = [],
+        cardsInfo: dict[Currency, list[CardCreateInfo]] = {}) -> None:
+        
+        UserBuilder.__init__(self,
+            UserType.CLIENT,
+            billingAddress, 
+            birthDate,
+            email,
+            fullName, 
+            gender,
+            jmbg,
+            username,
+            password,
+            id, 
+            certificate
+        )
+        self.accountsInfo = accountsInfo
+        self.cardsInfo = cardsInfo
 
-    cardBuilder= CardBuilder()
-
-    def Build():
+    def Build()-> Client:
         pass
 
-    def BuildAccounts():
-        pass
+    def BuildAccounts(self)-> list[Account]:
+        self.accounts = list[Account]
+        for ai in self.accountsInfo:
 
-    def BuildCards():
-        pass
+            accBuilder = AccountBuilder(ai)
+            acc = accBuilder.Build()
+            self.BuildCards(acc, self.cardsInfo[ai])
 
-    def BuildCertificate():
-        pass
 
-    def BuildUser():
-        pass
+    def BuildCards(self, account: Account, cardsInfo: list[CardCreateInfo]):
+        for ci in cardsInfo:
+            cardBuilder = CardBuilder(ci)
+            account.cards.append(cardBuilder.Build())
 
-    def ClientBuilder(billingAddress, birthDate, email, fullName, gender, jmbg, password, username, cardsInfo, accountInfo):
-        pass
+    def BuildCertificate(self):
+        

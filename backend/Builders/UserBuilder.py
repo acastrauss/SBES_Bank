@@ -7,18 +7,77 @@
 # Original author: acast
 # 
 #######################################################
-import IUser
-import Certificate
+from datetime import date
+from IUser import (
+    IUser
+)
+from Shared.Enums.Gender import (
+    Gender
+)
+from Shared.Enums.UserType import (
+    UserType
+)
+from Certificate import (
+    Certificate
+)
+from Shared.CertificateGenerator import (
+    CertificateGenerator
+)
 
-class UserBuilder:
-    def Build():
-        pass
 
-    def BuildCertificate():
-        pass
+class UserBuilder():
+    def __init__(
+        self,
+        userType: UserType,
+        billingAddress: str,
+        birthDate: date,
+        email: str,
+        fullName: str,
+        gender: Gender,
+        jmbg: int,
+        username: str,
+        password: str,
+        id: int = None, 
+        certificate: Certificate = None) -> None:
+        """
+            Provide Id and certificate if user exists,
+            if it's a new user create Id and certificate
+        """
 
-    def BuildUser():
-        pass
+        self.userType = userType
+        self.billingAddress = billingAddress
+        self.birthDate = birthDate
+        self.email = email
+        self.fullName = fullName
+        self.gender = gender
+        self.jmbg = jmbg
+        self. username = username
+        self.password = password
+        self.id = id
+        
+        if not certificate:
+            self.certificate = self.BuildCertificate()
+        else:
+            self.certificate = certificate
 
-    def UserBuilder(billingAddress, birthDate, email, fullName, gender, jmbg, password, username):
-        pass
+    def Build(self)-> IUser:
+        return IUser(
+            self.billingAddress,
+            self.birthDate,
+            self.email,
+            self.fullName,
+            self.gender,
+            self.jmbg,
+            self.password,
+            self.username,
+            self.userType,
+            self.id,
+            self.certificate
+        )
+
+    def BuildCertificate(self)-> Certificate:
+        # configure certificate authority name
+        certName = f"{self.username} {self.fullName}"
+        return CertificateGenerator.GenerateCertificate(
+            certName, ""
+        )        

@@ -8,10 +8,13 @@
 # 
 #######################################################
 import Account
+from Shared.Enums.Currency import Currency
 
-class AccountBuilder:
-    def AccountBuilder(currency):
-        pass
+class AccountBuilder():
+    def __init__(
+        self,
+        currency: Currency) -> None:
+        self.currency = currency
 
-    def Build():
-        pass
+    def Build(self)-> Account.Account:
+        return Account.Account(self.currency)
