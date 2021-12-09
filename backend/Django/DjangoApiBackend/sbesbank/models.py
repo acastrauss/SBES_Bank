@@ -1,10 +1,18 @@
 from django.db import models
 from django.db.models.fields import DateField
+from django.db.models.deletion import PROTECT
+from django.db.models.fields import FloatField
+
+from enum import Enum
+from datetime import (
+    date,
+    datetime
+)
 
 # Create your models here.
 
 class IUser(models.Model):
-    fullName = models.CharField(max_length = 50, unique = False)
+    fullName = models.CharField(max_length = 50, unique=False)
     password = models.CharField(max_length = 100)
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
@@ -25,14 +33,6 @@ class Certificate(models.Model):
     pxfPath = models.CharField(max_length = 200, unique = True)
     pvkPath = models.CharField(max_length = 200, unique = True)
     certificateName = models.CharField(max_length = 100, unique = True)
-from django.db.models.deletion import PROTECT
-from django.db.models.fields import FloatField
-
-from enum import Enum
-from datetime import (
-    date,
-    datetime
-)
 
 class Currency(Enum):
     USD = "USA Dollar"
@@ -79,7 +79,7 @@ class ExchangeRate(models.Model):
             https://nbs.rs/sr/drugi-nivo-navigacije/servisi/sistem-veb-servisa-NBS/
         )
     """
-    
+  
     currency = models.CharField(
         choices=[
             (tag, tag.value) for tag in Currency
@@ -226,9 +226,7 @@ class Card(models.Model):
 
 
 class Transaction(models.Model):
-    amount = models.FloatField(
-        
-    )
+    amount = models.FloatField()
 
     modelCode = models.IntegerField(
         blank=True,
@@ -288,4 +286,3 @@ class Transaction(models.Model):
         TrAcTransferInfo,
         on_delete=models.PROTECT,
     )
-
