@@ -116,7 +116,7 @@ def getUserByJMBG(jmbg):
 def getUserByEmail(mail):
     postgres_email=""" SELECT * FROM userr WHERE email = %s"""
     conn = None
-    jmbgg = None
+    email = None
     try:
         # read database configuration
         params = config()
@@ -151,7 +151,33 @@ def checkAvailability(username, email, jmbg):
         returnval=True
     return returnval
 
+def login(username, password):
+    postgres_login=""" SELECT * FROM userr WHERE username = %s and password = %s"""
+    conn = None
+    login = None
+    try:
+        # read database configuration
+        params = config()
+        # connect to the PostgreSQL database
+        conn = psycopg2.connect(**params)
+        # create a new cursor
+        cur = conn.cursor()
+        # execute the INSERT statement
+        
+        cur.execute(postgres_login,(username,password))
+        
+        login = cur.fetchall()
+        # commit the changes to the database
+        conn.commit()
+        # close communication with the database
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
     
+    if len(login)!=0:
+        return True
+    else: 
+        return False
 if __name__ == '__main__':
     connect()
   #  niz = getAllUsers()
@@ -162,6 +188,6 @@ if __name__ == '__main__':
     #print(korisnik)
     ##print(len(getUserByJMBG('12345674432111')))
     #print(getUserByEmail('proba@sssr.ru'))
-
-    print(checkAvailability('skorisnikk','sproba@sssr.ru','s123456744321'))
+    print(login('kossrisnikk','asdfghjk'))
+    #print(checkAvailability('skorisnikk','sproba@sssr.ru','s123456744321'))
     

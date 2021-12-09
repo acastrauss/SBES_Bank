@@ -3,26 +3,6 @@ import psycopg2
 #from Certificate import Certificate
 from config import config
 
-from backend.Models.Account import (
-    Account
-)
-
-def connect():
-    """ Connect to the PostgreSQL database server """
-    conn = None
-    try:
-        # read connection parameters
-        params = config()
-
-        # connect to the PostgreSQL server
-        print('Connecting to the PostgreSQL database...')
-        conn = psycopg2.connect(**params)
-        # create a cursor
-        cur = conn.cursor()
-
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-
 
 def insertCert(cert,user):
     postgres_insert=""" INSERT INTO public.certificate(
@@ -37,7 +17,7 @@ def insertCert(cert,user):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(postgres_insert, (cert.cerPath,cert.pfxPath,cert.pvkPath,user,cert.authorityName,cert.certificateName,))
+        cur.execute(postgres_insert, (cert.cerPath,cert.pfxPath,cert.pvkPath,user.id,cert.authorityName,cert.certificateName,))
         # commit the changes to the database
         conn.commit()
         # close communication with the database
