@@ -4,7 +4,7 @@ from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import FloatField
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
-from enum import Enum
+from enum import Enum, unique
 from datetime import (
     date,
     datetime
@@ -95,9 +95,10 @@ class ExchangeRate(models.Model):
             https://nbs.rs/sr/drugi-nivo-navigacije/servisi/sistem-veb-servisa-NBS/
         )
     """
-  
+    id = models.IntegerField(primary_key = True)
     currency = EnumChoiceField(
-        enum_class=Currency
+        enum_class=Currency,
+        unique = True
     )
     
     rateInDinar = models.FloatField()
