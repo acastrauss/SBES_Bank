@@ -12,6 +12,10 @@ from datetime import (
 
 
 class IUser(models.Model):
+    id = models.IntegerField(
+        primary_key=True
+    )
+    
     fullName = models.CharField(max_length = 50, unique=False)
     password = models.CharField(max_length = 64)
     """
@@ -211,6 +215,16 @@ class Card(models.Model):
         choices=CARD_PROCESSOR
     )
 
+    CARD_TYPE = [
+        ('DINA', 'DINA'),
+        ('CREDIT', 'CREDIT')
+    ]
+
+    cardType = models.CharField(
+        max_length=20,
+        choices=CARD_TYPE
+    )
+
     validUntil = models.DateField()
 
     accountFK = models.ForeignKey(
@@ -219,6 +233,7 @@ class Card(models.Model):
     )
     class Meta:
         db_table = "card"
+
 
 
 class Transaction(models.Model):
