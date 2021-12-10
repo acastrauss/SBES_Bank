@@ -63,7 +63,7 @@ class TrMyAccountInfoSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'balanceBefore',
-            'balaceAfter',
+            'balanceAfter',
             'accountNumber',
             'billingAddress',
             'fullName'
@@ -149,22 +149,24 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    trAcTransferInfo = TrAcTransferInfoSerializer()
-    trMyAccountInfo = TrMyAccountInfoSerializer()
-    paymentCode = PaymentCodeSerializer()
+    transferAccInfoFK = TrAcTransferInfoSerializer()
+    myAccInfoFK = TrMyAccountInfoSerializer()
+    paymentCodeFK = PaymentCodeSerializer()
     class Meta:
         model = Transaction
         fields = [
             'id',
             'amount',
             'modelCode',
+            'paymentCodeFK',
             'paymentPurpose',
             'preciseTime',
             'provision',
             'referenceNumber',
             'transactionType',
             'currency',
-
+            'myAccInfoFK',
+            'transferAccInfoFK'
         ]
 
     amount = serializers.FloatField()
@@ -201,20 +203,26 @@ class TransactionSerializer(serializers.ModelSerializer):
     )
 
 
+
+class ClientSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Client
+
+        fields = [
+            'userId'
+        ]
+
+        depth = 1
+
 class AccountSerializer(serializers.ModelSerializer):
     currency = EnumChoiceField(
         enum_class=Currency
     )
     
-    querysetCards = Card.objects.all()
-    accounts = CardSerializer(
-        querysetCards, many=True
-    )
+    clientId = ClientSerializer()
 
-    querysetTransactions = Transaction.objects.all()
-    transactions = TransactionSerializer(
-        querysetTransactions, many=True
-    )
+    
 
     class Meta:
         model = Account
@@ -223,7 +231,8 @@ class AccountSerializer(serializers.ModelSerializer):
             'accountNumber',
             'blocked',
             'currency',
-            'dateCreated'
+            'dateCreated',
+            'clientId'
         ]
 
 
@@ -263,19 +272,4 @@ class IUserSerializer(serializers.ModelSerializer):
         """
         return models.objects.create(**validated_data)
     
-
-class ClientSerializer(serializers.ModelSerializer):
-    queryset = Account.objects.all()
-    accounts = AccountSerializer(
-        queryset, many=True
-    )
-
-    class Meta:
-        model = Client
-
-        fields = [
-            'user'
-        ]
-
-        depth = 1
 
