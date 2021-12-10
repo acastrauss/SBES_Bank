@@ -1,4 +1,5 @@
-from rest_framework import serializers 
+from django.forms.fields import TypedChoiceField
+from rest_framework import serializers
 from sbesbank.models import *
 
 class PaymentCodeSerializer(serializers.ModelSerializer):
@@ -50,7 +51,7 @@ class TrAcTransferInfoSerializer(serializers.ModelSerializer):
     )
 
 
-class TrMyAccountInfoSerializer(serializers.serializerserializer):
+class TrMyAccountInfoSerializer(serializers.ModelSerializer):
     """
         This is the account from current client, that is:\n
         If client is sending money, this is SOURCE account\n
@@ -99,6 +100,7 @@ class CardSerializer(serializers.ModelSerializer):
             'cvc',
             'pin',
             'cardProcessor',
+            'cardType',
             'validUntil'
         ]
 
@@ -129,10 +131,18 @@ class CardSerializer(serializers.ModelSerializer):
         ('MASTER_CARD','MASTER_CARD'),
         ('AMERICAN_EXPRESS','AMERICAN_EXPRESS')
     ]
-
-    cardProcessor = serializers.CharField(
-        max_length = 30,
+    
+    cardProcessor = TypedChoiceField(
         choices=CARD_PROCESSOR
+    )
+
+    CARD_TYPE = [
+        ('DINA', 'DINA'),
+        ('CREDIT', 'CREDIT')
+    ]
+
+    cardType = TypedChoiceField(
+        choices=CARD_TYPE
     )
 
     validUntil = serializers.DateField()
@@ -160,32 +170,21 @@ class TransactionSerializer(serializers.ModelSerializer):
     amount = serializers.FloatField()
 
     modelCode = serializers.IntegerField(
-        blank=True,
-        null=True,
-        default=None,
-        max_length=2
+        default=None
     )
 
     paymentPurpose = serializers.CharField(
-        blank=True,
-        null=True,
         default=None,
-        max_length=70
     )
 
     preciseTime = serializers.DateTimeField(
         default=datetime.today()
     )
 
-    provision = serializers.FloatField(
-        null=True     
-    )
+    provision = serializers.FloatField()
 
     referenceNumber = serializers.CharField(
-        blank=True,
-        null=True,
         max_length=50,
-        default=None
     )
 
     TRANSACTION_TYPE = (
@@ -193,16 +192,12 @@ class TransactionSerializer(serializers.ModelSerializer):
         ('OUTFLOW','INFLOW')
     )
 
-    transactionType = serializers.CharField(
-        max_length = 30,
+    transactionType = TypedChoiceField(
         choices=TRANSACTION_TYPE
     )
 
-    currency = serializers.CharField(
-        max_length = 20,
-        choices=[
-            (tag, tag.value) for tag in Currency
-        ]
+    currency = EnumChoiceField(
+        enum_class=Currency
     )
 
 
@@ -211,12 +206,12 @@ class AccountSerializer(serializers.ModelSerializer):
         enum_class=Currency
     )
     
-    querysetCards = Card().objects.all()
+    querysetCards = Card.objects.all()
     accounts = CardSerializer(
         querysetCards, many=True
     )
 
-    querysetTransactions = Transaction().objects.all()
+    querysetTransactions = Transaction.objects.all()
     transactions = TransactionSerializer(
         querysetTransactions, many=True
     )
@@ -270,7 +265,7 @@ class IUserSerializer(serializers.ModelSerializer):
     
 
 class ClientSerializer(serializers.ModelSerializer):
-    queryset = Account().objects.all()
+    queryset = Account.objects.all()
     accounts = AccountSerializer(
         queryset, many=True
     )
