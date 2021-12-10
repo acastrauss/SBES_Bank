@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'sbesbank.apps.SbesbankConfig'
+    
     # CORS
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -52,14 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # CORS
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    
 ]
-
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
-)
 
 ROOT_URLCONF = 'DjangoApiBackend.urls'
 
@@ -90,8 +84,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sbesbank',
         'USER': 'postgres',
-        'PASSWORD': 'KINGrobert543',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.fields import DateField
-from django.db.models.deletion import PROTECT
+from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import FloatField
 
 from enum import Enum
@@ -15,17 +15,20 @@ class IUser(models.Model):
     password = models.CharField(max_length = 100)
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
-    genders = {('female'), ('male')}
-    gender = models.CharField(choices = genders)
+    genders = (('female','female'), ('male','male'))
+    gender = models.CharField(choices = genders, max_length = 20)
     jmbg = models.BigIntegerField(unique = True)
     birthDate  = models.DateField()
-    userTypes = {('admin'),('client')}
-    userType = models.CharField(choices = userTypes)
+    userTypes = (('admin','admin'),('client','client'))
+    userType = models.CharField(choices = userTypes, max_length = 40)
 
+    class Meta:
+        db_table = "iuser"
 
 class Client(models.Model):
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
-
+    class Meta:
+        db_table = "client"
 
 class Certificate(models.Model):
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
@@ -34,7 +37,8 @@ class Certificate(models.Model):
     pxfPath = models.CharField(max_length = 200, unique = True)
     pvkPath = models.CharField(max_length = 200, unique = True)
     certificateName = models.CharField(max_length = 100, unique = True)
-
+    class Meta:
+        db_table = "certificate"
 
 class Currency(Enum):
     USD = "USA Dollar"
@@ -46,6 +50,7 @@ class Currency(Enum):
     CAD = "Canadian dollar"
     AUD = "Australian dollar"
     RSD = "Serbian dinar"
+
 
 
 class PaymentCode(models.Model):
@@ -65,6 +70,8 @@ class PaymentCode(models.Model):
     description = models.CharField(
         max_length=100
     )
+    class Meta:
+        db_table = "paymentcode"
 
 
 class ExchangeRate(models.Model):
@@ -77,6 +84,7 @@ class ExchangeRate(models.Model):
     """
   
     currency = models.CharField(
+        max_length=20,
         choices=[
             (tag, tag.value) for tag in Currency
         ],
@@ -84,6 +92,8 @@ class ExchangeRate(models.Model):
     )
 
     rateInDinar = models.FloatField()
+    class Meta:
+        db_table = "exchangerate"
 
 
 class TrAcTransferInfo(models.Model):
@@ -104,6 +114,8 @@ class TrAcTransferInfo(models.Model):
     fullName = models.CharField(
         max_length=50
     )
+    class Meta:
+        db_table = "tractransferinfo"
 
 
 class TrMyAccountInfo(models.Model):
@@ -128,9 +140,12 @@ class TrMyAccountInfo(models.Model):
     fullName = models.CharField(
         max_length=50
     )
+    class Meta:
+        db_table = "trmyaccountinfo"
 
 
 class Account(models.Model):
+    clientId = models.ForeignKey(Client, on_delete = PROTECT, unique = True)
     accountBalance = models.FloatField()
 
     accountNumber = models.CharField(
@@ -142,6 +157,7 @@ class Account(models.Model):
     )
 
     currency = models.CharField(
+        max_length = 30,
         choices=[
             (tag, tag.value) for tag in Currency
         ]
@@ -150,6 +166,8 @@ class Account(models.Model):
     dateCreated = models.DateTimeField(
         default=datetime.today()
     )
+    class Meta:
+        db_table = "account"
 
 
 class Card(models.Model):
@@ -180,13 +198,14 @@ class Card(models.Model):
         max_length=64
     )
 
-    CARD_PROCESSOR = (
-        ('VISA'),
-        ('MASTER_CARD'),
-        ('AMERICAN_EXPRESS')
-    )
+    CARD_PROCESSOR = [
+        ('VISA','VISA'),
+        ('MASTER_CARD','MASTER_CARD'),
+        ('AMERICAN_EXPRESS','AMERICAN_EXPRESS')
+    ]
 
     cardProcessor = models.CharField(
+        max_length = 30,
         choices=CARD_PROCESSOR
     )
 
@@ -196,6 +215,8 @@ class Card(models.Model):
         Account,
         on_delete=models.PROTECT
     )
+    class Meta:
+        db_table = "card"
 
 
 class Transaction(models.Model):
@@ -231,15 +252,17 @@ class Transaction(models.Model):
     )
 
     TRANSACTION_TYPE = (
-        ('INFLOW'),
-        ('OUTFLOW')
+        ('INFLOW','INFLOW'),
+        ('OUTFLOW','INFLOW')
     )
 
     transactionType = models.CharField(
+        max_length = 30,
         choices=TRANSACTION_TYPE
     )
 
     currency = models.CharField(
+        max_length = 20,
         choices=[
             (tag, tag.value) for tag in Currency
         ]
@@ -259,3 +282,6 @@ class Transaction(models.Model):
         TrAcTransferInfo,
         on_delete=models.PROTECT,
     )
+    class Meta:
+        db_table = "transaction"
+
