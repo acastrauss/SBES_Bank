@@ -12,7 +12,10 @@ from datetime import (
 
 class IUser(models.Model):
     fullName = models.CharField(max_length = 50, unique=False)
-    password = models.CharField(max_length = 100)
+    """
+        Hash value has 64 length
+    """
+    password = models.CharField(max_length = 64)
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
     genders = (('female','female'), ('male','male'))
@@ -31,6 +34,9 @@ class Client(models.Model):
         db_table = "client"
 
 class Certificate(models.Model):
+    """
+        User certificates to cipher paths!
+    """
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
     authorityName = models.CharField(max_length = 50)
     cerPath = models.CharField(max_length = 200, unique = True)

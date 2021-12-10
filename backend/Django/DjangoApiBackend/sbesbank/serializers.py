@@ -1,10 +1,19 @@
 from rest_framework import serializers 
-from sbesbank.models import models
+from sbesbank.models import *
 
-class ModelsSerializer(serializers.ModelSerializer):
+
+
+class IUserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only = True)
-    fullName = serializers.CharField(max_length = 50, unique=False)
-    password = serializers.CharField(max_length = 100)
+    fullName = serializers.CharField(
+        max_length = 50
+    )
+    """
+        Hash value has 64 length
+    """
+    password = serializers.CharField(
+        max_length = 64
+    )
     username = serializers.CharField(max_length = 40, unique = True)
     billingAddress = serializers.CharField(max_length = 50 )
     genders = (('female','female'), ('male','male'))
