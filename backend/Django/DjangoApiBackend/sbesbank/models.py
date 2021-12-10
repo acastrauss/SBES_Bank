@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.fields import DateField
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import FloatField
+from enumchoicefield import ChoiceEnum, EnumChoiceField
 
 from enum import Enum
 from datetime import (
@@ -12,10 +13,11 @@ from datetime import (
 
 class IUser(models.Model):
     fullName = models.CharField(max_length = 50, unique=False)
+    password = models.CharField(max_length = 64)
     """
         Hash value has 64 length
     """
-    password = models.CharField(max_length = 64)
+    
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
     genders = (('female','female'), ('male','male'))
@@ -40,13 +42,14 @@ class Certificate(models.Model):
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
     authorityName = models.CharField(max_length = 50)
     cerPath = models.CharField(max_length = 200, unique = True)
-    pxfPath = models.CharField(max_length = 200, unique = True)
+    pfxPath = models.CharField(max_length = 200, unique = True)
     pvkPath = models.CharField(max_length = 200, unique = True)
     certificateName = models.CharField(max_length = 100, unique = True)
     class Meta:
         db_table = "certificate"
 
-class Currency(Enum):
+
+class Currency(ChoiceEnum):
     USD = "USA Dollar"
     EUR = "Euro"
     CHF = "Swiss franc"
@@ -89,14 +92,10 @@ class ExchangeRate(models.Model):
         )
     """
   
-    currency = models.CharField(
-        max_length=20,
-        choices=[
-            (tag, tag.value) for tag in Currency
-        ],
-        primary_key=True
+    currency = EnumChoiceField(
+        enum_class=Currency
     )
-
+    
     rateInDinar = models.FloatField()
     class Meta:
         db_table = "exchangerate"
@@ -162,11 +161,8 @@ class Account(models.Model):
         default=False
     )
 
-    currency = models.CharField(
-        max_length = 30,
-        choices=[
-            (tag, tag.value) for tag in Currency
-        ]
+    currency = EnumChoiceField(
+        enum_class=Currency
     )
 
     dateCreated = models.DateTimeField(
@@ -190,20 +186,20 @@ class Card(models.Model):
         max_length=20
     )
 
-    """
-        Hash value has 64 length
-    """
     cvc = models.CharField(
         max_length=64
     )
-
     """
         Hash value has 64 length
     """
+    
     pin = models.CharField(
         max_length=64
     )
-
+    """
+        Hash value has 64 length
+    """
+    
     CARD_PROCESSOR = [
         ('VISA','VISA'),
         ('MASTER_CARD','MASTER_CARD'),
@@ -267,13 +263,10 @@ class Transaction(models.Model):
         choices=TRANSACTION_TYPE
     )
 
-    currency = models.CharField(
-        max_length = 20,
-        choices=[
-            (tag, tag.value) for tag in Currency
-        ]
+    currency = EnumChoiceField(
+        enum_class=Currency
     )
-
+    
     paymentCodeFK = models.ForeignKey(
         PaymentCode,
         on_delete=models.PROTECT,
