@@ -5,22 +5,53 @@ from sbesbank.models import *
 from sbesbank.serializers import *
 # Create your views here.
 
-from modules.paymentCodes.parse import Parse
+from modules.exchangeRates import (
+    parse
+)
+import copy
+
+from sbesbank.models import Currency
 
 @api_view(['GET'])
 def TrAcTransfer(request, id):
     obj = TrAcTransferInfo.objects.get(id=id)
     serializer = TrAcTransferInfoSerializer(obj) 
 
-    # datadict = Parse()
-    # # print(datadict)
+    parser = parse.MyParser()
+    parser.Parse()
+    
+    dataDict = copy.deepcopy(parser.dataDict)
+    # del dataDict['DKK']
+    # del dataDict['JPY']
+    # del dataDict['NOK']
+    # del dataDict['SEK']
 
-    # for code in datadict:
-    #     # print(f"{int(code)}:{datadict[code]}")
-    #     PaymentCode.objects.create(
-    #         code=int(code),
-    #         description=datadict[code]
-    #     )
+    ids = ExchangeRate.objects.values('id')
+
+    maxId = 1
+
+    if len(ids) > 0:
+        maxId = ids.order_by('-id').first()
+
+    print(maxId)
+
+    for key in dataDict:
+        
+        try:
+            c = str(copy.deepcopy(key))
+            rate = float(copy.deepcopy(dataDict[key]))
+            curr = Currency[c]
+
+            ExchangeRate.objects.create(
+                id=maxId,
+                currency=Currency[c],
+                rateInDinar=rate
+            )
+
+            maxId += 1
+
+        except KeyError:
+            continue
 
     return JsonResponse(serializer.data)
 

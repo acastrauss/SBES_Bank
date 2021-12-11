@@ -54,15 +54,15 @@ class Certificate(models.Model):
 
 
 class Currency(ChoiceEnum):
-    USD = "USA Dollar"
-    EUR = "Euro"
-    CHF = "Swiss franc"
-    GBP = "British pound"
-    RUB = "Russian rouble"
-    CNY = "Chinese Yuan Renminbi"
-    CAD = "Canadian dollar"
-    AUD = "Australian dollar"
-    RSD = "Serbian dinar"
+    USD = "USD"
+    EUR = "EUR"
+    CHF = "CHF"
+    GBP = "GBP"
+    RUB = "RUB"
+    CNY = "CNY"
+    CAD = "CAD"
+    AUD = "AUD"
+    RSD = "RSD"
 
 
 
