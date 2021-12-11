@@ -1,0 +1,663 @@
+<!doctype html>
+
+<html>
+	<head>
+		<title>Menjačnica online</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
+	<meta name="description" content="Online menjačnica pruža vam mogučnost da po srednjem kursu narodne banke srbije konvertujete novac u neku od valuta ponuđenih u padajućoj listi." />
+	<link rel="shortuct icon" href="/favicon.ico">
+    
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css,style.css,style_table_sorter.css" />
+<script type="text/javascript" src="/js/jquery-3.4.1.min.js,jquery-ui.min.js,jquery-cookie.js,jcarousellite_1.0.1c4.js,konvertor.js,jquery.tablesorter.min.js"></script>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-6393713-1']);
+	  _gaq.push(['_trackPageview']);
+	  
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+    
+    </head><!--
+		<div class="left">
+			<div id="main_menu">
+						</div>
+			            
+		</div>
+		<div class="middle">
+				</div>
+		<div class="right">
+				</div>
+		<br style="clear:both" />
+-->
+
+
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Servisinfo ad 3 -->
+<ins class="adsbygoogle"
+	 style="display:block"
+	 data-ad-client="ca-pub-5045266709223385"
+	 data-ad-slot="8418426823"
+	 data-ad-format="auto"
+	 data-full-width-responsive="true"></ins>
+<script>
+	 (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+                            
+							<!-- Header 
+								<header id="header">
+									<a href="/" class="logo">Servisinfo</a>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
+									</ul>
+								</header>
+-->
+							<!-- Content -->
+								<section>
+									<h2>Menjačnica Online <font style="font-size:13px;">: konvertor</font></h2>
+<style>
+#menjacnica_online{
+	background-color:#FFFFFF;
+	border:1px solid #CCCCCC;
+	font-family:Arial,Helvetica,sans-serif;
+	margin-bottom:20px;
+	padding:2px;
+	max-width:500px;
+}
+</style>
+			<script type="text/javascript" language="javascript">
+var currencies = new Array;
+currencies['0'] = new Array(1, 1);
+currencies['978'] = new Array(117.5851, 1);
+			currencies['756'] = new Array(112.5971, 1);
+			currencies['840'] = new Array(104.0576, 1);
+			currencies['826'] = new Array(137.5425, 1);
+			currencies['36'] = new Array(74.3786, 1);
+			currencies['124'] = new Array(81.8382, 1);
+			currencies['208'] = new Array(15.8089, 1);
+			currencies['392'] = new Array(91.6771, 100);
+			currencies['578'] = new Array(11.5587, 1);
+			currencies['752'] = new Array(11.4797, 1);
+			currencies['643'] = new Array(1.4111, 1);
+			</script><div id="menjacnica_online">
+		<form id="konvertor_valuta" name="konvertor_valuta">
+			<table>
+				<tr>
+					<th align="center" colspan="2"><strong>Konvertor</strong></th>
+				</tr>
+				<tr>
+					<td align="center" colspan="2"></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">Iz valute
+<select name="fromcurrency" id="fromcurrency">
+<option value="0">RSD</option>					
+<option selected="selected" value="978">EUR</option>
+<option  value="756">CHF</option>
+<option  value="840">USD</option>
+<option  value="826">GBP</option>
+<option  value="36">AUD</option>
+<option  value="124">CAD</option>
+<option  value="208">DKK</option>
+<option  value="392">JPY</option>
+<option  value="578">NOK</option>
+<option  value="752">SEK</option>
+<option  value="643">RUB</option>
+</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					  	U valutu
+<select name="tocurrency" id="tocurrency">
+<option value="0" selected="selected">RSD</option>					
+<option value="978">EUR</option>
+<option value="756">CHF</option>
+<option value="840">USD</option>
+<option value="826">GBP</option>
+<option value="36">AUD</option>
+<option value="124">CAD</option>
+<option value="208">DKK</option>
+<option value="392">JPY</option>
+<option value="578">NOK</option>
+<option value="752">SEK</option>
+<option value="643">RUB</option>
+</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2">&nbsp;</td>
+				</tr>					
+				<tr>
+					<td align="center" colspan="2">
+					Iznos
+					<input name="amount" id="amount" type="text" maxlength="15">&nbsp;<span id="fromCurrencyAlfaChar" style="font-size:11px;">RSD</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2"></td>
+				</tr>					
+				<tr>
+					<td align="center" colspan="2">
+					  	Isplata: <span id="result" class="bolder">0.00</span>&nbsp;<span id="toCurrencyAlfaChar">RSD</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2"></td>
+				</tr>										
+				<tr>
+					<td align="center">
+					  	<button class="button" type="button" value="Razmeni" name="convert" id="convert" style="width: 90px;">Razmeni</button>
+					</td>
+					<td align="center">
+					  	<button class="button" type="button" value="Poništi" name="reset" id="reset" style="width: 90px;">Poništi</button>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" colspan="2"></td>
+				</tr>										
+				<tr bgcolor="#eeeeee">
+					<td colspan="2" align="center"><span class="svet">s e r v i s i n f o . c <img width="8" src="/images/svet_a.gif"/> m</span></td>					
+				</tr>
+			</table>
+		</form>
+	</div>
+<table>
+  <tr>
+    <th>Šifra</th>
+    <th>Valuta</th>
+    <th>Država</th>
+    <th>Srednji kurs</th>
+    <th>Datum formiranja<br /> kursa</th>
+  </tr>
+<tr  class="altrow">
+			<td align="center">978</td>
+			<td align="center">EUR</td>
+			<td class="country"><img src="/images/kursna_lista_v3/eur.gif" height="12" width="12" /> EU</td>
+			<td align="right">117.5851</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr >
+			<td align="center">756</td>
+			<td align="center">CHF</td>
+			<td class="country"><img src="/images/kursna_lista_v3/chf.gif" height="12" width="12" /> Švajcarska</td>
+			<td align="right">112.5971</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr  class="altrow">
+			<td align="center">840</td>
+			<td align="center">USD</td>
+			<td class="country"><img src="/images/kursna_lista_v3/usd.gif" height="12" width="12" /> SAD</td>
+			<td align="right">104.0576</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr >
+			<td align="center">826</td>
+			<td align="center">GBP</td>
+			<td class="country"><img src="/images/kursna_lista_v3/gbp.gif" height="12" width="12" /> V.Britanija</td>
+			<td align="right">137.5425</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr  class="altrow">
+			<td align="center">36</td>
+			<td align="center">AUD</td>
+			<td class="country"><img src="/images/kursna_lista_v3/aud.gif" height="12" width="12" /> Australija</td>
+			<td align="right">74.3786</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr >
+			<td align="center">124</td>
+			<td align="center">CAD</td>
+			<td class="country"><img src="/images/kursna_lista_v3/cad.gif" height="12" width="12" /> Kanada</td>
+			<td align="right">81.8382</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr  class="altrow">
+			<td align="center">208</td>
+			<td align="center">DKK</td>
+			<td class="country"><img src="/images/kursna_lista_v3/dkk.gif" height="12" width="12" /> Danska</td>
+			<td align="right">15.8089</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr >
+			<td align="center">392</td>
+			<td align="center">JPY</td>
+			<td class="country"><img src="/images/kursna_lista_v3/jpy.gif" height="12" width="12" /> Japan</td>
+			<td align="right">91.6771</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr  class="altrow">
+			<td align="center">578</td>
+			<td align="center">NOK</td>
+			<td class="country"><img src="/images/kursna_lista_v3/nok.gif" height="12" width="12" /> Norveška</td>
+			<td align="right">11.5587</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr >
+			<td align="center">752</td>
+			<td align="center">SEK</td>
+			<td class="country"><img src="/images/kursna_lista_v3/sek.gif" height="12" width="12" /> Švedska</td>
+			<td align="right">11.4797</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			<tr  class="altrow">
+			<td align="center">643</td>
+			<td align="center">RUB</td>
+			<td class="country"><img src="/images/kursna_lista_v3/rub.gif" height="12" width="12" /> Ruska Fed.</td>
+			<td align="right">1.4111</td>
+			<td align="center">10.12.2021</td>
+			</tr>
+			
+</table>
+<!--
+<span id="sound"></span>
+-->
+<p style="font-size: 11px; padding-top: 5px;">Prilikom konverzije valuta virtualna menjačnica vrši obračun po srednjem kursu Narodne Banke Srbije.</p>
+<br />
+	<select name="city" id="city">
+		<option value="Beograd">Menjačnice Beograd</option>
+		<option value="Pančevo">Menjačnice Pančevo</option>
+		<option value="Novi Sad">Menjačnice Novi Sad</option>
+		<option value="Niš">Menjačnice Niš</option>
+		<option value="Subotica">Menjačnice Subotica</option>
+		<option value="Sombor">Menjačnice Sombor</option>
+		<option value="Šabac">Menjačnice Šabac</option>
+		<option value="Kragujevac">Menjačnice Kragujevac</option>
+		<option value="Kraljevo">Menjačnice Kraljevo</option>
+		<option value="Leskovac">Menjačnice Leskovac</option>
+		<option value="Čačak">Menjačnice Čačak</option>
+		<option value="Užice">Menjačnice Užice</option>
+		<option value="Valjevo">Menjačnice Valjevo</option>
+		<option value="Zrenjanin">Menjačnice Zrenjanin</option>
+	</select>
+	<span id="loader"> <img src="/images/ajax-loader.gif" /> Učitavanje...</span>
+	<div id="dataContainer" style="height:250px; overflow:auto; background:url('/images/inputbackgr.gif') no-repeat scroll left top transparent; border:1px solid #777777;margin-bottom:5px;">
+		Ukupan broj pronađenih menjačnica: <span id='counter' class='bolder'>455</span><br /><table id="myTable" class="tablesorter">
+						<thead>
+						<tr>
+							<th>Naziv</th>
+							<th>Grad</th>
+							<th>Adresa</th>
+						</tr>
+						</thead>
+						<tbody><tr><td><span class='bolder'>2 S PLUS</span></td><td>Beograd</td><td>Palisadska br. 41</td></tr><tr><td><span class='bolder'>ACA</span></td><td>Beograd</td><td>Kraljice Marije br. 37</td></tr><tr><td><span class='bolder'>AG</span></td><td>Beograd</td><td>Takovska br. 13</td></tr><tr><td><span class='bolder'>AL</span></td><td>Beograd</td><td>Makenzijeva bb</td></tr><tr><td><span class='bolder'>ALEKSANDAR 2</span></td><td>Beograd</td><td>Crnotravska bb Lokal 23</td></tr><tr><td><span class='bolder'>ALEKSANDAR 3</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 365</td></tr><tr><td><span class='bolder'>ALEKSANDAR 4</span></td><td>Beograd</td><td>Kokanova br. 35</td></tr><tr><td><span class='bolder'>ALO - ALO</span></td><td>Beograd</td><td>Terazije br. 2</td></tr><tr><td><span class='bolder'>AMFORA 1</span></td><td>Beograd</td><td>Borska br. 68 v</td></tr><tr><td><span class='bolder'>AND - ART</span></td><td>Beograd</td><td>Sindeliceva br. 14</td></tr><tr><td><span class='bolder'>ANDREAS</span></td><td>Beograd</td><td>Vojvode Stepe br. 249</td></tr><tr><td><span class='bolder'>ARON</span></td><td>Beograd</td><td>Vojvode Stepe br. 244</td></tr><tr><td><span class='bolder'>AS PLUS</span></td><td>Beograd</td><td>Kirovljeva br. 3</td></tr><tr><td><span class='bolder'>ATATREF 2</span></td><td>Beograd</td><td>TriÅ¡e Kaclerovica br. 27 A</td></tr><tr><td><span class='bolder'>ATLANTIK 1</span></td><td>Beograd</td><td>Mekenzijeva br. 15</td></tr><tr><td><span class='bolder'>AUTOKOMANDA</span></td><td>Beograd</td><td>Vojvode Stepe br. 9</td></tr><tr><td><span class='bolder'>B & M Menjac</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 548</td></tr><tr><td><span class='bolder'>BAJIC 1</span></td><td>Beograd</td><td>Patrijarha Joanikija 2 a</td></tr><tr><td><span class='bolder'>BAJIC 3</span></td><td>Beograd</td><td>Vojvode Stepe br. 103</td></tr><tr><td><span class='bolder'>BAJIC 4</span></td><td>Beograd</td><td>Kirovljeva br. 3</td></tr><tr><td><span class='bolder'>BALTAZAR</span></td><td>Beograd</td><td>Primucura Å½arka br. 7 A</td></tr><tr><td><span class='bolder'>BANJICA 1</span></td><td>Beograd</td><td>Kokanova br. 30</td></tr><tr><td><span class='bolder'>BONIR</span></td><td>Beograd</td><td>Kralja Milana br. 8</td></tr><tr><td><span class='bolder'>BONUS MAX</span></td><td>Beograd</td><td>Nemanjina br. 36</td></tr><tr><td><span class='bolder'>BRACA ÄOKOVIC 2</span></td><td>Beograd</td><td>27. Marta br. 33 g</td></tr><tr><td><span class='bolder'>BRNO</span></td><td>Beograd</td><td>Vojvode Milenka br. 52 L9</td></tr><tr><td><span class='bolder'>CARAMIA</span></td><td>Beograd</td><td>Resavska br. 88</td></tr><tr><td><span class='bolder'>CARAMIA 1</span></td><td>Beograd</td><td>Resavska br. 76</td></tr><tr><td><span class='bolder'>CASH POINT</span></td><td>Beograd</td><td>Lomina br. 5</td></tr><tr><td><span class='bolder'>CASH ZA KEÅ </span></td><td>Beograd</td><td>Hasanaginice br. 4A</td></tr><tr><td><span class='bolder'>CATENA d.o.o.</span></td><td>Beograd</td><td>JuÅ¾ni bulevar 84, lokal 3</td></tr><tr><td><span class='bolder'>CHANGE 011</span></td><td>Beograd</td><td>Kraljice Marije br. 47</td></tr><tr><td><span class='bolder'>CHICAGO 5</span></td><td>Beograd</td><td>Mije Kovacevica br. 11 A</td></tr><tr><td><span class='bolder'>COIN 6</span></td><td>Beograd</td><td>Jurija Gagarina br. 81</td></tr><tr><td><span class='bolder'>COLLECTION 2</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 297 u</td></tr><tr><td><span class='bolder'>D & Ä</span></td><td>Beograd</td><td>sarajevska br. 22</td></tr><tr><td><span class='bolder'>DAN</span></td><td>Beograd</td><td>PoÅ¾eÅ¡ka br. 156</td></tr><tr><td><span class='bolder'>DARK</span></td><td>Beograd</td><td>Kralja Milutina br. 32</td></tr><tr><td><span class='bolder'>DeGo</span></td><td>Beograd</td><td>Kneza Mihaila br. 50</td></tr><tr><td><span class='bolder'>DELTA V</span></td><td>Beograd</td><td>KumodraÅ¡ka br. 174</td></tr><tr><td><span class='bolder'>DELTA VI</span></td><td>Beograd</td><td>Jelisavete Nacic br. 2</td></tr><tr><td><span class='bolder'>DI BESTE D. M. H.</span></td><td>Beograd</td><td>Severni bulevar br. 6</td></tr><tr><td><span class='bolder'>DIL 011 1</span></td><td>Beograd</td><td>Trgovacka br. 9 a</td></tr><tr><td><span class='bolder'>DOBRI</span></td><td>Beograd</td><td>Mirijevski venac br. 58</td></tr><tr><td><span class='bolder'>DON</span></td><td>Beograd</td><td>CamdÅ¾ijina br. 6</td></tr><tr><td><span class='bolder'>DON CHICAGO</span></td><td>Beograd</td><td>Balkanska br. 51</td></tr><tr><td><span class='bolder'>DUO EX 1</span></td><td>Beograd</td><td>Makenzijeva br. 81</td></tr><tr><td><span class='bolder'>DÅ½OKER SISTEM</span></td><td>Beograd</td><td>Internacionalnih brigada br. 22/9</td></tr><tr><td><span class='bolder'>EHCELLENT</span></td><td>Beograd</td><td>Ustanicka br. 67</td></tr><tr><td><span class='bolder'>ELDORADO 10</span></td><td>Beograd</td><td>MileÅ¡evska br. 69</td></tr><tr><td><span class='bolder'>ENES</span></td><td>Beograd</td><td>Vojvode Stepe br. 433</td></tr><tr><td><span class='bolder'>ENJOY</span></td><td>Beograd</td><td>Bulevar Vojvode MiÅ¡ica br. 33 C</td></tr><tr><td><span class='bolder'>EURO MANEX III</span></td><td>Beograd</td><td>Vojvode Stepe br. 10</td></tr><tr><td><span class='bolder'>EURODIL</span></td><td>Beograd</td><td>Pilota Mihaila Petrovica br. 5 - A</td></tr><tr><td><span class='bolder'>EXCLUSIVE CHANGE 16</span></td><td>Beograd</td><td>Auto put br. 18</td></tr><tr><td><span class='bolder'>EXCLUSIVE CHANGE 17</span></td><td>Beograd</td><td>Bacvanska br. 21</td></tr><tr><td><span class='bolder'>EXCLUSIVE CHANGE 4</span></td><td>Beograd</td><td>Bulevar umetnosti br. 4</td></tr><tr><td><span class='bolder'>EXCLUSIVE CHANGE 7</span></td><td>Beograd</td><td>ÄorÄa Stanojevica br. 35</td></tr><tr><td><span class='bolder'>FIA</span></td><td>Beograd</td><td>Pere Velimirovica br. 8 A</td></tr><tr><td><span class='bolder'>FLASH PORT</span></td><td>Beograd</td><td>Radoslava Grujica br. 24</td></tr><tr><td><span class='bolder'>FLUKS</span></td><td>Beograd</td><td>Stevana prvovencanog bb</td></tr><tr><td><span class='bolder'>FOREX EXCHANGE</span></td><td>Beograd</td><td>Slanacki put br. 95 B</td></tr><tr><td><span class='bolder'>FRONT</span></td><td>Beograd</td><td>Kosovska br. 6</td></tr><tr><td><span class='bolder'>GAZELA 2</span></td><td>Beograd</td><td>Ustanicka br. 180</td></tr><tr><td><span class='bolder'>GOKAC</span></td><td>Beograd</td><td>Kralja Milana br. 8</td></tr><tr><td><span class='bolder'>GOLD ROYAL 2</span></td><td>Beograd</td><td>Koste Glavinica br. 5 - A</td></tr><tr><td><span class='bolder'>GOLDEN MASTERS</span></td><td>Beograd</td><td>Lomina br. 5</td></tr><tr><td><span class='bolder'>GONZO 6</span></td><td>Beograd</td><td>Mije Kovacevica br. 6 A</td></tr><tr><td><span class='bolder'>HOTEL LIFEDESIGN</span></td><td>Beograd</td><td>Balkanska br. 18</td></tr><tr><td><span class='bolder'>HOTEL PRESTIGE</span></td><td>Beograd</td><td>Bulevar Vojvode MiÅ¡ica br. 24</td></tr><tr><td><span class='bolder'>HRAM 1</span></td><td>Beograd</td><td>Kataniceva br. 22</td></tr><tr><td><span class='bolder'>HUSKY M&M</span></td><td>Beograd</td><td>Kralja Petra br. 80</td></tr><tr><td><span class='bolder'>ID</span></td><td>Beograd</td><td>Ustanicka br. 127 A</td></tr><tr><td><span class='bolder'>IKI 2</span></td><td>Beograd</td><td>Dimitrija Tucovica br. 119 b</td></tr><tr><td><span class='bolder'>IKS 2</span></td><td>Beograd</td><td>Kraljice Natalije br. 54</td></tr><tr><td><span class='bolder'>INO FLOR</span></td><td>Beograd</td><td>DuÅ¡ana Vukasovica br. 61 - levo</td></tr><tr><td><span class='bolder'>JA COMPANY</span></td><td>Beograd</td><td>Terazije br. 25</td></tr><tr><td><span class='bolder'>JACK</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 164</td></tr><tr><td><span class='bolder'>JOVAN 2</span></td><td>Beograd</td><td>Partizanske avijacije br. 2 A</td></tr><tr><td><span class='bolder'>KAJMANI</span></td><td>Beograd</td><td>Å umatovacka br. 72</td></tr><tr><td><span class='bolder'>KEC PLUS</span></td><td>Beograd</td><td>BoÅ¾e Jankovica br. 1</td></tr><tr><td><span class='bolder'>KEFI 2</span></td><td>Beograd</td><td>Kneza ViÅ¡eslava br. 31v</td></tr><tr><td><span class='bolder'>KEÅ  AGENCIJA</span></td><td>Beograd</td><td>Deligradska br. 4</td></tr><tr><td><span class='bolder'>KIKI</span></td><td>Beograd</td><td>NjegoÅ¡eva br. 129 A</td></tr><tr><td><span class='bolder'>KRUNA 3</span></td><td>Beograd</td><td>ul. Cvijiceva br. 96</td></tr><tr><td><span class='bolder'>KUBA 002</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 561</td></tr><tr><td><span class='bolder'>LASTA</span></td><td>Beograd</td><td>Savski trg br. 1 A</td></tr><tr><td><span class='bolder'>LASTA 1</span></td><td>Beograd</td><td>Å½eleznicka bb</td></tr><tr><td><span class='bolder'>LAV</span></td><td>Beograd</td><td>Kataniceva br. 22</td></tr><tr><td><span class='bolder'>LAV AUTO</span></td><td>Beograd</td><td>Savska br. 33/1</td></tr><tr><td><span class='bolder'>LION</span></td><td>Beograd</td><td>Maksima Gorkog br. 64</td></tr><tr><td><span class='bolder'>LIRA</span></td><td>Beograd</td><td>Milorada DraÅ¡kovica br. 28</td></tr><tr><td><span class='bolder'>LIRA 1</span></td><td>Beograd</td><td>17. Oktobra br. 15 A</td></tr><tr><td><span class='bolder'>LUNA 1</span></td><td>Beograd</td><td>Vidikovacki venac br. 92A, lokal 46</td></tr><tr><td><span class='bolder'>M & M 2</span></td><td>Beograd</td><td>Brace Jugovca br. 3</td></tr><tr><td><span class='bolder'>M&N</span></td><td>Beograd</td><td>Vladetina br. 5 B</td></tr><tr><td><span class='bolder'>MAFIL 2</span></td><td>Beograd</td><td>Savska br. 17</td></tr><tr><td><span class='bolder'>MAH</span></td><td>Beograd</td><td>Cara DuÅ¡ana br. 24 a</td></tr><tr><td><span class='bolder'>MAMBA +</span></td><td>Beograd</td><td>Cara DuÅ¡ana br. 24</td></tr><tr><td><span class='bolder'>MANJACNICA</span></td><td>Beograd</td><td>Brace Jugovica br. 7</td></tr><tr><td><span class='bolder'>MAXIMIX 2</span></td><td>Beograd</td><td>Savski trg br. 2</td></tr><tr><td><span class='bolder'>MAXIMUM</span></td><td>Beograd</td><td>Trgovacka br. 8/a</td></tr><tr><td><span class='bolder'>MAXIMUM MS 2</span></td><td>Beograd</td><td>Obrenovacki drum br. 3</td></tr><tr><td><span class='bolder'>MAXIMUM MS 3</span></td><td>Beograd</td><td>Borska br. 51</td></tr><tr><td><span class='bolder'>MAXOL co 1</span></td><td>Beograd</td><td>JuÅ¾ni bulevar br. 86</td></tr><tr><td><span class='bolder'>MENJACNICA 1</span></td><td>Beograd</td><td>Dimitrija Tucovica br. 57</td></tr><tr><td><span class='bolder'>MENJACNICA 2</span></td><td>Beograd</td><td>Kraljice Natalije br. 62 b</td></tr><tr><td><span class='bolder'>MENJACNICA CITY 011</span></td><td>Beograd</td><td>Obilicev venac br. 18 - 20</td></tr><tr><td><span class='bolder'>MICA</span></td><td>Beograd</td><td>Podavalska br. 58</td></tr><tr><td><span class='bolder'>MIDI</span></td><td>Beograd</td><td>NjegoÅ¡eva br. 31 A</td></tr><tr><td><span class='bolder'>MIJA 2</span></td><td>Beograd</td><td>Uciteljska br. 60</td></tr><tr><td><span class='bolder'>MIKI MAUS</span></td><td>Beograd</td><td>Dimitrija Tucovica br. 148, lokal 8</td></tr><tr><td><span class='bolder'>MILLION</span></td><td>Beograd</td><td>MileÅ¡evska br. 9</td></tr><tr><td><span class='bolder'>MM 1</span></td><td>Beograd</td><td>Ustanicka br. 64</td></tr><tr><td><span class='bolder'>MONDIJAL</span></td><td>Beograd</td><td>Dr. Milutina Ivkovica br. 2 E</td></tr><tr><td><span class='bolder'>MONT - MEKS 2</span></td><td>Beograd</td><td>Jug Bogdanova br. 5 - 7</td></tr><tr><td><span class='bolder'>MONTE CARLO</span></td><td>Beograd</td><td>Goce Delceva br. 27/15</td></tr><tr><td><span class='bolder'>MUKI</span></td><td>Beograd</td><td>Vidikovacki venac br. 3 g</td></tr><tr><td><span class='bolder'>MV</span></td><td>Beograd</td><td>Mirijevski bulevar br. 41 M</td></tr><tr><td><span class='bolder'>MV</span></td><td>Beograd</td><td>KumodraÅ¡ka br. 170</td></tr><tr><td><span class='bolder'>NAP</span></td><td>Beograd</td><td>Bulevar despota Stefana br. 47</td></tr><tr><td><span class='bolder'>NI - MA</span></td><td>Beograd</td><td>Darinke Radovic br. 34</td></tr><tr><td><span class='bolder'>NNS</span></td><td>Beograd</td><td>Patrijarha Joanikija bb</td></tr><tr><td><span class='bolder'>NNS 1</span></td><td>Beograd</td><td>Kneza ViÅ¡eslava bb</td></tr><tr><td><span class='bolder'>NNS 2</span></td><td>Beograd</td><td>Oplenacka br. 47</td></tr><tr><td><span class='bolder'>NOVCIC</span></td><td>Beograd</td><td>Cika Ljubina br. 7, pasaÅ¾</td></tr><tr><td><span class='bolder'>NOVCIC 1</span></td><td>Beograd</td><td>Knez Mihailova br. 19</td></tr><tr><td><span class='bolder'>OLE</span></td><td>Beograd</td><td>Kneza MiloÅ¡a br. 64</td></tr><tr><td><span class='bolder'>OLI 2</span></td><td>Beograd</td><td>KruÅ¡evacka br. 41</td></tr><tr><td><span class='bolder'>OLI 3</span></td><td>Beograd</td><td>Vojvode Stepe br. 153</td></tr><tr><td><span class='bolder'>ONE MILLION 1</span></td><td>Beograd</td><td>Turgenjeva br. 10</td></tr><tr><td><span class='bolder'>OZIRIS</span></td><td>Beograd</td><td>NjegoÅ¡eva br. 63</td></tr><tr><td><span class='bolder'>P. R. S.</span></td><td>Beograd</td><td>Stevana Äurdevica TroÅ¡arinca br. 1</td></tr><tr><td><span class='bolder'>PALAZZO</span></td><td>Beograd</td><td>Carice Milice br. 5</td></tr><tr><td><span class='bolder'>PARIS 4</span></td><td>Beograd</td><td>MarÅ¡ala Birjuzova bb Bazar - Sremska</td></tr><tr><td><span class='bolder'>PIKOLO</span></td><td>Beograd</td><td>Ustanicka br. 237</td></tr><tr><td><span class='bolder'>PLATO</span></td><td>Beograd</td><td>Pilota Mihaila Petrovica br. 2</td></tr><tr><td><span class='bolder'>PORTA BG 1</span></td><td>Beograd</td><td>Borska br. 13/G</td></tr><tr><td><span class='bolder'>POTRES</span></td><td>Beograd</td><td>Podavalska br. 65 b</td></tr><tr><td><span class='bolder'>PREMIA MAX</span></td><td>Beograd</td><td>Francuska br. 37 A</td></tr><tr><td><span class='bolder'>PREMIJA</span></td><td>Beograd</td><td>Patrijarha Joanikija br. 29</td></tr><tr><td><span class='bolder'>PURE</span></td><td>Beograd</td><td>Kneginje Zorke br. 2</td></tr><tr><td><span class='bolder'>RAFA 2</span></td><td>Beograd</td><td>Cika Ljubina br. 178</td></tr><tr><td><span class='bolder'>RAFA 3</span></td><td>Beograd</td><td>Obilicev venac br. 25</td></tr><tr><td><span class='bolder'>RAFA 4</span></td><td>Beograd</td><td>Trg republike br. 5</td></tr><tr><td><span class='bolder'>RAMOVIC 2</span></td><td>Beograd</td><td>Salvadora Aljendea br. 15/B</td></tr><tr><td><span class='bolder'>RUDNIK ZLATA</span></td><td>Beograd</td><td>Maksima Gorkog br. 52</td></tr><tr><td><span class='bolder'>S. D.</span></td><td>Beograd</td><td>NjegoÅ¡eva br. 31 B</td></tr><tr><td><span class='bolder'>SAFIR</span></td><td>Beograd</td><td>Patrijarha Joanikija bb</td></tr><tr><td><span class='bolder'>SANJA 1</span></td><td>Beograd</td><td>PoÅ¾eÅ¡ka br. 150 A</td></tr><tr><td><span class='bolder'>SANJA 1 2</span></td><td>Beograd</td><td>PoÅ¾eÅ¡ka br. 87 B</td></tr><tr><td><span class='bolder'>SAVSKI VENAC</span></td><td>Beograd</td><td>Savska br. 17</td></tr><tr><td><span class='bolder'>SIDRO PLUS</span></td><td>Beograd</td><td>Paunova br. 5</td></tr><tr><td><span class='bolder'>SINUS 2</span></td><td>Beograd</td><td>Ismeta Mujazinovica br. 23 D</td></tr><tr><td><span class='bolder'>SKADAR +</span></td><td>Beograd</td><td>Skadarska br. 20</td></tr><tr><td><span class='bolder'>SLON 2</span></td><td>Beograd</td><td>Kraljice Natalije br. 60</td></tr><tr><td><span class='bolder'>SPRING +</span></td><td>Beograd</td><td>Francuska br. 37 A</td></tr><tr><td><span class='bolder'>SQUARE NINE</span></td><td>Beograd</td><td>Studentski trg br. 9</td></tr><tr><td><span class='bolder'>STRELITZIA</span></td><td>Beograd</td><td>MarÅ¡ala Birjuzova br. 1</td></tr><tr><td><span class='bolder'>SUZANA 22</span></td><td>Beograd</td><td>Å ejkina br. 36/01</td></tr><tr><td><span class='bolder'>SVID</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 180</td></tr><tr><td><span class='bolder'>TALARIS +</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 139</td></tr><tr><td><span class='bolder'>TAÅ  TETA</span></td><td>Beograd</td><td>Ilije GaraÅ¡anina br. 26</td></tr><tr><td><span class='bolder'>TIM 2</span></td><td>Beograd</td><td>Cara Nikolaja Drugog br. 61 A</td></tr><tr><td><span class='bolder'>TOP - ALFA</span></td><td>Beograd</td><td>Kosmajska br. 56</td></tr><tr><td><span class='bolder'>TOPHEM CAMBIO</span></td><td>Beograd</td><td>Koste Glavinica br. 3 A</td></tr><tr><td><span class='bolder'>TREZOR C&C</span></td><td>Beograd</td><td>Kneza ViÅ¡eslava br. 63</td></tr><tr><td><span class='bolder'>ULTRA A PRIM</span></td><td>Beograd</td><td>Gavrila Principa br. 24</td></tr><tr><td><span class='bolder'>V&V 1</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 548</td></tr><tr><td><span class='bolder'>VASKO</span></td><td>Beograd</td><td>Bulevar Mihajla Pupina br. 165/A</td></tr><tr><td><span class='bolder'>VERANO MOTOLOGISTIC</span></td><td>Beograd</td><td>Vojvode Stepe br. 352</td></tr><tr><td><span class='bolder'>VIDIKOVAC</span></td><td>Beograd</td><td>Ratka Mitrovica br. 187</td></tr><tr><td><span class='bolder'>VIO LUKOIL AERODROM</span></td><td>Beograd</td><td>Auto - put za Zagreb 296</td></tr><tr><td><span class='bolder'>VIP - KARABURMA</span></td><td>Beograd</td><td>Mirijevski bulevar br. 18 B</td></tr><tr><td><span class='bolder'>VIP - NIS BIP</span></td><td>Beograd</td><td>FranÅ¡ D epare bb</td></tr><tr><td><span class='bolder'>VIP - NIS DUNAV</span></td><td>Beograd</td><td>Pancevacki put bb</td></tr><tr><td><span class='bolder'>VIVA. G</span></td><td>Beograd</td><td>Borska br. 70B</td></tr><tr><td><span class='bolder'>VK PLUS</span></td><td>Beograd</td><td>Vidikovacki venac bb</td></tr><tr><td><span class='bolder'>VNC 13</span></td><td>Beograd</td><td>Bulevar kralja Aleksandra br. 297</td></tr><tr><td><span class='bolder'>VNC 14</span></td><td>Beograd</td><td>PoÅ¾eÅ¡ka br. 41</td></tr><tr><td><span class='bolder'>VNC 18</span></td><td>Beograd</td><td>Bulevar despota Stefana br. 108</td></tr><tr><td><span class='bolder'>VNC 6</span></td><td>Beograd</td><td>Mirijevski venac br. 23</td></tr><tr><td><span class='bolder'>VNC 7</span></td><td>Beograd</td><td>Vladimira Karica br. 5</td></tr><tr><td><span class='bolder'>VNC 8</span></td><td>Beograd</td><td>Milutina Milankovica br. 34</td></tr><tr><td><span class='bolder'>VNC 9</span></td><td>Beograd</td><td>Narodnih heroja br. 30</td></tr><tr><td><span class='bolder'>VUK 1</span></td><td>Beograd</td><td>Knez Mihailova br. 21</td></tr><tr><td><span class='bolder'>WAI KIKI</span></td><td>Beograd</td><td>Lomina br. 5</td></tr><tr><td><span class='bolder'>ZEM G</span></td><td>Beograd</td><td>Kneza MiloÅ¡a br. 78</td></tr><tr><td><span class='bolder'>Å ARGIN SOFIJA</span></td><td>Beograd</td><td>Kokanova br. 28</td></tr><tr><td><span class='bolder'>Å ATOR - JEZERO</span></td><td>Beograd</td><td>Kokanova br. 8</td></tr><tr><td><span class='bolder'>Å PAR</span></td><td>Beograd</td><td>Dimitrija Tucovica br. 152 a</td></tr><tr><td><span class='bolder'>Å½ARKOVO</span></td><td>Beograd</td><td>Ratka Mitrovica br. 118</td></tr><tr><td><span class='bolder'>Å½ARKOVO 2</span></td><td>Beograd</td><td>Ratka Mitrovica br. 118</td></tr><tr><td><span class='bolder'>ÄAK 10</span></td><td>Beograd</td><td>Terazije br. 12</td></tr><tr><td><span class='bolder'>ÄAK 13</span></td><td>Beograd</td><td>Zrenjaninski put br. 84 c</td></tr><tr><td><span class='bolder'>ÄOKOVIC 4</span></td><td>Beograd</td><td>Sremska 3 - 5</td></tr><tr><td><span class='bolder'>A & M</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Zorana Äindica br. 44</td></tr><tr><td><span class='bolder'>AGRO MIKS - RED FIELD</span></td><td>Beograd, Novi Beograd</td><td>Partizanske avijacije bb</td></tr><tr><td><span class='bolder'>ALKA</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 14 n</td></tr><tr><td><span class='bolder'>ALTA 4</span></td><td>Beograd, Novi Beograd</td><td>Gandijeva br. 76, lokal 26</td></tr><tr><td><span class='bolder'>ALTA 5</span></td><td>Beograd, Novi Beograd</td><td>Ljubinke Bobic br. 26 B</td></tr><tr><td><span class='bolder'>AMBASADOR</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Zorana ÄinÄiÄ‡a br. 12</td></tr><tr><td><span class='bolder'>ANELEJ</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 103</td></tr><tr><td><span class='bolder'>ATLANTIK</span></td><td>Beograd, Novi Beograd</td><td>Goce Delceva br. 27</td></tr><tr><td><span class='bolder'>BALKAN II</span></td><td>Beograd, Novi Beograd</td><td>Proleterske solidarnosti bb, lokal 7</td></tr><tr><td><span class='bolder'>BIO LIFE</span></td><td>Beograd, Novi Beograd</td><td>III bulevar br. 34, lokal 29</td></tr><tr><td><span class='bolder'>BOOM</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija Carnojevica br. 95, lokal A1</td></tr><tr><td><span class='bolder'>BRADA</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 229, lok. 68 a</td></tr><tr><td><span class='bolder'>COD</span></td><td>Beograd, Novi Beograd</td><td>Bulevra Mihaila Pupina br. 10 z/VP 69</td></tr><tr><td><span class='bolder'>COIN 2</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 39A</td></tr><tr><td><span class='bolder'>COIN 5</span></td><td>Beograd, Novi Beograd</td><td>Goce Delceva br. 18 g</td></tr><tr><td><span class='bolder'>DABA</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 221</td></tr><tr><td><span class='bolder'>DIBONAS COMPANY</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 227/59 a</td></tr><tr><td><span class='bolder'>DINAR</span></td><td>Beograd, Novi Beograd</td><td>Palmira Toljatija br. 9</td></tr><tr><td><span class='bolder'>DOLAR</span></td><td>Beograd, Novi Beograd</td><td>Bulevar umetnosti br. 27</td></tr><tr><td><span class='bolder'>DRAGAN PLUS</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 80 B</td></tr><tr><td><span class='bolder'>EGAL 1</span></td><td>Beograd, Novi Beograd</td><td>Shopping center UÅ CE lokal br. 24</td></tr><tr><td><span class='bolder'>EGAL 2</span></td><td>Beograd, Novi Beograd</td><td>Bulevar umetnosti br. 4, Merkator centar Beograd, PP br. SB 22a</td></tr><tr><td><span class='bolder'>ENTER</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina 15 L 26</td></tr><tr><td><span class='bolder'>EURO LAV 3</span></td><td>Beograd, Novi Beograd</td><td>Autoput br. 18, TC "ZMAJ"</td></tr><tr><td><span class='bolder'>EURO MILENIJUM</span></td><td>Beograd, Novi Beograd</td><td>Nedeljka GvozdenoviÄ‡a br. 24 a</td></tr><tr><td><span class='bolder'>EURO PETROL NOVI BEOGRAD</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 198/a</td></tr><tr><td><span class='bolder'>F & N</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina, pijaca blok 44, lokal 111</td></tr><tr><td><span class='bolder'>GOLDEN LINE</span></td><td>Beograd, Novi Beograd</td><td>Omladinskih brigada br. 18/b</td></tr><tr><td><span class='bolder'>GRADAC</span></td><td>Beograd, Novi Beograd</td><td>ToÅ¡in bunar br. 45</td></tr><tr><td><span class='bolder'>GRAVITACIJA</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina 231 TC ENJUB lokal 03</td></tr><tr><td><span class='bolder'>HMB EXTRA</span></td><td>Beograd, Novi Beograd</td><td>Milentija Popovica br. 9</td></tr><tr><td><span class='bolder'>HUM</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihajla Pupina br. 3</td></tr><tr><td><span class='bolder'>HUM 1</span></td><td>Beograd, Novi Beograd</td><td>ToÅ¡in bunar br. 188</td></tr><tr><td><span class='bolder'>IKI 1</span></td><td>Beograd, Novi Beograd</td><td>Äorda StanojeviÄ‡a br. 11 d</td></tr><tr><td><span class='bolder'>IN</span></td><td>Beograd, Novi Beograd</td><td>Bulevar dr Zorana Äindica br. 195</td></tr><tr><td><span class='bolder'>IN HOTEL</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arenija Carnojevica br. 56</td></tr><tr><td><span class='bolder'>JABUCILO 1</span></td><td>Beograd, Novi Beograd</td><td>Å panskih boraca br. 22 d</td></tr><tr><td><span class='bolder'>JOVAN</span></td><td>Beograd, Novi Beograd</td><td>Partizanske avijacije br. 13</td></tr><tr><td><span class='bolder'>KRUG</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 229/2, lok. 110</td></tr><tr><td><span class='bolder'>LUSAGA</span></td><td>Beograd, Novi Beograd</td><td>Bulevar umetnosti br. 17 a</td></tr><tr><td><span class='bolder'>M - TEAM</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 151 A</td></tr><tr><td><span class='bolder'>M B M</span></td><td>Beograd, Novi Beograd</td><td>Pariske komune br. 20</td></tr><tr><td><span class='bolder'>MANOJLO</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 155a, lokal 1</td></tr><tr><td><span class='bolder'>MASSILIA</span></td><td>Beograd, Novi Beograd</td><td>Bulevar AVNOJ - a br. 79</td></tr><tr><td><span class='bolder'>MASTER 2</span></td><td>Beograd, Novi Beograd</td><td>Staro sajmiÅ¡te br. 2</td></tr><tr><td><span class='bolder'>MBM 1</span></td><td>Beograd, Novi Beograd</td><td>Milentija Popovica br. 32b</td></tr><tr><td><span class='bolder'>MBM 2</span></td><td>Beograd, Novi Beograd</td><td>Vojvodanska br. 2</td></tr><tr><td><span class='bolder'>MEGA PLUS</span></td><td>Beograd, Novi Beograd</td><td>Palmira Toljatija br. 7</td></tr><tr><td><span class='bolder'>Menjacnica BATA</span></td><td>Beograd, Novi Beograd</td><td>Gandijeva br. 148a</td></tr><tr><td><span class='bolder'>MENJACNICA BROJ 1</span></td><td>Beograd, Novi Beograd</td><td>Milutina Milankovica br. 7 v</td></tr><tr><td><span class='bolder'>MG MENJACNICE</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 36 d</td></tr><tr><td><span class='bolder'>MIAMI</span></td><td>Beograd, Novi Beograd</td><td>Ljubinke Bobic br. 26 A</td></tr><tr><td><span class='bolder'>MINA</span></td><td>Beograd, Novi Beograd</td><td>Proleterske solidarnosti br. 77, lok. 9</td></tr><tr><td><span class='bolder'>MIXI</span></td><td>Beograd, Novi Beograd</td><td>Surcinska br. 31</td></tr><tr><td><span class='bolder'>MOND</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 151/8</td></tr><tr><td><span class='bolder'>MONET</span></td><td>Beograd, Novi Beograd</td><td>Milentija Popovica br. 9</td></tr><tr><td><span class='bolder'>MONETA</span></td><td>Beograd, Novi Beograd</td><td>Dr Ivana Ribara br. 91 b</td></tr><tr><td><span class='bolder'>MONETA 2</span></td><td>Beograd, Novi Beograd</td><td>Milutina MilankoviÄ‡a br. 86 A</td></tr><tr><td><span class='bolder'>MONMAJ - MIA</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihajla Pupina bb</td></tr><tr><td><span class='bolder'>MONT - MEKS</span></td><td>Beograd, Novi Beograd</td><td>Obrenovacka br. 4</td></tr><tr><td><span class='bolder'>MONTERA</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihaila Pupina br. 10 a</td></tr><tr><td><span class='bolder'>NACA MNS</span></td><td>Beograd, Novi Beograd</td><td>Narodnih heroja br. 42</td></tr><tr><td><span class='bolder'>NACIONAL</span></td><td>Beograd, Novi Beograd</td><td>Auto put br. 5</td></tr><tr><td><span class='bolder'>NIK</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihaila Pupina br. 10 E, lok. 20</td></tr><tr><td><span class='bolder'>OKO 1</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 14N/1</td></tr><tr><td><span class='bolder'>OKO 3</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 87</td></tr><tr><td><span class='bolder'>ORAO</span></td><td>Beograd, Novi Beograd</td><td>Palmira Toljatija br. 5</td></tr><tr><td><span class='bolder'>OXBRIDGE</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihaila Pupina 10 v, lok. 25</td></tr><tr><td><span class='bolder'>PANTER 10</span></td><td>Beograd, Novi Beograd</td><td>Bulevar DR. Zorana ÄinÄiÄ‡a br. 44, lokal 14</td></tr><tr><td><span class='bolder'>PANTER 11</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Zorana ÄinÄiÄ‡a br. 12 d</td></tr><tr><td><span class='bolder'>PANTER 15</span></td><td>Beograd, Novi Beograd</td><td>Shopping center UÅ CE</td></tr><tr><td><span class='bolder'>PANTER 17</span></td><td>Beograd, Novi Beograd</td><td>Proletrske solidarnosti br. 17, lokal 17</td></tr><tr><td><span class='bolder'>PANTER 5</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 89, lok. 355</td></tr><tr><td><span class='bolder'>PANTER 8</span></td><td>Beograd, Novi Beograd</td><td>Idea - fob, Omladinskih brigada</td></tr><tr><td><span class='bolder'>PARIS 6</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 87</td></tr><tr><td><span class='bolder'>PARTNER</span></td><td>Beograd, Novi Beograd</td><td>Nehruova br. 51, lokal 23</td></tr><tr><td><span class='bolder'>PARTY DREAM</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija CarnojeviÄ‡a br. 95/4</td></tr><tr><td><span class='bolder'>PERPER</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Zorana Äindica br. 106 a</td></tr><tr><td><span class='bolder'>PINAKER</span></td><td>Beograd, Novi Beograd</td><td>III bulevar br. 34</td></tr><tr><td><span class='bolder'>PLANETA</span></td><td>Beograd, Novi Beograd</td><td>Palmira Toljatija br. 5</td></tr><tr><td><span class='bolder'>PLUS</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 153</td></tr><tr><td><span class='bolder'>PLUS 1</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 149, lokal 17</td></tr><tr><td><span class='bolder'>POLIMIX 2</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija CarnojeviÄ‡a br. 95</td></tr><tr><td><span class='bolder'>PREMIER</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija Carnojevica br. 95</td></tr><tr><td><span class='bolder'>RAMOVIC 3</span></td><td>Beograd, Novi Beograd</td><td>DuÅ¡ana VukasoviÄ‡a br. 8</td></tr><tr><td><span class='bolder'>RAZVRÅ JE CO</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihajla Pupina br. 10 D/V - V. P. 62</td></tr><tr><td><span class='bolder'>REGENCY</span></td><td>Beograd, Novi Beograd</td><td>Milentija Popovica br. 5</td></tr><tr><td><span class='bolder'>RIO ROYALE</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihaila Pupina br. 4, TC UÅ CE lokal 295</td></tr><tr><td><span class='bolder'>RSG</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija Carnojevica br. 95, lok. 7</td></tr><tr><td><span class='bolder'>S & L</span></td><td>Beograd, Novi Beograd</td><td>Partizanske avijacije br. 25, lok. 8</td></tr><tr><td><span class='bolder'>SENJAK 2</span></td><td>Beograd, Novi Beograd</td><td>Omladinskih brigada br. 65 v</td></tr><tr><td><span class='bolder'>SINUS</span></td><td>Beograd, Novi Beograd</td><td>Ugao Ljubinke Bobic, H. Klajna i Ismeta Mujezinovica, objekat 5, lok. 2</td></tr><tr><td><span class='bolder'>SM&AD</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 219, TC Mala piramida, lokal 1</td></tr><tr><td><span class='bolder'>SMS</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 31 b</td></tr><tr><td><span class='bolder'>SOLDI 2</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 147 A</td></tr><tr><td><span class='bolder'>THOFMAN</span></td><td>Beograd, Novi Beograd</td><td>Pariske komune br. 13</td></tr><tr><td><span class='bolder'>TINA</span></td><td>Beograd, Novi Beograd</td><td>Proleterske solidarnosti br. 77 a, lokal br. 5</td></tr><tr><td><span class='bolder'>TRANGE - FRANGE 2</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Zorana ÄinÄiÄ‡a br. 59</td></tr><tr><td><span class='bolder'>TREZOR</span></td><td>Beograd, Novi Beograd</td><td>Narodnih heroja br. 22</td></tr><tr><td><span class='bolder'>TRIVUK 1</span></td><td>Beograd, Novi Beograd</td><td>Stojana Aralice br. 28</td></tr><tr><td><span class='bolder'>UNIVEREKSPORT 8</span></td><td>Beograd, Novi Beograd</td><td>Nehruova br. 68 b</td></tr><tr><td><span class='bolder'>UROÅ </span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina 153, lokal 21</td></tr><tr><td><span class='bolder'>UROÅ  2</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 151, lokal br. 55</td></tr><tr><td><span class='bolder'>VALUTA</span></td><td>Beograd, Novi Beograd</td><td>Palmira Toljatija br. 5</td></tr><tr><td><span class='bolder'>VALUTA 2</span></td><td>Beograd, Novi Beograd</td><td>Bulevar AVNOJ - a br. 12 d, lok. 35</td></tr><tr><td><span class='bolder'>VIDRA 2</span></td><td>Beograd, Novi Beograd</td><td>Goce Delceva br. 27, lok. 4</td></tr><tr><td><span class='bolder'>VIP - BLOK 61</span></td><td>Beograd, Novi Beograd</td><td>Dr. Ivana Ribara br. 91</td></tr><tr><td><span class='bolder'>VIP - NIS NOVI BEOGRAD - DEJTON</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Lenjina bb</td></tr><tr><td><span class='bolder'>VIP - NIS ZMAJ 1</span></td><td>Beograd, Novi Beograd</td><td>Auto put Beograd - Zagreb (izlaz)</td></tr><tr><td><span class='bolder'>VIP - NIS ZMAJ 2</span></td><td>Beograd, Novi Beograd</td><td>Auto put Beograd - Zagreb (ulaz)</td></tr><tr><td><span class='bolder'>VIP - SAVA CENTAR</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija CarnojeviÄ‡a br. 30 a</td></tr><tr><td><span class='bolder'>VIP - UÅ CE 2</span></td><td>Beograd, Novi Beograd</td><td>Mihajla Pupina 6, TC UÅ CE</td></tr><tr><td><span class='bolder'>VIP 7</span></td><td>Beograd, Novi Beograd</td><td>DELTA CITY ugao ulica Jurija Gagarina i Agostina Neta</td></tr><tr><td><span class='bolder'>VIP 8</span></td><td>Beograd, Novi Beograd</td><td>Partizanske avijacije bb, TC "IDEA"</td></tr><tr><td><span class='bolder'>VIP 9</span></td><td>Beograd, Novi Beograd</td><td>Gandijeva br. 21, "IMMOCENTAR"</td></tr><tr><td><span class='bolder'>VIP UÅ CE</span></td><td>Beograd, Novi Beograd</td><td>Shopping center UÅ CE</td></tr><tr><td><span class='bolder'>VNC 1</span></td><td>Beograd, Novi Beograd</td><td>DÅ¾ona Kenedija br. 10 a</td></tr><tr><td><span class='bolder'>VNC 10</span></td><td>Beograd, Novi Beograd</td><td>Pariske komune br. 13</td></tr><tr><td><span class='bolder'>VNC 15</span></td><td>Beograd, Novi Beograd</td><td>Nehruova br. 61 a</td></tr><tr><td><span class='bolder'>VRH</span></td><td>Beograd, Novi Beograd</td><td>Ismeta Mujezinovica br. 20 a, lokal 19</td></tr><tr><td><span class='bolder'>VUK GRAF 2</span></td><td>Beograd, Novi Beograd</td><td>Proleterske solidarnosti br. 8</td></tr><tr><td><span class='bolder'>WINNERCOMB</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 155a, lok. 5</td></tr><tr><td><span class='bolder'>WINNERCOMB 2</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 39</td></tr><tr><td><span class='bolder'>WINNERCOMB 3</span></td><td>Beograd, Novi Beograd</td><td>Nehruova br. 56 v</td></tr><tr><td><span class='bolder'>WINNERCOMB 4</span></td><td>Beograd, Novi Beograd</td><td>Gandijeva br. 76 a, lokal br. 32</td></tr><tr><td><span class='bolder'>WINNERCOMB 5</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 28</td></tr><tr><td><span class='bolder'>WINNERCOMB 6</span></td><td>Beograd, Novi Beograd</td><td>Pijaca blok 44, lokal 6</td></tr><tr><td><span class='bolder'>X INTERNATIONAL</span></td><td>Beograd, Novi Beograd</td><td>Milutina Milankovica br. 40</td></tr><tr><td><span class='bolder'>ZEKO</span></td><td>Beograd, Novi Beograd</td><td>Jurija Gagarina br. 165 v</td></tr><tr><td><span class='bolder'>ZONA</span></td><td>Beograd, Novi Beograd</td><td>Ljubinke Bobic br. 26 A</td></tr><tr><td><span class='bolder'>Å AMPION</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Mihaila Pupina br. 145</td></tr><tr><td><span class='bolder'>Å IN</span></td><td>Beograd, Novi Beograd</td><td>Bulevar umetnosti br. 27</td></tr><tr><td><span class='bolder'>Å ORMAZ</span></td><td>Beograd, Novi Beograd</td><td>Gandijeva br. 100 a</td></tr><tr><td><span class='bolder'>ÄAK 7</span></td><td>Beograd, Novi Beograd</td><td>Bulevar Arsenija CarnojeviÄ‡a br. 69</td></tr><tr><td><span class='bolder'>AMOR</span></td><td>Beograd, Stari Grad</td><td>VlajkoviÄ‡eva br. 11</td></tr><tr><td><span class='bolder'>AS</span></td><td>Beograd, Stari Grad</td><td>TrgovaÄka br. 9, lokal 9/1</td></tr><tr><td><span class='bolder'>ATELJE</span></td><td>Beograd, Stari Grad</td><td>Svetogorska br. 20</td></tr><tr><td><span class='bolder'>BEX</span></td><td>Beograd, Stari Grad</td><td>Narodnog fronta br. 45</td></tr><tr><td><span class='bolder'>BONA DEA</span></td><td>Beograd, Stari Grad</td><td>Sremska b.b, podzemni prolaz Albanija</td></tr><tr><td><span class='bolder'>CENTAR-BOBAN</span></td><td>Beograd, Stari Grad</td><td>Dunavska br. 13</td></tr><tr><td><span class='bolder'>CHICAGO 4</span></td><td>Beograd, Stari Grad</td><td>Venizelsova br. 42</td></tr><tr><td><span class='bolder'>COIN 3</span></td><td>Beograd, Stari Grad</td><td>Kralja Petra br. 56</td></tr><tr><td><span class='bolder'>D2</span></td><td>Beograd, Stari Grad</td><td>Zmaj Jovina br. 9</td></tr><tr><td><span class='bolder'>DOK</span></td><td>Beograd, Stari Grad</td><td>Makedonska br.17</td></tr><tr><td><span class='bolder'>DOK 2</span></td><td>Beograd, Stari Grad</td><td>Mije KovaÄeviÄ‡a br. 6 t</td></tr><tr><td><span class='bolder'>DOK 7</span></td><td>Beograd, Stari Grad</td><td>Makedonska br. 28-prizemlje</td></tr><tr><td><span class='bolder'>DOMINION</span></td><td>Beograd, Stari Grad</td><td>Kralja Milana br. 28</td></tr><tr><td><span class='bolder'>DONN</span></td><td>Beograd, Stari Grad</td><td>Terazije - podzemni prolaz kod Igumanove palate</td></tr><tr><td><span class='bolder'>DUNAV</span></td><td>Beograd, Stari Grad</td><td>Kursulina br. 42a</td></tr><tr><td><span class='bolder'>DÅ½ORDÅ½O</span></td><td>Beograd, Stari Grad</td><td>DÅ¾orDÅ¾a VaÅ¡ingtona br. 6</td></tr><tr><td><span class='bolder'>EURO LAV 2</span></td><td>Beograd, Stari Grad</td><td>ViÅ¡njiÄ‡eva br. 9</td></tr><tr><td><span class='bolder'>EUROJEEP</span></td><td>Beograd, Stari Grad</td><td>KaraÄ‘orÄ‘eva br. 63</td></tr><tr><td><span class='bolder'>EXTREME 1</span></td><td>Beograd, Stari Grad</td><td>Cara DuÅ¡ana br. 49</td></tr><tr><td><span class='bolder'>FUNTA</span></td><td>Beograd, Stari Grad</td><td>Makedonska br. 30</td></tr><tr><td><span class='bolder'>GROÅ </span></td><td>Beograd, Stari Grad</td><td>Matice Srpske br. 43, lokal 58</td></tr><tr><td><span class='bolder'>Hotel BALKAN - recepcija</span></td><td>Beograd, Stari Grad</td><td>Prizrenska br. 2</td></tr><tr><td><span class='bolder'>ICONS</span></td><td>Beograd, Stari Grad</td><td>Pop Lukina br. 1</td></tr><tr><td><span class='bolder'>IKS 3</span></td><td>Beograd, Stari Grad</td><td>Andre NikoliÄ‡a br. 2</td></tr><tr><td><span class='bolder'>JEVREMOVIÄ†</span></td><td>Beograd, Stari Grad</td><td>Kralja Milana br. 47</td></tr><tr><td><span class='bolder'>JEVREMOVIÄ† 1</span></td><td>Beograd, Stari Grad</td><td>Beogradska br. 12</td></tr><tr><td><span class='bolder'>KARATAÅ </span></td><td>Beograd, Stari Grad</td><td>Svetogorska br. 46</td></tr><tr><td><span class='bolder'>KIS</span></td><td>Beograd, Stari Grad</td><td>Bulevar despota Stefana br. 57</td></tr><tr><td><span class='bolder'>LAV 2</span></td><td>Beograd, Stari Grad</td><td>DÅ¾orDÅ¾a VaÅ¡ingtona b.b.</td></tr><tr><td><span class='bolder'>LUTRIJAFILNIK I</span></td><td>Beograd, Stari Grad</td><td>Dr. Milutina IvkoviÄ‡a br. 2a</td></tr><tr><td><span class='bolder'>M & M</span></td><td>Beograd, Stari Grad</td><td>DubrovaÄka br. 16</td></tr><tr><td><span class='bolder'>M.F.P.</span></td><td>Beograd, Stari Grad</td><td>Sarajevska br. 22</td></tr><tr><td><span class='bolder'>MANITO</span></td><td>Beograd, Stari Grad</td><td>Kondina br. 26</td></tr><tr><td><span class='bolder'>MARKAL</span></td><td>Beograd, Stari Grad</td><td>Balkanska br. 12 A</td></tr><tr><td><span class='bolder'>MASTERS</span></td><td>Beograd, Stari Grad</td><td>Svetogorska br. 18</td></tr><tr><td><span class='bolder'>MASTERS 1</span></td><td>Beograd, Stari Grad</td><td>Kondina br. 3</td></tr><tr><td><span class='bolder'>MAVERIK 2</span></td><td>Beograd, Stari Grad</td><td>Cara DuÅ¡ana br. 8</td></tr><tr><td><span class='bolder'>MIÄ†KO</span></td><td>Beograd, Stari Grad</td><td>Vuka KaraDÅ¾iÄ‡a br. 4</td></tr><tr><td><span class='bolder'>MONET GS</span></td><td>Beograd, Stari Grad</td><td>Masarikova br. 4</td></tr><tr><td><span class='bolder'>MONET GS 1</span></td><td>Beograd, Stari Grad</td><td>KaraÄ‘orÄ‘eva br. 6, Savsko pristaniÅ¡te</td></tr><tr><td><span class='bolder'>MONETA 1</span></td><td>Beograd, Stari Grad</td><td>KaraÄ‘orÄ‘eva br. 75</td></tr><tr><td><span class='bolder'>NAJROBI 2</span></td><td>Beograd, Stari Grad</td><td>Terazije br. 16</td></tr><tr><td><span class='bolder'>NEW YORK</span></td><td>Beograd, Stari Grad</td><td>ÄŒumiÄ‡evo sokaÄe br. 2, lok. 39</td></tr><tr><td><span class='bolder'>PANTER 13</span></td><td>Beograd, Stari Grad</td><td>Å½orÅ¾a Klemensoa br. 37, Luka Beograd, Å¡alter sala</td></tr><tr><td><span class='bolder'>PARIS 1</span></td><td>Beograd, Stari Grad</td><td>Brankova br. 9</td></tr><tr><td><span class='bolder'>PARIS 2</span></td><td>Beograd, Stari Grad</td><td>Resavska br.34</td></tr><tr><td><span class='bolder'>PARLAMENT</span></td><td>Beograd, Stari Grad</td><td>ÄŒika Ljubina br. 6</td></tr><tr><td><span class='bolder'>PIRANA 1</span></td><td>Beograd, Stari Grad</td><td>ÄŒika Ljubina br. 16</td></tr><tr><td><span class='bolder'>PIRANA 4</span></td><td>Beograd, Stari Grad</td><td>Balkanska br. 32</td></tr><tr><td><span class='bolder'>PIRANA 7</span></td><td>Beograd, Stari Grad</td><td>DeÄanska br. 19</td></tr><tr><td><span class='bolder'>PIRANA 9</span></td><td>Beograd, Stari Grad</td><td>Prizrenska br. 6</td></tr><tr><td><span class='bolder'>PLATO BOOKS</span></td><td>Beograd, Stari Grad</td><td>Knez Mihailova br. 48</td></tr><tr><td><span class='bolder'>PORTA BG</span></td><td>Beograd, Stari Grad</td><td>Trg republike br. 5, TC Staklenac, prizemlje</td></tr><tr><td><span class='bolder'>PRIMA</span></td><td>Beograd, Stari Grad</td><td>Äure JakÅ¡iÄ‡a br. 5</td></tr><tr><td><span class='bolder'>PRONTO MODA</span></td><td>Beograd, Stari Grad</td><td>Terazije br. 27</td></tr><tr><td><span class='bolder'>RAJKO</span></td><td>Beograd, Stari Grad</td><td>Resavska br. 2</td></tr><tr><td><span class='bolder'>RAÄŒIÄ†</span></td><td>Beograd, Stari Grad</td><td>Cara DuÅ¡ana br. 25</td></tr><tr><td><span class='bolder'>REBEKA FINANCE</span></td><td>Beograd, Stari Grad</td><td>KataniÄ‡eva br. 2</td></tr><tr><td><span class='bolder'>REVOLUCIJA</span></td><td>Beograd, Stari grad</td><td>Cara DuÅ¡ana br. 72</td></tr><tr><td><span class='bolder'>RICHI GROUP</span></td><td>Beograd, Stari Grad</td><td>Uzun Mirkova br. 4</td></tr><tr><td><span class='bolder'>SING FARM</span></td><td>Beograd, Stari Grad</td><td>Dositejeva br. 20</td></tr><tr><td><span class='bolder'>SIR CAVENDISH</span></td><td>Beograd, Stari Grad</td><td>Pijaca Skadarlija, lok. 44</td></tr><tr><td><span class='bolder'>SIRENA PLUS</span></td><td>Beograd, Stari Grad</td><td>Trg Nikole PaÅ¡iÄ‡a br. 4</td></tr><tr><td><span class='bolder'>SKY SERVIS</span></td><td>Beograd, Stari Grad</td><td>Knez Mihailova br.24</td></tr><tr><td><span class='bolder'>TREZORR</span></td><td>Beograd, Stari Grad</td><td>Savski trg br. 2</td></tr><tr><td><span class='bolder'>ULTRA</span></td><td>Beograd, Stari Grad</td><td>Gavrila Principa br. 24</td></tr><tr><td><span class='bolder'>ULTRA 2</span></td><td>Beograd, Stari Grad</td><td>Terazije br. 4</td></tr><tr><td><span class='bolder'>UNION</span></td><td>Beograd, Stari Grad</td><td>Kosovska br. 11</td></tr><tr><td><span class='bolder'>VIP</span></td><td>Beograd, Stari Grad</td><td>KataniÄ‡eva br.1</td></tr><tr><td><span class='bolder'>VIP 1</span></td><td>Beograd, Stari Grad</td><td>Carice Milice br. 15</td></tr><tr><td><span class='bolder'>VIP 2</span></td><td>Beograd, Stari Grad</td><td>Makedonska br. 24</td></tr><tr><td><span class='bolder'>VIP 4</span></td><td>Beograd, Stari Grad</td><td>Kosovska br. 37</td></tr><tr><td><span class='bolder'>VITTORIO EMANUELE II</span></td><td>Beograd, Stari Grad</td><td>Nikole SpasiÄ‡a br. 3, lokal br. 10</td></tr><tr><td><span class='bolder'>VIVUS</span></td><td>Beograd, Stari Grad</td><td>Kneza MiloÅ¡a br. 15</td></tr><tr><td><span class='bolder'>VUK</span></td><td>Beograd, Stari Grad</td><td>Knez Mihailova br. 25</td></tr><tr><td><span class='bolder'>Å KORPION</span></td><td>Beograd, Stari Grad</td><td>MarÅ¡ala Birjuzova br. 2-4</td></tr><tr><td><span class='bolder'>ÄAK 3</span></td><td>Beograd, Stari Grad</td><td>KolarÄeva br. 7</td></tr><tr><td><span class='bolder'>ÄOKOVIÄ†</span></td><td>Beograd, Stari Grad</td><td>Prizrenska br. 15</td></tr><tr><td><span class='bolder'>ÄOKOVIÄ† 3</span></td><td>Beograd, Stari Grad</td><td>Mekedonska br. 11-13</td></tr><tr><td><span class='bolder'>ÄOKOVIÄ† 7</span></td><td>Beograd, Stari Grad</td><td>Prizrenska br. 15</td></tr><tr><td><span class='bolder'>ÄOKOVIÄ† 9</span></td><td>Beograd, Stari Grad</td><td>Gospodar Jevremova br. 59</td></tr><tr><td><span class='bolder'>ALEKSANDRIJA</span></td><td>Beograd, Zemun</td><td>Glavna br. 6</td></tr><tr><td><span class='bolder'>ALTA</span></td><td>Beograd, Zemun</td><td>Ugrinovacka br. 212</td></tr><tr><td><span class='bolder'>ALTA 2</span></td><td>Beograd, Zemun</td><td>KrajiÅ¡ka br. 59</td></tr><tr><td><span class='bolder'>ALTA 3</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 10 a</td></tr><tr><td><span class='bolder'>BEOVEL 2</span></td><td>Beograd, Zemun</td><td>Glavna br. 31</td></tr><tr><td><span class='bolder'>BERBER</span></td><td>Beograd, Zemun</td><td>Pazovacki put br. 55</td></tr><tr><td><span class='bolder'>BERBER 2</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 36 a</td></tr><tr><td><span class='bolder'>BRAVO</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 10 g</td></tr><tr><td><span class='bolder'>DOK 11</span></td><td>Beograd, Zemun</td><td>Trg Branka RadiceviÄ‡a br. 3</td></tr><tr><td><span class='bolder'>DOLAR 2</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 36/0</td></tr><tr><td><span class='bolder'>DON</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 4</td></tr><tr><td><span class='bolder'>EURO PETROL ZEMUN</span></td><td>Beograd, Zemun</td><td>Ratarski put br. 37 b</td></tr><tr><td><span class='bolder'>FISVEZO</span></td><td>Beograd, Zemun</td><td>Gospodska br. 14</td></tr><tr><td><span class='bolder'>GOLUB</span></td><td>Beograd, Zemun</td><td>Save KovaceviÄ‡a br. 7 b</td></tr><tr><td><span class='bolder'>GONGO 2005</span></td><td>Beograd, Zemun</td><td>Ugrinovacka br. 196 a</td></tr><tr><td><span class='bolder'>GROÅ </span></td><td>Beograd, Zemun</td><td>Backa br. 15 j</td></tr><tr><td><span class='bolder'>JABUCILO</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 2 - n</td></tr><tr><td><span class='bolder'>JULIJA</span></td><td>Beograd, Zemun</td><td>Magistratski trg br. 2</td></tr><tr><td><span class='bolder'>KDK - ELECTRIC 2</span></td><td>Beograd, Zemun</td><td>Masarikov trg br. 5</td></tr><tr><td><span class='bolder'>M. M.</span></td><td>Beograd, Zemun</td><td>Dubrovacka br. 2 a</td></tr><tr><td><span class='bolder'>MENJACNICA</span></td><td>Beograd, Zemun</td><td>NiÅ¡ka br. 13</td></tr><tr><td><span class='bolder'>NAJROBI</span></td><td>Beograd, Zemun</td><td>Petra Zrinjskog br. 1</td></tr><tr><td><span class='bolder'>NAJROBI 3</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 29 b</td></tr><tr><td><span class='bolder'>NIKICA</span></td><td>Beograd, Zemun</td><td>Prve pruge br. 37 d</td></tr><tr><td><span class='bolder'>PANDA +</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 116 - B</td></tr><tr><td><span class='bolder'>PANTER 4</span></td><td>Beograd, Zemun</td><td>Zmaj Jovina br. 25</td></tr><tr><td><span class='bolder'>PANTER 6</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 15 a</td></tr><tr><td><span class='bolder'>PARIS 3</span></td><td>Beograd, Zemun</td><td>Glavna br. 10</td></tr><tr><td><span class='bolder'>PINK PLUS</span></td><td>Beograd, Zemun</td><td>Prvomajska br. 116 Å¡</td></tr><tr><td><span class='bolder'>PRINCESS 1</span></td><td>Beograd, Zemun</td><td>Franje Krca br. 40</td></tr><tr><td><span class='bolder'>RED X</span></td><td>Beograd, Zemun</td><td>Milice Å uvakovic br. 2 h</td></tr><tr><td><span class='bolder'>SANY CENTAR 2</span></td><td>Beograd, Zemun</td><td>Majora Zorana RadosavljeviÄ‡a br. 252</td></tr><tr><td><span class='bolder'>SMILLEY</span></td><td>Beograd, Zemun</td><td>ToÅ¡in bunar br. 90</td></tr><tr><td><span class='bolder'>TANJA I ZORAN</span></td><td>Beograd, Zemun</td><td>Zagorska br. 11 - k</td></tr><tr><td><span class='bolder'>TRIVUK</span></td><td>Beograd, Zemun</td><td>Vrtlarska br. 35 a</td></tr><tr><td><span class='bolder'>UGLJEÅ A</span></td><td>Beograd, Zemun</td><td>Palmira Toljatija br. 66 a</td></tr><tr><td><span class='bolder'>VNC 2</span></td><td>Beograd, Zemun</td><td>Gornjogradska br. 11 a</td></tr><tr><td><span class='bolder'>ZEM</span></td><td>Beograd, Zemun</td><td>Vojni put br. 569/1</td></tr><tr><td><span class='bolder'>ZEM 1</span></td><td>Beograd, Zemun</td><td>Vrtlarska br. 53 a</td></tr><tr><td><span class='bolder'>ZLATNIK</span></td><td>Beograd, Zemun</td><td>Dobanovacka br. 95</td></tr><tr><td><span class='bolder'>ZUM - S</span></td><td>Beograd, Zemun</td><td>Brace SmiljaniÄ‡a br. 17a</td></tr><tr><td><span class='bolder'>ÄAK 1</span></td><td>Beograd, Zemun</td><td>Milana ReÅ¡etara br. 5</td></tr><tr><td><span class='bolder'>ÄAK 2</span></td><td>Beograd, Zemun</td><td>Glavna br. 35</td></tr><tr><td><span class='bolder'>ÄAK 4</span></td><td>Beograd, Zemun</td><td>Batajnicki drum br. 1 a</td></tr></tbody>
+					</table>	</div>
+		
+	<script>
+	$(document).ready(function() {
+		$("#myTable").tablesorter(); 
+		$("select#city").change(function(){
+			var id = $("select#city option:selected").attr('value');
+			var type = 'exchange_offices';
+			$.post("/ajax_request.php", {id:id, type:type}, function(data){
+				$("#dataContainer").html(data);
+				$("#myTable").tablesorter(); // re inicijalizacija
+				var container = $('#dataContainer');
+				var	scrollTo = $('#counter');
+					/*
+					container.scrollTop(
+						scrollTo.offset().top - container.offset().top + container.scrollTop()
+					);
+					*/
+					// animate the scrolling:
+					container.animate({
+						scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+					});					
+			});
+		});
+	});
+
+	$('#loader').hide()  // hide it initially
+    .ajaxStart(function() {
+        $(this).show();
+    })
+    .ajaxStop(function() {
+        $(this).hide();
+    });
+	</script>
+<br />
+	Pogledajte još i:<br />
+<a href="/biz/kursna-lista" class="bolder">Zvanični kurs</a><br />
+<a href="/biz/kursna-lista/indikativni-kurs" class="bolder">Indikativni kurs</a>
+<script>
+$(document).ready(function(){ android_app_offer(); });
+</script>								</section>
+                                
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Servisinfo ad 1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5045266709223385"
+     data-ad-slot="1627988897"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>                               
+                                
+								                                <div class="share_buttons" style="padding: 10px 0;clear:both;">
+                                    <div style="display: inline; vertical-align: top;">
+                                    <!--<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.servisinfo.com%2Fbiz%2Fmenjacnica-online&amp;layout=standard&amp;show_faces=true&amp;width=265&amp;action=like&amp;colorscheme=light&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:265px; height:80px;" allowTransparency="true"></iframe>-->
+                                    </div>
+                                </div>
+
+
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+			<!-- Search
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+ -->
+ 
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<b><a href="https://www.servisinfo.com/">Servisinfo.com</a></b>
+									</header>
+									<ul>
+										<li>
+											<span class="opener">Servisinfo</span>
+											<ul>
+                                                <li><a href="/lutrija">Lutrija</a></li>
+                                                <li><a href="/vesti">Vesti dana</a></li>
+                                                <li><a href="/ip-adresa">Moja ip adresa</a></li>
+                                                <li><a href="/nadji-adresu">Pronađi adresu</a></li>
+                                                <li><a href="/servisi">Za Webmastere</a></li>
+                                                <li><a href="/praznici">Praznici - neradni dani</a></li>
+                                                <li><a href="/preslovljavanje">Preslovljavanje teksta</a></li>
+                                                <li><a href="/cene">Cene goriva</a></li>
+                                                <li><a href="/cena-struje">Cena struje</a></li>
+                                                <li><a href="/tablica-kalorija">Tablica kalorija</a></li>
+                                                <li><a href="/bioritam">Bioritam</a></li>
+                                                <li><a href="/postanski-brojevi">Poštanski brojevi</a></li>
+                                                <li><a href="/pozivni-brojevi">Pozivni brojevi</a></li>
+                                                <li><a href="/velicina-odece-brojevi">Veličina odeće (brojevi)</a></li>
+                                                <li><a href="/velicina-obuce-brojevi">Veličina obuće (brojevi)</a></li>
+                                                <li><a href="/normalna-telesna-temperatura">Normalna telesna temperatura</a></li>
+											</ul>
+										</li>
+										<li>
+											<span class="opener">BIZ</span>
+											<ul>
+                                                <li><a href="/biz/kursna-lista">Dnevni kurs</a></li>
+                                                <li><a href="/biz/cena-zlata">Cena zlata</a></li>
+                                                <li><a href="/biz/cena-srebra">Cena srebra</a></li>
+                                                <li><a href="/biz/konvertor-valuta">Konvertor valuta</a></li>
+                                                <li><a href="/biz/menjacnica-online">Menjačnica online</a></li>
+                                                <li><a href="/biz/berza">Beogradska berza</a></li>
+                                                <li><a href="/biz/cena-platine">Cena platine</a></li>
+                                                <li><a href="/biz/cena-paladijuma">Cena paladijuma</a></li>
+                                                <li><a href="/biz/cena-bakra">Cena bakra</a></li>
+                                                <li><a href="/biz/cena-aluminijuma">Cena aluminijuma</a></li>
+                                                <li><a href="/biz/cena-prirodnog-gasa">Cena prirodnog gasa</a></li>
+                                                <li><a href="/biz/cena-pamuka">Cena pamuka</a></li>
+                                                <li><a href="/biz/cena-secera">Cena šećera</a></li>
+                                                <li><a href="/biz/cena-kafe">Cena kafe</a></li>
+                                                <li><a href="/biz/kreditni-kalkulator">Kreditni kalkulator</a></li>
+                                                <li><a href="/biz/kalkulator-procenta">Kalkulator procenta</a></li>
+                                                <li><a href="/biz/sifre-placanja">Šifre plaćanja - dinari</a></li>
+                                                <li><a href="/biz/sifre-placanja-inostranstvo">Šifre plaćanja - devize</a></li>
+                                                <li><a href="/biz/provera-racuna">Provera računa</a></li>
+                                                <li><a href="/biz/pretraga-duznika">Pretraga dužnika</a></li>
+                                                <li><a href="/biz/pdv-kalkulator">PDV kalkulator</a></li>
+
+											</ul>
+										</li>
+                                        
+										<li>
+											<span class="opener">TV PROGRAM</span>
+											<ul>
+                                                <li><a href="/pregled-programa/fox-life">Fox Life</a></li>
+                                                <li><a href="/pregled-programa/b92">B92</a></li>
+                                                <li><a href="/pregled-programa/cinemania">Cinemania</a></li>
+                                                <li><a href="/pregled-programa/cinestar">CineStar</a></li>
+                                                <li><a href="/pregled-programa/eurosport">Eurosport</a></li>
+                        
+                                                <li><a href="/pregled-programa/happy-tv">Happy TV</a></li>
+                                                <li><a href="/pregled-programa/rts-1">RTS 1</a></li>
+                                                <li><a href="/pregled-programa/rts-2">RTS 2</a></li>
+                                                <li><a href="/pregled-programa/rtv-1">RTV 1</a></li>
+                                                <li><a href="/pregled-programa/studio-b">Studio B</a></li>
+                        
+                                                <li><a href="/pregled-programa/pink">Pink</a></li>
+                                                <li><a href="/pregled-programa/tlc">TLC</a></li>
+                                                <li><a href="/pregled-programa/hrt-1">HRT 1</a></li>
+                                                <li><a href="/pregled-programa/hrt-2">HRT 2</a></li>
+                                                <li><a href="/pregled-programa/history">History</a></li>
+                        
+                                                <li><a href="/pregled-programa/prva">Prva</a></li>
+                                                <li><a href="/pregled-programa/obn">OBN</a></li>
+                                                <li><a href="/pregled-programa/tv1000">TV 1000</a></li>
+                                                <li><a href="/pregled-programa/discovery">Discovery</a></li>
+                                                <li><a href="/pregled-programa/discovery-id">Discovery ID</a></li>
+											</ul>
+										</li>
+										<li>
+											<span class="opener">MOBILNI TELEFONI</span>
+											<ul>
+                                                <li><a href="/mobilni-telefoni/apple">Apple</a></li>
+                                                <li><a href="/mobilni-telefoni/asus">Asus</a></li>
+                                                <li><a href="/mobilni-telefoni/blackberry">Blackberry</a></li>
+                                                <li><a href="/mobilni-telefoni/htc">HTC</a></li>
+                        
+                                                <li><a href="/mobilni-telefoni/lg">LG</a></li>
+                                                <li><a href="/mobilni-telefoni/motorola">Motorola</a></li>
+                                                <li><a href="/mobilni-telefoni/nokia">Nokia</a></li>
+                                                <li><a href="/mobilni-telefoni/palm">Palm</a></li>
+                        
+                                                <li><a href="/mobilni-telefoni/philips">Philips</a></li>
+                                                <li><a href="/mobilni-telefoni/samsung">Samsung</a></li>
+                                                <li><a href="/mobilni-telefoni/sony-ericsson">Sony Ericsson</a></li>
+											</ul>
+										</li>
+										<li>
+											<span class="opener">SPORT</span>
+											<ul>
+                                                <li><a href="/sport/fudbal">Fudbal</a></li>
+                                                <li><a href="/sport/kosarka">Košarka</a></li>
+                                                <li><a href="/sport/odbojka">Odbojka</a></li>
+                        
+                                                <li><a href="/sport/tenis">Tenis</a></li>
+                                                <li><a href="/sport/rukomet">Rukomet</a></li>
+                                                <li><a href="/sport/hokej">Hokej</a></li>
+                        
+                                                <li><a href="/sport/bejzbol">Bejzbol</a></li>
+                                                <li><a href="/sport/americki-fudbal">Američki fudbal</a></li>
+                                                <li><a href="/sport/ragbi">Ragbi</a></li>
+											</ul>
+										</li>
+										<li>
+											<span class="opener">VREMENSKA PROGNOZA</span>
+                                            <ul>
+                                                <li><a href="/vremenska-prognoza/srbija">Srbija</a></li>
+                                                <li><a href="/vremenska-prognoza/hrvatska">Hrvatska</a></li>
+                                                <li><a href="/vremenska-prognoza/bih">BiH</a></li>
+                                                <li><a href="/vremenska-prognoza/slovenija">Slovenija</a></li>
+                                                <li><a href="/vremenska-prognoza/crna-gora">Crna Gora</a></li>
+
+                                                <li><a href="/vremenska-prognoza/srbija/beograd">Beograd</a></li>
+                                                <li><a href="/vremenska-prognoza/hrvatska/zagreb">Zagreb</a></li>
+                                                <li><a href="/vremenska-prognoza/bih/banja-luka">Banja Luka</a></li>
+                                                <li><a href="/vremenska-prognoza/slovenija/ljubljana">Ljubljana</a></li>
+                                                <li><a href="/vremenska-prognoza/crna-gora/podgorica">Podgorica</a></li>
+
+                                                <li><a href="/vremenska-prognoza/srbija/novi-sad">Novi Sad</a></li>
+                                                <li><a href="/vremenska-prognoza/hrvatska/dubrovnik">Dubrovnik</a></li>
+                                                <li><a href="/vremenska-prognoza/bih/sarajevo">Sarajevo</a></li>
+                                                <li><a href="/vremenska-prognoza/slovenija/portoroz">Portorož</a></li>
+                                                <li><a href="/vremenska-prognoza/crna-gora/budva">Budva</a></li>
+
+                                                <li><a href="/vremenska-prognoza/srbija/nis">Niš</a></li>
+                                                <li><a href="/vremenska-prognoza/hrvatska/pula">Pula</a></li>
+                                                <li><a href="/vremenska-prognoza/bih/mostar">Mostar</a></li>
+                                                <li><a href="/vremenska-prognoza/slovenija/koper">Koper</a></li>
+                                                <li><a href="/vremenska-prognoza/crna-gora/herceg-novi">Herceg Novi</a></li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+										<!-- Section -->
+								<section>
+
+									<div class="mini-posts">
+										<article>
+											<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                                            <!-- Servisinfo ad 2 -->
+                                            <ins class="adsbygoogle"
+                                                 style="display:block"
+                                                 data-ad-client="ca-pub-5045266709223385"
+                                                 data-ad-slot="3048402844"
+                                                 data-ad-format="auto"
+                                                 data-full-width-responsive="true"></ins>
+                                            <script>
+                                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                                            </script>                                        
+										</article>
+									</div>
+                                    
+									<header class="major">
+										<h4>BIZ</h4>
+									</header>
+                                    
+									<div class="mini-posts">
+										<article>
+                                            <ul>
+												<li class="footer_block_heading"><a href="/biz" style="text-decoration:none; cursor:pointer;">BIZ</a></li>
+												<li><a href="/biz/kursna-lista">Dnevni kurs</a></li>
+												<li><a href="/biz/konvertor-valuta">Konvertor valuta</a></li>
+												<li><a href="/biz/kursna-lista/indikativni-kurs">Indikativni kurs</a></li>
+												<li><a href="/biz/menjacnica-online">Menjačnica online</a></li>
+												<li><a href="/biz/napredni-kreditni-kalkulator">Kreditni kalkulator (složeni račun)</a></li>
+												<li><a href="/biz/euribor">Euribor vrednosti</a></li>
+												<li><a href="/biz/libor">Libor vrednosti</a></li>
+												<li><a href="/biz/berza">Beogradska berza</a></li>
+												<li><a href="/biz/lizing-kompanije">Lizing kompanije</a></li>
+                                            </ul>
+										</article>
+									</div>
+                                      
+									<header class="major">
+										<h4>SERVISINFIO</h4>
+									</header>
+                                    
+									<div class="mini-posts">
+										<article>
+                                            <ul>
+                                                <li><a href="/cene">Cene goriva</a></li>
+                                                <li><a href="/cena-struje">Cana struje (kWh)</a></li>
+                                                <li><a href="/nadji-adresu">Pronađi adresu</a></li>
+                                                <li><a href="/ip-adresa">Moja IP adresa</a></li>
+                                                <li><a href="/automobili-iz-uvoza">Polovni automobili iz uvoza (mobile.de)</a></li>
+                                                <li><a href="/praznici">Praznici-neradni dani</a></li>
+                                                <li><a href="/hrvatski-meseci-na-srpskom">Hrvatski meseci na Srpskom</a></li>
+                                                <li><a href="/lutrija">Lutrija</a></li>
+                                            </ul>
+										</article>
+									</div>
+
+									<header class="major">
+										<h4>SIROVINE</h4>
+									</header>
+                                    
+									<div class="mini-posts">
+										<article>
+                                            <ul>
+												<li class="footer_block_heading"><a href="/poljoprivredne-sirovine" style="text-decoration:none; cursor:pointer;">SIROVINE</a></li>
+												<li><a href="/biz/cena-kafe">Kafa</a></li>
+												<li><a href="/biz/cena-kakaoa">Kakao</a></li>
+												<li><a href="/biz/cena-kukuruza">Kukuruz</a></li>
+												<li><a href="/biz/cena-pamuka">Pamuk</a></li>
+												<li><a href="/biz/cena-soje">Soja</a></li>
+												<li><a href="/biz/cena-sojinog-brasna">Sojino brašno</a></li>
+												<li><a href="/biz/cena-sojinog-ulja">Sojino ulje</a></li>
+												<li><a href="/biz/cena-secera">Šećer</a></li>
+                                            </ul>
+										</article>
+									</div>
+                                      
+									<header class="major">
+										<h4>METALI</h4>
+									</header>
+                                    
+									<div class="mini-posts">
+										<article>
+                                            <ul>
+												<li class="footer_block_heading"><a href="/metali" style="text-decoration:none; cursor:pointer;">METALI</a></li>
+												<li><a href="/biz/cena-zlata">Zlato</a></li>
+												<li><a href="/biz/cena-srebra">Srebro</a></li>
+												<li><a href="/biz/cena-platine">Platina</a></li>
+												<li><a href="/biz/cena-paladijuma">Paladijum</a></li>
+												<li><a href="/biz/cena-aluminijuma">Aluminijum</a></li>
+												<li><a href="/biz/cena-bakra">Bakar</a></li>
+                                            </ul>
+										</article>
+									</div>
+                                      
+									<header class="major">
+										<h4>PREPORUČUJEMO</h4>
+									</header>
+                                    
+									<div class="mini-posts">
+										<article>
+                                            <ul>
+												<li><a href="/biz/kursna-lista">Dnevni kurs</a></li>
+												<li><a href="/biz/konvertor-valuta">Univerzalni konvertor valuta</a></li>
+                                            </ul>
+										</article>
+									</div>
+                                      
+								</section>
+
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>SERVISINFO</h2>
+									</header>
+
+									<ul class="contact">
+										<li><a href="/kontakt">Kontakt</a></li>
+                                        <!--<li><a href="/marketing">Marketing</a></li>-->
+                                        <li><a href="/servisi">Webmaster tools</a></li>
+                                        <li><a href="/uslovi">Uslovi korišćenja</a></li>
+									</ul>
+								</section>
+                                
+							<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">&copy; Copyright 2021 servisinfo.com</p>
+								</footer>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/browser.min.js"></script>
+			<script src="/assets/js/breakpoints.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<script src="/assets/js/main.js"></script>
+
+	</body>
+</html>
