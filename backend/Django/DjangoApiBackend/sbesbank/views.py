@@ -26,6 +26,17 @@ def Transact(request, id):
 
     return JsonResponse(serializer.data)
 
+@api_view(['GET'])
+def IUserData(request, id):
+    
+    obj1 = IUser.objects.get(id=id) 
+    obj2 = Certificate.objects.get(userId=id)
+    serializer1 =  IUserSerializer(obj1)
+    serializer2 = CertificateSerializer(obj2)
+
+    return JsonResponse({"IUser": serializer1.data,
+    "Certificate": serializer2.data})
+
 
 @api_view(['GET'])
 def AccInfo(request, id):
@@ -33,5 +44,15 @@ def AccInfo(request, id):
     obj2 = list(Card.objects.filter(accountFK=id))
     serializer1 =  AccountSerializer(obj1)
     serializer2 = CardSerializer(obj2,many = True)
+
     return JsonResponse({"Account": serializer1.data,
     "Cards": serializer2.data})
+
+@api_view(['GET'])
+def CertData(requset, userId):
+    obj = Certificate.objects.get(userId = userId)
+    serializer = CertificateSerializer(obj)
+
+    return JsonResponse(serializer.data)
+
+

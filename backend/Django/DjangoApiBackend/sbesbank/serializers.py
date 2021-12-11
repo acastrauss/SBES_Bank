@@ -244,13 +244,13 @@ class CertificateSerializer(serializers.ModelSerializer):
             'cerPath',
             'pfxPath',
             'pvkPath',
-            'certificateName'
+            'certificateName',
+            'userId'
         ]
 
 
 class IUserSerializer(serializers.ModelSerializer):
     
-    certificate = CertificateSerializer()
 
     class Meta:
         model = IUser
@@ -263,7 +263,7 @@ class IUserSerializer(serializers.ModelSerializer):
             'gender',
             'jmbg',
             'birthDate',
-            'userType'
+            'userType',
         ]
     
     def create(self, validated_data):
