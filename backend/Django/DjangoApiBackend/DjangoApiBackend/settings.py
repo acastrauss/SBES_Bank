@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sbesbank',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'KINGrobert543',
         'HOST': 'localhost',
         'PORT': '5432',
     }

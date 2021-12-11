@@ -5,10 +5,22 @@ from sbesbank.models import *
 from sbesbank.serializers import *
 # Create your views here.
 
+from modules.paymentCodes.parse import Parse
+
 @api_view(['GET'])
 def TrAcTransfer(request, id):
     obj = TrAcTransferInfo.objects.get(id=id)
     serializer = TrAcTransferInfoSerializer(obj) 
+
+    # datadict = Parse()
+    # # print(datadict)
+
+    # for code in datadict:
+    #     # print(f"{int(code)}:{datadict[code]}")
+    #     PaymentCode.objects.create(
+    #         code=int(code),
+    #         description=datadict[code]
+    #     )
 
     return JsonResponse(serializer.data)
 
