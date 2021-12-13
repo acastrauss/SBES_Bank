@@ -1,7 +1,7 @@
 from django.forms.fields import TypedChoiceField
 from rest_framework import serializers
 from sbesbank.models import *
-
+from django.db.models import *
 class PaymentCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentCode
@@ -203,55 +203,8 @@ class TransactionSerializer(serializers.ModelSerializer):
     )
 
 
-
-class ClientSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Client
-
-        fields = [
-            'userId'
-        ]
-
-        depth = 1
-
-class AccountSerializer(serializers.ModelSerializer):
-    currency = EnumChoiceField(
-        enum_class=Currency
-    )
-    
-    clientId = ClientSerializer()
-
-    
-
-    class Meta:
-        model = Account
-        fields = [
-            'accountBalance',
-            'accountNumber',
-            'blocked',
-            'currency',
-            'dateCreated',
-            'clientId'
-        ]
-
-
-class CertificateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Certificate
-        fields = [
-            'authorityName',
-            'cerPath',
-            'pfxPath',
-            'pvkPath',
-            'certificateName',
-            'userId'
-        ]
-
-
 class IUserSerializer(serializers.ModelSerializer):
-    
-
+   
     class Meta:
         model = IUser
         fields = [
@@ -270,6 +223,65 @@ class IUserSerializer(serializers.ModelSerializer):
         """
         Create and return a new User instance
         """
-        return models.objects.create(**validated_data)
+        return IUser.objects.create(**validated_data)
     
+
+class ClientSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Client
+
+        fields = [
+            'id',
+            'userId'
+        ]
+
+        depth = 1
+    
+    
+    def create(self, validated_data):
+        """
+        Create and return a new User instance
+        """
+        validated_data.userId= validated_data.userId['id']
+        return Client.objects.create(**validated_data)
+        
+
+class AccountSerializer(serializers.ModelSerializer):
+   
+    clientId = ClientSerializer()
+
+    
+
+    class Meta:
+        model = Account
+        fields = [
+            'accountBalance',
+            'accountNumber',
+            'blocked',
+            'currency',
+            'dateCreated',
+            'clientId'
+        ]
+    
+    def create(self, validated_data):
+        """
+        Create and return a new User instance
+        """
+        return Account.objects.create(**validated_data)
+
+
+class CertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = [
+            'authorityName',
+            'cerPath',
+            'pfxPath',
+            'pvkPath',
+            'certificateName',
+            'userId'
+        ]
+
+
 

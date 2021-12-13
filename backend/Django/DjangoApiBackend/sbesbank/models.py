@@ -159,7 +159,7 @@ class Account(models.Model):
     accountBalance = models.FloatField()
 
     accountNumber = models.CharField(
-        max_length=20
+        max_length=24
     )
 
     blocked = models.BooleanField(
@@ -212,7 +212,7 @@ class Card(models.Model):
     ]
 
     cardProcessor = models.CharField(
-        max_length = 30,
+        max_length = 100,
         choices=CARD_PROCESSOR
     )
 

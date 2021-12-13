@@ -7,14 +7,13 @@
 # Original author: acast
 # 
 #######################################################
-
-from BankConfig import (
+from Shared.BankConfig import(
     BankConfigParser
 )
 
 import random
 import copy
-from Enums import (
+from Shared.Enums import (
     CreditCardProcessor
 )
 
