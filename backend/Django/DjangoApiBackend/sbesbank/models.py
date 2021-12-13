@@ -114,7 +114,7 @@ class TrAcTransferInfo(models.Model):
     """
 
     accountNumber = models.CharField(
-        max_length=20
+        max_length=25
     )
 
     billingAddress = models.CharField(
@@ -140,7 +140,7 @@ class TrMyAccountInfo(models.Model):
     balanceAfter = models.FloatField()
 
     accountNumber = models.CharField(
-        max_length=20
+        max_length=25
     )
 
     billingAddress = models.CharField(

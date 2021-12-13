@@ -39,7 +39,7 @@ class TrAcTransferInfoSerializer(serializers.ModelSerializer):
             ]
 
     accountNumber = serializers.CharField(
-        max_length=20
+        max_length=25
     )
 
     billingAddress = serializers.CharField(
@@ -74,7 +74,7 @@ class TrMyAccountInfoSerializer(serializers.ModelSerializer):
     balanceAfter = serializers.FloatField()
 
     accountNumber = serializers.CharField(
-        max_length=20
+        max_length=25
     )
 
     billingAddress = serializers.CharField(

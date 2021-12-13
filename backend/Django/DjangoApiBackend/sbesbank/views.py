@@ -1,14 +1,16 @@
 
+from typing import KeysView
 from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.utils import translation
 from rest_framework.decorators import api_view
 from Shared.Enums.CardType import CardType
 from sbesbank.models import *
 from sbesbank.serializers import *
 from rest_framework import status
 from Shared.BankNumbers import *
-
+from sbesbank.models import *
 from datetime import datetime
 # Create your views here.
 from rest_framework.parsers import JSONParser 
@@ -187,6 +189,50 @@ def createNewClientAccount(request):
     else:
         return JsonResponse(iuser_serializer.errors, status
         = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def AddTransaction(request):
+    transaction_data = JSONParser().parse(request) 
+    myacc = transaction_data['myAccInfoFK']
+    tracc = transaction_data['transferAccInfoFK']
+    paymentCod= transaction_data['paymentCodeFK']
+    pym = PaymentCode.objects.get(code = paymentCod['code'])
+    transaction_serializer = TransactionSerializer(data = transaction_data)
+   
+    myacc_serializer = TrMyAccountInfoSerializer(data = myacc)
+    tracc_serializer = TrAcTransferInfoSerializer(data = tracc)
+    if myacc_serializer.is_valid():
+        myacc_serializer.save()
+        if tracc_serializer.is_valid():
+            tracc_serializer.save()
+            transaction_serializer.paymentCodeFK = pym.code
+            transact = Transaction()
+            # transact.paymentCodeFK = pym
+            # transact.paymentPurpose = transaction_data['paymentPurpose']
+            # transact.amount = transaction_data['amount']
+            # transact.modelCode = transaction_data['modelCode']
+            # transact.paymentPurpose = transaction_data['paymentPurpose']
+            # transact.provision = transaction_data['provision']
+            # transact.preciseTime = transaction_data['preciseTime']
+                
+            idss = TrAcTransferInfo.objects.values('id')
+            ids2 = TrMyAccountInfo.objects.values('id')
+            
+            transaction_serializer.transferAccInfoFK = TrAcTransferInfo.objects.get(id= idss.order_by('-id').first()['id'])
+            
+            transaction_serializer.myAccInfoFK = TrMyAccountInfo.objects.get(id = ids2.order_by('-id').first()['id'])
+            transaction_serializer.id = transaction_data['id']
+            if transaction_serializer.is_valid():
+                 transaction_serializer.save()
+            return JsonResponse(transaction_serializer.data)
+        else:
+            JsonResponse(tracc_serializer.errors, status
+    = status.HTTP_400_BAD_REQUEST)
+    else:
+        JsonResponse(myacc_serializer.errors, status
+    = status.HTTP_400_BAD_REQUEST)
+    
+
 
 def createAccount():
     account = Account()
