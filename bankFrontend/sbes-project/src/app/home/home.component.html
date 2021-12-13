@@ -1,0 +1,6 @@
+    <div *ngIf="userName === null; else odjava">
+        <img src="assets/login.jpg" height="50" size="50" alt="Login" [routerLink]="['/login']">
+    </div>
+    <ng-template #odjava>
+        <img src="assets/logout.jpg" height="50" size="50" alt="Login" [routerLink]="['/']">
+    </ng-template>
