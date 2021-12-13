@@ -1,0 +1,63 @@
+<h2 class="form">Register</h2>
+<hr>
+<div class="form">
+    <form [formGroup]="registerFrom" (ngSubmit)="submitForm(registerFrom.value)">
+        <div class="form-group">
+            <label for="username">User name</label>
+            <input type="text"  id="username" name="username" class="form-control" formControlName="username">
+        </div>
+        <div class="error-message" *ngIf="username.errors?.['required']">Name is required</div>
+        <br>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" id="password" class="form-control" formControlName="password">
+        </div>
+        <div class="error-message" *ngIf="password.errors?.['required']">Password is required</div>
+        <br>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" class="form-control" formControlName="gender">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="gender.errors?.['required']">Gender is required</div>
+        <br>
+        <div class="form-group">
+            <label for="jmbg">Jmbg</label>
+            <input type="text" id="jmbg" class="form-control" formControlName="jmbg">
+        </div>
+        <div class="error-message" *ngIf="jmbg.errors?.['required']">Jmbg is required</div>
+    
+        <br>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email"  id="email" name="email" class="form-control" formControlName="email">
+        </div>
+        <div class="error-message" *ngIf="email.errors?.['required']">Email is required</div>
+        <div class="error-message" *ngIf="email.errors?.['email']">Email is not correct</div>
+        <br>
+        <div class="form-group">
+            <label for="birthDate">Birth date</label>
+            <input type="date" id="birthDate" class="form-control" value="2021-07-22" formControlName="birthDate">
+        </div>
+        <div class="error-message" *ngIf="birthDate.errors?.['required']">BirthDate is required</div>
+        <br>
+        <div class="form-group">
+            <label for="billingAddress">Billing address</label>
+            <input type="text" id="billingAddress" class="form-control" formControlName="billingAddress">
+        </div>
+        <div class="error-message" *ngIf="billingAddress.errors?.['required']">Billing address is required</div>
+        <br>
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" class="form-control" formControlName="fullName">
+        </div>
+        <div class="error-message" *ngIf="fullName.errors?.['required']">Full name is required</div>
+    
+        <br>
+        <button type="submit" [routerLink]="['/']" class="btn btn-primary btn-block" [disabled]="!registerFrom.valid">Submit</button>
+    </form>
+    
+</div>
