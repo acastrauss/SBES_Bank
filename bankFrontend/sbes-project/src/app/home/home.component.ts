@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit,OnDestroy {
     this.paramMapSub = this.route.paramMap.subscribe(params =>{
     this.userName = params.get('username');
     
-    this.getUserById(this.userName).subscribe((user : UserModel)=>this.loginUser = user);
+    // this.getUserById(this.userName).subscribe((user : UserModel)=>this.loginUser = user);
     /*
     this.UserService.getUsers().subscribe((users:UserModel[])=>{
                       users.forEach(u=>{if(u.username==this.userName){

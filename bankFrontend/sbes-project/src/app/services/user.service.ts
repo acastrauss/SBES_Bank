@@ -9,7 +9,7 @@ import { UserModel } from '../models/user.model';
 export class UserService {
 
   private users: Observable<UserModel[]>;
-  private usersUrl = "http://localhost:3001/users/";
+  private usersUrl = "http://127.0.0.1:8000/api/sbesbank/loginuser";
 
   constructor(private htpp : HttpClient) { 
     this.users = new Observable<UserModel[]>();

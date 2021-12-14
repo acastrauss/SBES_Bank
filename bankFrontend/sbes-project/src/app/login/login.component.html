@@ -12,7 +12,7 @@
             <input type="text" id="password" class="form-control" formControlName="password">
         </div>
         <div class="error-message" *ngIf="password.errors?.['required']">Password is required</div>
-        <button type="submit" routerLink="/login/{{userName}}" class="btn btn-primary btn-block" [disabled]="!loginFrom.valid">Submit</button>
+        <button type="submit"  class="btn btn-primary btn-block" [disabled]="!loginFrom.valid">Submit</button>
     </form>
 </div>
 

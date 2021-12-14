@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.UserService.logIn(data).subscribe((user : UserModel) =>{
-      this.authenticate(data);
+      // this.authenticate(data);
       window.alert('Korisnik ${user.username} uspjesno logovan!');
       localStorage.setItem('user',JSON.stringify(data));
       this.loginFrom.reset();

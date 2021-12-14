@@ -7,18 +7,17 @@
 # Original author: acast
 # 
 #######################################################
-from Shared.BankConfig import(
+from BankConfig import (
     BankConfigParser
 )
-
 import random
 import copy
-from Shared.Enums import (
+from Enums.CreditCardProcessor import (
     CreditCardProcessor
 )
 
 
-class BankNumbers:
+class BankNumbers():
     def GenerateAccountNumber()-> str:
         digits = []
         conf = BankConfigParser()
@@ -172,7 +171,6 @@ class BankNumbers:
         ).zfill(3)
 
         return cvc
-
 
     def GeneratePIN(
         cardNumber: str, accountNumber: str

@@ -7,11 +7,40 @@
 # Original author: acast
 # 
 #######################################################
-import Certificate
+from sbesbank.models import Certificate
 
-class CertificateGenerator:  
+
+class CertificateGenerator:
     def GenerateCertificate(
-        certificateName: str,
-        authorityName: str
+            self,
+            certificateName: str,
+            authorityName: str
         ) -> Certificate:
-        pass
+        """
+            Generating certificate for user.
+            UserId must be set after generation
+        """
+        cert = Certificate()
+        cert.authorityName = authorityName
+        cert.certificateName = certificateName
+        cert.cerPath = self.GenerateCerFile()
+        cert.pvkPath = self.GeneratePvkFile()
+        cert.pfxPath = self.GeneratePfxFile()
+
+    def GenerateCerFile(self) -> str:
+        """
+            Returns path to certificate
+        """
+        return ""
+
+    def GeneratePfxFile(self) -> str:
+        """
+            Returns path to certificate
+        """
+        return ""
+    
+    def GeneratePvkFile(self) -> str:
+        """
+            Returns path to certificate
+        """
+        return ""

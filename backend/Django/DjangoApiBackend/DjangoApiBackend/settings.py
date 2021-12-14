@@ -25,8 +25,6 @@ SECRET_KEY = 'django-insecure-a2&6lm9&m%zfy3xo$y8d$1nf15hw2m)*9jw0g=$6dl-t+)1j27
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -39,11 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'sbesbank.apps.SbesbankConfig'
-    
-    # CORS
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,9 +48,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # CORS
-    
 ]
+
+## SET CORS TO BE ALLOWED FROM ANGULAR FRONTEND
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost",]
+# CORS_ORIGIN_WHITELIST = (
+# "127.0.0.1:4200",
+# "localhost:4200",
+# )
+
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'DjangoApiBackend.urls'
 
