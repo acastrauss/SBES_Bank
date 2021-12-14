@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^api/sbesbank/account', views.createAccount),
     url(r'^api/sbesbank/accCli', views.createNewClientAccount),
     url(r'^api/sbesbank/loginuser', views.LogInUser),
+    url(r'^api/sbesbank/addTransaction', views.AddTransaction),
 ]
