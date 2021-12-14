@@ -197,16 +197,13 @@ def AddTransaction(request):
     tracc = transaction_data['transferAccInfoFK']
     paymentCod= transaction_data['paymentCodeFK']
     pym = PaymentCode.objects.get(code = paymentCod['code'])
-    transaction_serializer = TransactionSerializer(data = transaction_data)
-   
     myacc_serializer = TrMyAccountInfoSerializer(data = myacc)
     tracc_serializer = TrAcTransferInfoSerializer(data = tracc)
+    
     if myacc_serializer.is_valid():
         myacc_serializer.save()
         if tracc_serializer.is_valid():
             tracc_serializer.save()
-            transaction_serializer.paymentCodeFK = pym.code
-            transact = Transaction()
             # transact.paymentCodeFK = pym
             # transact.paymentPurpose = transaction_data['paymentPurpose']
             # transact.amount = transaction_data['amount']
@@ -215,21 +212,62 @@ def AddTransaction(request):
             # transact.provision = transaction_data['provision']
             # transact.preciseTime = transaction_data['preciseTime']
                 
-            idss = TrAcTransferInfo.objects.values('id')
-            ids2 = TrMyAccountInfo.objects.values('id')
+            idtrac = TrAcTransferInfo.objects.values('id')
+            idmyac = TrMyAccountInfo.objects.values('id')
+            idtr = Transaction.objects.values('id')
+
+           # transaction_serializer.paymentCodeFK = PaymentCodeSerializer(data = pym)
+            transferAccInfoFK = TrAcTransferInfo.objects.get(id= idtrac.order_by('-id').first()['id'])
+            myAccInfoFK = TrMyAccountInfo.objects.get(id = idmyac.order_by('-id').first()['id'])
+            #transaction_serializer.id = 
+            idtrr = idtr.order_by('-id').first()['id'] + 1
+            typetr = 0
+            if transaction_data['transactionType']=='INFLOW':
+                typetr = 0
+            else:
+                typetr = 1
+            currencyId = 0
+            if transaction_data['currency']=='USD':
+                currencyId = 1
+            elif transaction_data['currency']=='EUR':
+                currencyId = 2
+            elif transaction_data['currency']=='CHF':
+                currencyId = 3
+            elif transaction_data['currency']=='GBP':
+                currencyId = 4
+            elif transaction_data['currency']=='RUB':
+                currencyId = 5
+            elif transaction_data['currency']=='CNY':
+                currencyId = 6
+            elif transaction_data['currency']=='CAD':
+                currencyId = 7
+            elif transaction_data['currency']=='AUD':
+                currencyId = 8
+            elif transaction_data['currency']=='RSD':
+                currencyId = 9
+
+            transaction = Transaction.objects.create(
+                id = idtrr,
+                amount =transaction_data['amount'],
+                modelCode = transaction_data['modelCode'],
+                paymentCodeFK = pym,
+                paymentPurpose = transaction_data['paymentPurpose'],
+                preciseTime = transaction_data['preciseTime'], 
+                provision = transaction_data['provision'],
+                referenceNumber = transaction_data['referenceNumber'],
+                transactionType = Transaction.TRANSACTION_TYPE[typetr][1],
+                currency = Currency(currencyId),
+                myAccInfoFK = myAccInfoFK,
+                transferAccInfoFK = transferAccInfoFK
+            )
             
-            transaction_serializer.transferAccInfoFK = TrAcTransferInfo.objects.get(id= idss.order_by('-id').first()['id'])
-            
-            transaction_serializer.myAccInfoFK = TrMyAccountInfo.objects.get(id = ids2.order_by('-id').first()['id'])
-            transaction_serializer.id = transaction_data['id']
-            if transaction_serializer.is_valid():
-                 transaction_serializer.save()
-            return JsonResponse(transaction_serializer.data)
+            transaction.save()
+            return JsonResponse(transaction_data)
         else:
-            JsonResponse(tracc_serializer.errors, status
-    = status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(tracc_serializer.errors, status
+        = status.HTTP_400_BAD_REQUEST)
     else:
-        JsonResponse(myacc_serializer.errors, status
+        return JsonResponse(myacc_serializer.errors, status
     = status.HTTP_400_BAD_REQUEST)
     
 
