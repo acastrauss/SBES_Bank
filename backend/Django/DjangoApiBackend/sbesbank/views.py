@@ -1,4 +1,3 @@
-
 from typing import KeysView
 from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render
@@ -6,21 +5,22 @@ from django.http import JsonResponse
 from django.utils import translation
 from rest_framework.decorators import api_view
 from Shared.Enums.CardType import CardType
-# from Shared.Enums.CreditCardProcessor import CreditCardProcessor
 from sbesbank.models import *
 from sbesbank.serializers import *
 from rest_framework import status
-import json
-
-# from Shared.BankNumbers import (
-#     BankNumbers
-# )
 from Shared.BankNumbers import *
+
 from sbesbank.models import *
 from datetime import datetime
-from rest_framework.parsers import JSONParser
-
 # Create your views here.
+from rest_framework.parsers import JSONParser 
+import json
+from modules.exchangeRates import (
+    parse
+)
+import copy
+
+from sbesbank.models import Currency
 
 
 @api_view(['GET'])
@@ -37,12 +37,6 @@ def TrMyAcc(request, id):
     serializer = TrMyAccountInfoSerializer(obj) 
 
     return JsonResponse(serializer.data)
-
-
-
-
-
-
 
 
 
@@ -65,12 +59,6 @@ def LogInUser(request):
     ser = ClientSerializer(client)
 
     return JsonResponse(ser.data)
-
-
-
-
-
-
 
 
 @api_view(['GET'])
@@ -138,6 +126,42 @@ def AccTransactions(request, id):
     return JsonResponse(serializer.data)
 
 
+
+@api_view(['GET'])
+def ChangeAccount(request, id, currency):
+    typetr = 0
+    currencyId = 0
+    if currency=='USD':
+        currencyId = 1
+    elif currency=='EUR':
+        currencyId = 2
+    elif currency=='CHF':
+        currencyId = 3
+    elif currency=='GBP':
+        currencyId = 4
+    elif currency=='RUB':
+        currencyId = 5
+    elif currency=='CNY':
+        currencyId = 6
+    elif currency=='CAD':
+        currencyId = 7
+    elif currency=='AUD':
+        currencyId = 8
+    elif currency=='RSD':
+        currencyId = 9
+    curr = Currency(currencyId)
+    account =Account.objects.get(clientId = id, currency = curr)
+    cards = list(Card.objects.filter(accountFK = account.id))
+    serializer_acc = AccountSerializer(account)
+    serializer_cards = CardSerializer(cards,many = True)
+
+    return JsonResponse(
+        {
+            "Account": serializer_acc.data,
+            "Cards": serializer_cards.data
+        }
+    )
+
 @api_view(['POST'])
 def createUser(request):
     iuser_data = JSONParser().parse(request)
@@ -165,16 +189,14 @@ def createClient(request):
 
 
 @api_view(['POST'])
-def createAccount(request):
-    account_data = JSONParser().parse(request)
-    account_serializer = AccountSerializer(data = account_data)
-    if account_serializer.is_valid():
-        account_serializer.save()
-        return JsonResponse(account_serializer.data)
-    else:
-        return JsonResponse(
-            account_serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST)
+def createAccountPOST(request, clientId,currency):
+    account = Account()
+    account = createAccount()
+    account.clientId = Client.objects.get(id = clientId)
+    account.currency = Currency(getCurrency(currency))
+    account.save()
+    account_serialized = AccountSerializer(account)
+    return JsonResponse(account_serialized.data)
 
 
 @api_view(['POST'])
@@ -190,46 +212,66 @@ def createNewClientAccount(request):
         account = Account()
         account = createAccount()
         client1 = Client.objects.get(userId =iuser_data['id'])
-        ids = Account.objects.values('id')
-        account.id = ids.order_by('-id').first()['id'] + 1 
         account.clientId = client1
         account.save()
-        # card = createCard(userr.fullName,CardType.DEBIT,account.accountNumber)
-        # card.accountFK = account
-        # idss = Card.objects.values('id')
-        # card.id = idss.order_by('-id').first()['id'] + 1
-        # card.save()
+        card = createCard(userr.fullName,CardType.DEBIT,account.accountNumber)
+        card.accountFK = account
+        card.save()
         return JsonResponse(iuser_serializer.data)
     else:
-        return JsonResponse(
-            iuser_serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-
-# @api_view(['POST'])
-# def createAccount():
-#     account = Account()
-#     account.accountBalance = 0.0
-#     account.accountNumber = BankNumbers.GenerateAccountNumber()
-#     account.blocked = False
-#     account.currency = Currency.RSD
-#     account.dateCreated = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
-#     return account
-
-
-# @api_view(['POST'])
-# def createCard(cardHolder,cardType,accountNumber):
-#     card = Card()
-#     card.cardHolder= cardHolder
-#     card.cardNumber = BankNumbers.GenerateCardNumber(cardProcessor= CreditCardProcessor.CreditCardProcessor.MASTER_CARD)
-#     card.cardProcessor = CreditCardProcessor.CreditCardProcessor.MASTER_CARD
-#     card.pin = BankNumbers.GeneratePIN(card.cardNumber,accountNumber)
-#     card.validUntil =  (datetime.now()).strftime("%Y-%m-%d")
-#     card.cardType = cardType
-#     return card
         return JsonResponse(iuser_serializer.errors, status
         = status.HTTP_400_BAD_REQUEST)
+
+def createAccount():
+    account = Account()
+    ids = Account.objects.values('id')
+    try:
+        account.id = ids.order_by('-id').first()['id'] + 1 
+    except:
+        account.id = 1
+    account.accountBalance = 0.0
+    account.accountNumber = BankNumbers.GenerateAccountNumber()
+    account.blocked = False
+    account.currency = Currency.RSD
+    account.dateCreated = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+    return account
+
+def createCard(cardHolder,cardType,accountNumber):
+    card = Card()
+    idss = Card.objects.values('id')
+    try:
+        card.id = idss.order_by('-id').first()['id'] + 1    
+    except:
+        card.id = 1
+    card.cardHolder= cardHolder
+    card.cardNumber = BankNumbers.GenerateCardNumber(cardProcessor= CreditCardProcessor.CreditCardProcessor.MASTER_CARD)
+    card.cardProcessor = CreditCardProcessor.CreditCardProcessor.MASTER_CARD
+    card.pin = BankNumbers.GeneratePIN(card.cardNumber,accountNumber)    
+    card.validUntil =  (datetime.now()).strftime("%Y-%m-%d")
+    card.cardType = cardType
+    return card
+
+def getCurrency(currency):
+    currencyId = 0
+    if currency=='USD':
+        currencyId = 1
+    elif currency=='EUR':
+        currencyId = 2
+    elif currency=='CHF':
+        currencyId = 3
+    elif currency=='GBP':
+        currencyId = 4
+    elif currency=='RUB':
+        currencyId = 5
+    elif currency=='CNY':
+        currencyId = 6
+    elif currency=='CAD':
+        currencyId = 7
+    elif currency=='AUD':
+        currencyId = 8
+    elif currency=='RSD':
+        currencyId = 9       
+    return currencyId
 
 @api_view(['POST'])
 def AddTransaction(request):
@@ -257,7 +299,7 @@ def AddTransaction(request):
             idmyac = TrMyAccountInfo.objects.values('id')
             idtr = Transaction.objects.values('id')
 
-           # transaction_serializer.paymentCodeFK = PaymentCodeSerializer(data = pym)
+            #transaction_serializer.paymentCodeFK = PaymentCodeSerializer(data = pym)
             transferAccInfoFK = TrAcTransferInfo.objects.get(id= idtrac.order_by('-id').first()['id'])
             myAccInfoFK = TrMyAccountInfo.objects.get(id = idmyac.order_by('-id').first()['id'])
             #transaction_serializer.id = 
@@ -311,3 +353,4 @@ def AddTransaction(request):
         return JsonResponse(myacc_serializer.errors, status
     = status.HTTP_400_BAD_REQUEST)
     
+

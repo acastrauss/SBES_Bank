@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^api/sbesbank/trmyacc/id=([0-9]*)', views.TrMyAcc),
     url(r'^api/sbesbank/iuser/id=([0-9]*)', views.IUserData),
     url(r'^api/sbesbank/accountinfo/id=([0-9]*)', views.AccInfo),
+    url(r'^api/sbesbank/changeacc/clientId=([0-9]*)&currency=([a-zA-Z]{2,})', views.ChangeAccount),
+    url(r'^api/sbesbank/createacc/clientId=([0-9]*)&currency=([a-zA-Z]{2,})', views.createAccountPOST),
     url(r'^api/sbesbank/transaction/id=([0-9]*)', views.Transact),
     url(r'^api/sbesbank/client/id=([0-9]*)', views.getClient),
     url(r'^api/sbesbank/certificate/id=([0-9]*)', views.CertData),
