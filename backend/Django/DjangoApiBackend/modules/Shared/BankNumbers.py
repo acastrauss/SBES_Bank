@@ -8,13 +8,14 @@
 # 
 #######################################################
 
-from Shared.BankConfig import (
+from modules.Shared.BankConfig import (
     BankConfigParser
 )
 
 import random
 import copy
-from Shared.Enums import (
+
+from modules.Shared.Enums import (
     CreditCardProcessor
 )
 

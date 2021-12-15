@@ -1,26 +1,21 @@
-from typing import KeysView
 from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import translation
 from rest_framework.decorators import api_view
-from Shared.Enums.CardType import CardType
+from rest_framework import status
+from rest_framework.parsers import JSONParser 
+
 from sbesbank.models import *
 from sbesbank.serializers import *
-from rest_framework import status
-from Shared.BankNumbers import *
+from modules.Shared.BankNumbers import *
+from modules.Shared.Enums.CardType import CardType
 
-from sbesbank.models import *
 from datetime import datetime
-# Create your views here.
-from rest_framework.parsers import JSONParser 
-import json
-from modules.exchangeRates import (
-    parse
-)
-import copy
 
-from sbesbank.models import Currency
+from typing import KeysView
+import json
+import copy
 
 
 @api_view(['GET'])
@@ -49,8 +44,6 @@ def LogInUser(request):
         username=body['username'],
         password=body['password']
     )
-
-    print(user)
 
     client = Client.objects.get(
         userId=user
