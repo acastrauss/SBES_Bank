@@ -2,6 +2,7 @@ from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.utils import translation
+from django_prepared_query.exceptions import IncorrectBindParameter
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import JSONParser 
@@ -10,13 +11,16 @@ from sbesbank.models import *
 from sbesbank.serializers import *
 from modules.Shared.BankNumbers import *
 from modules.Shared.Enums.CardType import CardType
-
+from django_prepared_query import (
+    BindParam
+)
 from datetime import datetime
 
 from typing import KeysView
 import json
 import copy
 
+from django.db import models
 
 @api_view(['GET'])
 def TrAcTransfer(request, id):
@@ -37,8 +41,8 @@ def TrMyAcc(request, id):
 
 @api_view(['POST'])
 def LogInUser(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    bodyUnicode = request.body.decode('utf-8')
+    body = json.loads(bodyUnicode)
 
     user = IUser.objects.get(
         username=body['username'],
@@ -52,6 +56,101 @@ def LogInUser(request):
     ser = ClientSerializer(client)
 
     return JsonResponse(ser.data)
+
+
+def ModelsExistsFields(
+    model:models.Model,
+    dataDict:dict,
+    keys:list[str],
+    all:bool
+) -> list[str]:
+    """
+        Return list of fields that already exist in DB
+    """
+    fieldsExists:list[str] = []
+
+    for key in dataDict:
+        if str(key) in keys:
+            dictCopy = {}
+            dictCopy[copy.deepcopy(key)] = copy.deepcopy(dataDict[key]) 
+            
+            if model.objects.filter(**dictCopy).exists():
+                fieldsExists.append(str(key))
+
+    if all:
+        return [] if len(fieldsExists) != len(keys) else fieldsExists
+    else:
+        fieldsExists
+
+
+
+def ModelExists(
+    model:models.Model,
+    dataDict:dict,
+    keys:list[str])->bool:
+    """
+        Model is Django model\n
+        Data Dict are key-value pairs with 
+        key as column name and value as column value\n
+        Keys are column names that need to be checked
+    """
+    dictCopy = {}
+
+    for key in dataDict:
+        if str(key) in keys:
+            dictCopy[copy.deepcopy(key)] = copy.deepcopy(dataDict[key]) 
+
+    return model.objects.filter(**dictCopy).exists()
+
+
+def GetNextId(model:models.Model):
+    if(len(model.objects.all()) > 0):
+        return model.objects.all().order_by('-id')[0].id + 1
+    else:
+        return 1
+
+def CreateModel(model:models.Model, dataDict:dict) -> models.Model: 
+    m = model(**dataDict)
+    m.save()
+    return m
+
+
+@api_view(['POST'])
+def RegisterUser(request):
+    body = json.loads(
+        request.body.decode('utf-8')
+    )
+
+    userFound = ModelsExistsFields(
+        IUser, body, ["username", "jmbg", "userType"], True
+    )
+    
+    if(len(userFound) != 0):
+        retStr = "User with "
+        for f in userFound:
+            retStr += f"{f}={body[f]}, "
+        
+        retStr += " already exists."
+
+        return JsonResponse(retStr, status=409, safe=False)
+
+    
+    body['id'] = GetNextId(IUser)
+    user = CreateModel(IUser, body)
+
+    if (body['userType'] == 'client'):
+        client = CreateModel(Client, {
+            'id' : GetNextId(Client),
+            'userId' : user
+        })
+
+        return JsonResponse(
+            ClientSerializer(client).data
+        )
+    else:
+        return JsonResponse(
+            IUserSerializer(user).data
+        )
 
 
 @api_view(['GET'])
@@ -158,7 +257,7 @@ def ChangeAccount(request, id, currency):
 @api_view(['POST'])
 def createUser(request):
     iuser_data = JSONParser().parse(request)
-    iuser_serializer = IUserSerializer(data = iuser_data)
+    iuser_serializer = IUserSerializer(data=iuser_data)
     if iuser_serializer.is_valid():
         iuser_serializer.save()
         return JsonResponse(iuser_serializer.data)
@@ -171,7 +270,7 @@ def createUser(request):
 @api_view(['POST'])
 def createClient(request):
     client_data = JSONParser().parse(request)
-    userr = IUser.objects.get(id = client_data['userId'])
+    userr = IUser.objects.get(id=client_data['userId'])
     client = Client()
     client.userId = userr
     client.save()

@@ -2,6 +2,12 @@ from django.db import models
 from django.db.models.fields import DateField
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import FloatField
+
+from django.core.validators import (
+    MaxValueValidator,
+    MinValueValidator
+)
+
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
 from enum import Enum, unique
@@ -26,7 +32,13 @@ class IUser(models.Model):
     billingAddress = models.CharField(max_length = 50 )
     genders = (('female','female'), ('male','male'))
     gender = models.CharField(choices = genders, max_length = 20)
-    jmbg = models.BigIntegerField(unique = True)
+    jmbg = models.BigIntegerField(
+        unique=True,
+        validators=[
+            MaxValueValidator(pow(10, 14) - 1),
+            MinValueValidator(pow(10, 13)),
+        ]
+    )
     birthDate  = models.DateField()
     userTypes = (('admin','admin'),('client','client'))
     userType = models.CharField(choices = userTypes, max_length = 40)
