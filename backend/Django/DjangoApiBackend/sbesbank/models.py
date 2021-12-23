@@ -53,13 +53,12 @@ class Client(models.Model):
 
 class Certificate(models.Model):
     """
-        User certificates to cipher paths!
+        User certificate and private key !
     """
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
     authorityName = models.CharField(max_length = 50)
-    cerPath = models.CharField(max_length = 200, unique = True)
-    pfxPath = models.CharField(max_length = 200, unique = True)
-    pvkPath = models.CharField(max_length = 200, unique = True)
+    pemPath = models.CharField(max_length = 200, unique = True)
+    keyPath = models.CharField(max_length = 200, unique = True)
     certificateName = models.CharField(max_length = 100, unique = True)
     class Meta:
         db_table = "certificate"

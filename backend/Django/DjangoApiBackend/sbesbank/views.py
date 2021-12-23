@@ -221,27 +221,7 @@ def AccTransactions(request, id):
 
 @api_view(['GET'])
 def ChangeAccount(request, id, currency):
-    typetr = 0
-    currencyId = 0
-    if currency=='USD':
-        currencyId = 1
-    elif currency=='EUR':
-        currencyId = 2
-    elif currency=='CHF':
-        currencyId = 3
-    elif currency=='GBP':
-        currencyId = 4
-    elif currency=='RUB':
-        currencyId = 5
-    elif currency=='CNY':
-        currencyId = 6
-    elif currency=='CAD':
-        currencyId = 7
-    elif currency=='AUD':
-        currencyId = 8
-    elif currency=='RSD':
-        currencyId = 9
-    curr = Currency(currencyId)
+    curr = Currency(getCurrency(currency))
     account =Account.objects.get(clientId = id, currency = curr)
     cards = list(Card.objects.filter(accountFK = account.id))
     serializer_acc = AccountSerializer(account)
@@ -343,28 +323,6 @@ def createCard(cardHolder,cardType,accountNumber):
     card.cardType = cardType
     return card
 
-def getCurrency(currency):
-    currencyId = 0
-    if currency=='USD':
-        currencyId = 1
-    elif currency=='EUR':
-        currencyId = 2
-    elif currency=='CHF':
-        currencyId = 3
-    elif currency=='GBP':
-        currencyId = 4
-    elif currency=='RUB':
-        currencyId = 5
-    elif currency=='CNY':
-        currencyId = 6
-    elif currency=='CAD':
-        currencyId = 7
-    elif currency=='AUD':
-        currencyId = 8
-    elif currency=='RSD':
-        currencyId = 9       
-    return currencyId
-
 @api_view(['POST'])
 def AddTransaction(request):
     transaction_data = JSONParser().parse(request) 
@@ -401,26 +359,7 @@ def AddTransaction(request):
                 typetr = 0
             else:
                 typetr = 1
-            currencyId = 0
-            if transaction_data['currency']=='USD':
-                currencyId = 1
-            elif transaction_data['currency']=='EUR':
-                currencyId = 2
-            elif transaction_data['currency']=='CHF':
-                currencyId = 3
-            elif transaction_data['currency']=='GBP':
-                currencyId = 4
-            elif transaction_data['currency']=='RUB':
-                currencyId = 5
-            elif transaction_data['currency']=='CNY':
-                currencyId = 6
-            elif transaction_data['currency']=='CAD':
-                currencyId = 7
-            elif transaction_data['currency']=='AUD':
-                currencyId = 8
-            elif transaction_data['currency']=='RSD':
-                currencyId = 9
-
+            
             transaction = Transaction.objects.create(
                 id = idtrr,
                 amount =transaction_data['amount'],
@@ -431,7 +370,7 @@ def AddTransaction(request):
                 provision = transaction_data['provision'],
                 referenceNumber = transaction_data['referenceNumber'],
                 transactionType = Transaction.TRANSACTION_TYPE[typetr][1],
-                currency = Currency(currencyId),
+                currency = Currency(getCurrency(transaction_data['currency'])),
                 myAccInfoFK = myAccInfoFK,
                 transferAccInfoFK = transferAccInfoFK
             )
@@ -446,3 +385,25 @@ def AddTransaction(request):
     = status.HTTP_400_BAD_REQUEST)
     
 
+
+def getCurrency(currency):
+    currencyId = 0
+    if currency=='USD':
+        currencyId = 1
+    elif currency=='EUR':
+        currencyId = 2
+    elif currency=='CHF':
+        currencyId = 3
+    elif currency=='GBP':
+        currencyId = 4
+    elif currency=='RUB':
+        currencyId = 5
+    elif currency=='CNY':
+        currencyId = 6
+    elif currency=='CAD':
+        currencyId = 7
+    elif currency=='AUD':
+        currencyId = 8
+    elif currency=='RSD':
+        currencyId = 9       
+    return currencyId

@@ -252,7 +252,6 @@ class AccountSerializer(serializers.ModelSerializer):
     clientId = ClientSerializer()
 
     
-
     class Meta:
         model = Account
         fields = [
@@ -263,24 +262,16 @@ class AccountSerializer(serializers.ModelSerializer):
             'dateCreated',
             'clientId'
         ]
-    
-    def create(self, validated_data):
-        """
-        Create and return a new User instance
-        """
-        return Account.objects.create(**validated_data)
-
 
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
         fields = [
+            'userId',
             'authorityName',
-            'cerPath',
-            'pfxPath',
-            'pvkPath',
-            'certificateName',
-            'userId'
+            'pemPath',
+            'keyPath',
+            'certificateName'
         ]
 
 
