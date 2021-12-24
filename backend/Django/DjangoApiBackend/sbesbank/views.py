@@ -1,8 +1,5 @@
-from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.utils import translation
-from django_prepared_query.exceptions import IncorrectBindParameter
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import JSONParser 
@@ -11,16 +8,64 @@ from sbesbank.models import *
 from sbesbank.serializers import *
 from modules.Shared.BankNumbers import *
 from modules.Shared.Enums.CardType import CardType
-from django_prepared_query import (
-    BindParam
-)
-from datetime import datetime
-
-from typing import KeysView
+from datetime import datetime, timedelta
 import json
 import copy
 
 from django.db import models
+
+from modules.paymentCodes.parse import (
+    Parse
+)
+
+from modules.exchangeRates.parse import (
+    MyParser
+)
+
+@api_view(['GET'])
+def InitCurrencies(request):
+
+    # Enter payment codes
+    # paymentCodes = Parse()
+
+    # for k in paymentCodes.keys():
+    #     PaymentCode.objects.create(
+    #         code=k,
+    #         description=paymentCodes[k]
+    #     )
+
+    # Enter exchange rates
+    dateModified = date.today() + timedelta(days=2)
+    rates = ExchangeRate.objects.all()    
+    updated = True
+
+    if(len(rates) > 0):
+        updated = rates[0].dateModified >= dateModified
+
+    if(not updated):
+        exchangeRateParser = MyParser()
+        exchangeRateParser.Parse()
+        
+        for k in exchangeRateParser.dataDict:
+            id = GetNextId(ExchangeRate)
+
+            ExchangeRate.objects.create(
+                id=id,
+                currency=Currency[k],
+                dateModified=dateModified,
+                rateInDinar=exchangeRateParser.dataDict[k]
+            )
+
+        print('Updated')
+    else:
+        print('NOt updated')
+
+
+    return JsonResponse(
+        1,
+        status=200,
+        safe=False
+    )
 
 @api_view(['GET'])
 def TrAcTransfer(request, id):
@@ -36,7 +81,6 @@ def TrMyAcc(request, id):
     serializer = TrMyAccountInfoSerializer(obj) 
 
     return JsonResponse(serializer.data)
-
 
 
 @api_view(['POST'])

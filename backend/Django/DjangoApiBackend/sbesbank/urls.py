@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^api/sbesbank/loginuser', views.LogInUser),
     url(r'^api/sbesbank/registeruser', views.RegisterUser),
     url(r'^api/sbesbank/addTransaction', views.AddTransaction),
+    url(r'^api/sbesbank/initcurrencies',views.InitCurrencies)
 ]

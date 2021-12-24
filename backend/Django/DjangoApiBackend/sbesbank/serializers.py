@@ -19,7 +19,8 @@ class ExchangeRateSerializer(serializers.ModelSerializer):
         model = ExchangeRate
         fields = [
             'currency',
-            'rateInDinar'
+            'rateInDinar',
+            'dateModified'
         ]
         
 

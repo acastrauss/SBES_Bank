@@ -47,7 +47,7 @@ class IUser(models.Model):
         db_table = "iuser"
 
 class Client(models.Model):
-    userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
+    userId = models.ForeignKey(IUser, on_delete=models.CASCADE, unique=False)
     class Meta:
         db_table = "client"
 
@@ -74,7 +74,10 @@ class Currency(ChoiceEnum):
     CAD = "CAD"
     AUD = "AUD"
     RSD = "RSD"
-
+    DKK = "DKK"
+    NOK = "NOK"
+    SEK = "SEK"
+    JPY = "JPY"
 
 
 class PaymentCode(models.Model):
@@ -106,12 +109,14 @@ class ExchangeRate(models.Model):
             https://nbs.rs/sr/drugi-nivo-navigacije/servisi/sistem-veb-servisa-NBS/
         )
     """
-    id = models.IntegerField(primary_key = True)
+    id = models.IntegerField(primary_key=True)
     currency = EnumChoiceField(
         enum_class=Currency,
-        unique = True
+        unique=True
     )
     
+    dateModified = models.DateField()
+
     rateInDinar = models.FloatField()
     class Meta:
         db_table = "exchangerate"
