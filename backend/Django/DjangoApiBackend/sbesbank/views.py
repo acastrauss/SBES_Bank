@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
-from rest_framework.parsers import JSONParser 
-
+from rest_framework.parsers import JSONParser
+from modules.Certificates.newCertMaker import NewUserCert
+from modules.Certificates.selfSigned import getCertAuthorityName
+import os
 from sbesbank.models import *
 from sbesbank.serializers import *
 from modules.Shared.BankNumbers import *
@@ -84,16 +86,16 @@ def CreateModel(model:models.Model, dataDict:dict) -> models.Model:
 @api_view(['GET'])
 def InitCurrencies(request):
 
-    # Enter payment codes
-    # paymentCodes = Parse()
+    #Enter payment codes
+    paymentCodes = Parse()
 
-    # for k in paymentCodes.keys():
-    #     PaymentCode.objects.create(
-    #         code=k,
-    #         description=paymentCodes[k]
-    #     )
+    for k in paymentCodes.keys():
+        PaymentCode.objects.create(
+            code=k,
+            description=paymentCodes[k]
+        )
 
-    # Enter exchange rates
+    #Enter exchange rates
     dateModified = date.today()
     rates = ExchangeRate.objects.all()    
     updated = False
@@ -166,6 +168,13 @@ def LogInUser(request):
     return JsonResponse(ser.data)
 
 
+def getPathForDB(path):
+    pathForDB = path.split('DjangoApiBackend\\')[1]
+    return pathForDB
+
+def getAbsolutePath(dbPath):
+    absPath = os.path.join(os.getcwd() ,dbPath)
+    return absPath
 
 @api_view(['POST'])
 def RegisterUser(request):
@@ -196,8 +205,18 @@ def RegisterUser(request):
             'userId' : user
         })
 
-        return JsonResponse(
-            ClientSerializer(client).data
+        pemPath,keyPath = NewUserCert(os.path.join(os.getcwd(),'modules','Certificates'),body['username'])
+       
+        certificate = CreateModel(Certificate, {
+            'id' : GetNextId(Certificate),
+            'authorityName' : getCertAuthorityName(),
+            'pemPath' : getPathForDB(pemPath),
+            'keyPath' : getPathForDB(keyPath),
+            'certificateName' : body['username'],
+            'userId' : user
+            }
+        )
+        return JsonResponse( ClientSerializer(client).data
         )
     else:
         return JsonResponse(
@@ -205,6 +224,8 @@ def RegisterUser(request):
         )
 
 
+
+#C:\Users\HP\Documents\GitHub\SBES_Bank\backend\Django\DjangoApiBackend\modules\Certificates\ddedrefe.key
 @api_view(['GET'])
 def Transact(request, id):
     obj = Transaction.objects.get(id=id)

@@ -40,6 +40,6 @@ def makeCertAuthority():
 
 
 def getCertAuthorityName():
-    CN = "CertAuthority"
+    CN = "certAuthority"
     return CN
-    
+   

@@ -1,17 +1,17 @@
 import OpenSSL
-from os.path import join
+import os
 import random
-import selfSigned
+from modules.Certificates import selfSigned
 
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 
-def NewUserCert(username):
+def NewUserCert(path,username):
     CN = selfSigned.getCertAuthorityName()
-
-    with open(CN + ".pem", "r") as f:
+    
+    with open(os.path.join(path , CN + ".pem"), "r") as f:
         cert_buf = f.read()
-    with open(CN + ".key", "r") as f:
+    with open(os.path.join(path , CN + ".key"), "r") as f:
         key_buf  = f.read()
     ca_cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert_buf)
     ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM, key_buf)
@@ -29,8 +29,10 @@ def NewUserCert(username):
     cert.sign(ca_key, "sha1")
 
     pub=OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
-    open(username +'.pem', "wt").write(pub.decode("utf-8"))
+    cert_path = os.path.join(path, username + '.pem')
+    open(cert_path, "wt").write(pub.decode("utf-8"))
     priv=OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, key)
-    open(username +'.key', "wt").write(priv.decode("utf-8") )
+    key_path = os.path.join(path, username + '.key')
+    open(key_path, "wt").write(priv.decode("utf-8"))
 
-    return (pub,priv)
+    return (cert_path, key_path)
