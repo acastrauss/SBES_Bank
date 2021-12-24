@@ -109,10 +109,10 @@ class ExchangeRate(models.Model):
             https://nbs.rs/sr/drugi-nivo-navigacije/servisi/sistem-veb-servisa-NBS/
         )
     """
-    id = models.IntegerField(primary_key=True)
     currency = EnumChoiceField(
         enum_class=Currency,
-        unique=True
+        unique=True,
+        primary_key=True
     )
     
     dateModified = models.DateField()

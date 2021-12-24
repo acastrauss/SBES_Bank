@@ -22,85 +22,6 @@ from modules.exchangeRates.parse import (
     MyParser
 )
 
-@api_view(['GET'])
-def InitCurrencies(request):
-
-    # Enter payment codes
-    # paymentCodes = Parse()
-
-    # for k in paymentCodes.keys():
-    #     PaymentCode.objects.create(
-    #         code=k,
-    #         description=paymentCodes[k]
-    #     )
-
-    # Enter exchange rates
-    dateModified = date.today() + timedelta(days=2)
-    rates = ExchangeRate.objects.all()    
-    updated = True
-
-    if(len(rates) > 0):
-        updated = rates[0].dateModified >= dateModified
-
-    if(not updated):
-        exchangeRateParser = MyParser()
-        exchangeRateParser.Parse()
-        
-        for k in exchangeRateParser.dataDict:
-            id = GetNextId(ExchangeRate)
-
-            ExchangeRate.objects.create(
-                id=id,
-                currency=Currency[k],
-                dateModified=dateModified,
-                rateInDinar=exchangeRateParser.dataDict[k]
-            )
-
-        print('Updated')
-    else:
-        print('NOt updated')
-
-
-    return JsonResponse(
-        1,
-        status=200,
-        safe=False
-    )
-
-@api_view(['GET'])
-def TrAcTransfer(request, id):
-    obj=TrAcTransferInfo.objects.get(id=id)
-    serializer=TrAcTransferInfoSerializer(obj) 
-
-    return JsonResponse(serializer.data)
-
-
-@api_view(['GET'])
-def TrMyAcc(request, id):
-    obj = TrMyAccountInfo.objects.get(id=id)
-    serializer = TrMyAccountInfoSerializer(obj) 
-
-    return JsonResponse(serializer.data)
-
-
-@api_view(['POST'])
-def LogInUser(request):
-    bodyUnicode = request.body.decode('utf-8')
-    body = json.loads(bodyUnicode)
-
-    user = IUser.objects.get(
-        username=body['username'],
-        password=body['password']
-    )
-
-    client = Client.objects.get(
-        userId=user
-    )
-
-    ser = ClientSerializer(client)
-
-    return JsonResponse(ser.data)
-
 
 def ModelsExistsFields(
     model:models.Model,
@@ -157,6 +78,93 @@ def CreateModel(model:models.Model, dataDict:dict) -> models.Model:
     m = model(**dataDict)
     m.save()
     return m
+
+
+
+@api_view(['GET'])
+def InitCurrencies(request):
+
+    # Enter payment codes
+    # paymentCodes = Parse()
+
+    # for k in paymentCodes.keys():
+    #     PaymentCode.objects.create(
+    #         code=k,
+    #         description=paymentCodes[k]
+    #     )
+
+    # Enter exchange rates
+    dateModified = date.today()
+    rates = ExchangeRate.objects.all()    
+    updated = False
+
+    if(len(rates) > 0):
+        updated = rates[0].dateModified >= dateModified
+
+    if(not updated):
+        exchangeRateParser = MyParser()
+        exchangeRateParser.Parse()
+        
+        for k in exchangeRateParser.dataDict:
+            if(ModelsExistsFields(
+                ExchangeRate, 
+                {'currency': Currency[k]},
+                ['currency'], True
+            )):
+                er = ExchangeRate.objects.get(
+                    currency=Currency[k]
+                )
+                er.dateModified = dateModified
+                er.rateInDinar=exchangeRateParser.dataDict[k]
+                er.save()
+
+            else:
+                ExchangeRate.objects.create(
+                    currency=Currency[k],
+                    dateModified=dateModified,
+                    rateInDinar=exchangeRateParser.dataDict[k]
+                )
+  
+    return JsonResponse(
+        1,
+        status=200,
+        safe=False
+    )
+
+@api_view(['GET'])
+def TrAcTransfer(request, id):
+    obj=TrAcTransferInfo.objects.get(id=id)
+    serializer=TrAcTransferInfoSerializer(obj) 
+
+    return JsonResponse(serializer.data)
+
+
+@api_view(['GET'])
+def TrMyAcc(request, id):
+    obj = TrMyAccountInfo.objects.get(id=id)
+    serializer = TrMyAccountInfoSerializer(obj) 
+
+    return JsonResponse(serializer.data)
+
+
+@api_view(['POST'])
+def LogInUser(request):
+    bodyUnicode = request.body.decode('utf-8')
+    body = json.loads(bodyUnicode)
+
+    user = IUser.objects.get(
+        username=body['username'],
+        password=body['password']
+    )
+
+    client = Client.objects.get(
+        userId=user
+    )
+
+    ser = ClientSerializer(client)
+
+    return JsonResponse(ser.data)
+
 
 
 @api_view(['POST'])

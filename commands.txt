@@ -2,3 +2,5 @@ run server (in Django\DjangoApiBackend):python manage.py runserver 8000
 activate venv for python (in backend dir): .venv\Scripts\activate
 install required dependecies (when in venv): pip install -r requirements.txt
 put required packages in requirements.txt: pip freeze > requirements.txt
+make database migrations: python manage.py makemigrations sbesbank
+migrate models to database: python manage.py migrate sbesbank
