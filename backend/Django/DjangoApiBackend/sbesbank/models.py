@@ -171,7 +171,7 @@ class TrMyAccountInfo(models.Model):
 
 
 class Account(models.Model):
-    clientId = models.ForeignKey(Client, on_delete = PROTECT, unique = True)
+    clientId = models.ForeignKey(Client, on_delete = PROTECT, unique = False)
     accountBalance = models.FloatField()
 
     accountNumber = models.CharField(

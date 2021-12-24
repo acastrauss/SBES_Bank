@@ -8,19 +8,31 @@
 # 
 #######################################################
 
-from modules.Shared.BankConfig import (
+from .BankConfig import (
     BankConfigParser
+)
+
+from .Enums.CreditCardProcessor import (
+    CreditCardProcessor
 )
 
 import random
 import copy
 
-from modules.Shared.Enums import (
-    CreditCardProcessor
-)
 
 
-class BankNumbers:
+class BankNumbers():
+    
+    @staticmethod 
+    def GetDigitsFromInt(a:int):
+        temp = copy.deepcopy(a)
+        digits:list[int] = []
+        while temp != 0:
+            digits.insert(0, temp % 10)
+            temp //= 10
+
+        return digits
+
     def GenerateAccountNumber()-> str:
         digits = []
         conf = BankConfigParser()
@@ -66,18 +78,10 @@ class BankNumbers:
 
         return retStr
 
-    @staticmethod 
-    def GetDigitsFromInt(a:int)->list[int]:
-        temp = copy.deepcopy(a)
-        digits = []
-        while temp != 0:
-            digits.insert(0, temp % 10)
-            temp //= 10
-
-        return digits
+    
 
     @staticmethod
-    def LuhnAlgorithm(digits:list[int]):
+    def LuhnAlgorithm(digits):
         """
             Algorithm for calculating check digit (last) on credit card:
             1. Starting form right multiple every second digit by 2 (including 0 index)
@@ -108,8 +112,8 @@ class BankNumbers:
 
     @staticmethod
     def SetFirst6Digits(
-        cardProcessor: CreditCardProcessor.CreditCardProcessor,
-        digits:list[int]):
+        cardProcessor:CreditCardProcessor,
+        digits):
         
         """
             First digits represents credit cards processor (
@@ -119,9 +123,9 @@ class BankNumbers:
         """
         config = BankConfigParser()
         
-        if cardProcessor == CreditCardProcessor.CreditCardProcessor.AMERICAN_EXPRESS:
+        if cardProcessor == CreditCardProcessor.AMERICAN_EXPRESS:
             digits.append(config.AmericanExpressStartDigit)
-        elif cardProcessor == CreditCardProcessor.CreditCardProcessor.MASTER_CARD:
+        elif cardProcessor ==CreditCardProcessor.MASTER_CARD:
             digits.append(config.MasterCardStartDigit)
         else:
             digits.append(config.VisaStartDigit)
@@ -131,7 +135,7 @@ class BankNumbers:
         ))
 
     @staticmethod
-    def AccountDigits(digits:list[int]):
+    def AccountDigits(digits):
         # check in db for uniqueness
         # six digit number
         
@@ -145,7 +149,7 @@ class BankNumbers:
         )
 
     @staticmethod
-    def GenerateCardNumber(cardProcessor: CreditCardProcessor.CreditCardProcessor)-> str:
+    def GenerateCardNumber(cardProcessor: CreditCardProcessor)-> str:
         digits = []
         BankNumbers.SetFirst6Digits(cardProcessor, digits)
         BankNumbers.AccountDigits(digits)
@@ -192,7 +196,3 @@ class BankNumbers:
         ).zfill(4)
 
         return pin
-
-    def GenerateTransactionID()-> int:
-        # extract next number from db
-        pass

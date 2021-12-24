@@ -252,7 +252,6 @@ class AccountSerializer(serializers.ModelSerializer):
    
     clientId = ClientSerializer()
 
-    
     class Meta:
         model = Account
         fields = [
