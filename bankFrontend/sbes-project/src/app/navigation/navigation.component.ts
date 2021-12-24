@@ -1,3 +1,4 @@
+import { getLocaleWeekEndRange } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -12,4 +13,11 @@ export class NavigationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public loggedIn(){
+      return localStorage.getItem('client');
+  }
+
+  public onLogOut(){
+    localStorage.removeItem('client');
+  }
 }

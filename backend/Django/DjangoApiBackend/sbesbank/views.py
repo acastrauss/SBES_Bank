@@ -15,7 +15,7 @@ import json
 # from Shared.BankNumbers import (
 #     BankNumbers
 # )
-from Shared.BankNumbers import *
+#from Shared.BankNumbers import *
 from sbesbank.models import *
 from datetime import datetime
 from rest_framework.parsers import JSONParser
@@ -32,17 +32,12 @@ def TrAcTransfer(request, id):
 
 
 @api_view(['GET'])
-def TrMyAcc(request, id):
+def TrMyAcc(request):
+    id = request.GET.get("id")
     obj = TrMyAccountInfo.objects.get(id=id)
     serializer = TrMyAccountInfoSerializer(obj) 
-
+    
     return JsonResponse(serializer.data)
-
-
-
-
-
-
 
 
 
@@ -105,17 +100,20 @@ def IUserData(request, id):
 
 
 @api_view(['GET'])
-def AccInfo(request, id):
-    obj1 = Account.objects.get(id=id) 
-    obj2 = list(Card.objects.filter(accountFK=id))
-    serializer1 =  AccountSerializer(obj1)
-    serializer2 = CardSerializer(obj2,many = True)
+def AccInfo(request):
+    accId = request.GET.get("id")
+    obj1 = list(Account.objects.filter(
+        clientId=accId
+    ))
 
+    print(obj1)
+    # obj1 = Account.objects.get(clientId_id=accId) 
+    # obj2 = list(Card.objects.filter(accountFK=id))
+    serializer1 =  AccountSerializer(obj1, many=True)
+    # serializer2 = CardSerializer(obj2,many = True)
     return JsonResponse(
-        {
-            "Account": serializer1.data,
-            "Cards": serializer2.data
-            }
+            serializer1.data, safe=False
+            # "Cards": serializer2.data
     )
 
 
@@ -228,8 +226,9 @@ def createNewClientAccount(request):
 #     card.validUntil =  (datetime.now()).strftime("%Y-%m-%d")
 #     card.cardType = cardType
 #     return card
-        return JsonResponse(iuser_serializer.errors, status
-        = status.HTTP_400_BAD_REQUEST)
+#       return JsonResponse(iuser_serializer.errors, status
+#        = status.HTTP_400_BAD_REQUEST)
+#
 
 @api_view(['POST'])
 def AddTransaction(request):

@@ -10,6 +10,10 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AccountSpliterComponent } from './spliters/account-spliter/account-spliter.component';
+import { CardSpliterComponent } from './spliters/card-spliter/card-spliter.component';
+import { AccountComponent } from './account/account.component';
+import { CardComponent } from './card/card.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,6 +22,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     NavigationComponent,
     LoginComponent,
+    AccountSpliterComponent,
+    CardSpliterComponent,
+    AccountComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

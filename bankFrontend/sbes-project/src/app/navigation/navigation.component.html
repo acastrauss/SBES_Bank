@@ -9,8 +9,18 @@
                     <li class="nav-item">
                         <a class="nav-link" [routerLink]="['/']">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  [routerLink]="['/register']">Register</a>
+                </ul>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li *ngIf="!loggedIn()" class="nav-item">
+                        <a class="nav-link" [routerLink]="['/register']">Register</a>
+                    </li>
+                    <li *ngIf="!loggedIn()" class="nav-item">
+                        <a class="nav-link" [routerLink]="['/login']">Log in</a>
+                    </li>
+                    <li *ngIf="loggedIn()" class="nav-item">
+                        <a class="nav-link" (click)="onLogOut()">Log out</a>
                     </li>
                 </ul>
             </div>

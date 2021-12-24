@@ -1,0 +1,32 @@
+<h2 class="form">Create card</h2>
+<hr>
+<div class="form">
+    <form [formGroup]="cardForm" (ngSubmit)="submitForm(cardForm.value)">
+        <div class="form-group">
+            <label for="cardHolder">Card holder</label>
+            <input id="cardHolder" class="form-control" formControlName="cardHolder" [(ngModel)]="cardHolder.userId.username" readonly> 
+        </div>
+        <div class="form-group">
+            <label for="accNum">Account number</label>
+            <input type="text" id="accNum" class="form-control" formControlName="accNum" [(ngModel)]="accNum.accountNumber" readonly>
+        </div>
+        <div class="form-group">
+            <label for="cardType">Credit type</label>
+            <select id="cardType" name="cardType" class="form-control" formControlName="cardType">
+                <option value="debit">DEBIT</option>
+                <option value="credit">CREDIT</option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="cardType.errors?.['required']">Card type is required</div>
+        <div class="form-group">
+            <label for="processor">Processor</label>
+            <select id="processor" name="processor" class="form-control" formControlName="processor">
+                <option value="visa">VISA</option>
+                <option value="master-card">MASTER CARD</option>
+                <option value="american-express">AMERICAN EXPRESS</option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="processor.errors?.['required']">Processor is required</div>
+        <br><button type="submit" class="btn btn-primary btn-block" [disabled]="!cardForm.valid">Submit</button>
+    </form>
+</div>

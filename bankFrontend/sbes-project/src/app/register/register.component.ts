@@ -2,7 +2,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { of, throwError } from 'rxjs';
-import { UserModel } from '../models/user.model';
+import { ClientModel } from '../models/client.model';
+import { ClientService } from '../services/client.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -12,11 +13,11 @@ import { UserService } from '../services/user.service';
 })
 export class RegisterComponent implements OnInit {
   
-  public users : UserModel[] ;
+  public users : ClientModel[] ;
   public registerFrom : FormGroup;
 
   constructor(private formBuilder : FormBuilder,
-              private UserService : UserService) {
+              private ClientService : ClientService) {
 
     this.users = JSON.parse(localStorage.getItem('users')!);  /////////
 
@@ -68,7 +69,7 @@ export class RegisterComponent implements OnInit {
   }
 
 
-  public submitForm(data : UserModel){
+  public submitForm(data : ClientModel){
     console.log(data);
     
     if(!this.registerFrom.valid){
@@ -76,7 +77,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.UserService.register(data).subscribe((user : UserModel) =>{
+    this.ClientService.register(data).subscribe((user : ClientModel) =>{
       this.authenticate(data);
       window.alert('Korisnik ${user.username} uspjesno registrovan!');
       this.users.push(data);///mozda cu morati data kastovati 
@@ -87,26 +88,29 @@ export class RegisterComponent implements OnInit {
 
   public authenticate(formData : any){
 
-    const user = this.users.find(x=> x.username === formData.username  && x.password === formData.password 
-      && x.fullName === formData.fullName);
+    const user = this.users.find(x=> x.userId.username === formData.username  && x.userId.password === formData.password 
+      && x.userId.fullName === formData.fullName);
     
     if(user) 
       return ok({
-        id:user.id,
-        jmbg: user.jmbg,
-        username: user.username,
-        password: user.password,
-        gender: user.gender,
-        fullName : user.fullName,
-        email: user.email,
-        birthDate : user.birthDate,
-        billingAddress : user.billingAddress
+        id : user.id,
+        userId:{
+          id : user.userId.id,
+          jmbg: user.userId.jmbg,
+          username: user.userId.username,
+          password: user.userId.password,
+          gender: user.userId.gender,
+          fullName : user.userId.fullName,
+          email: user.userId.email,
+          birthDate : user.userId.birthDate,
+          billingAddress : user.userId.billingAddress
+        }
     })
     return error('Korisnik ${user.fullName} vec postoji,pokusajte ponovo!');
   }
   }
 
-  function ok(body? : UserModel)  {
+  function ok(body? : ClientModel)  {
     return of(new HttpResponse({ status: 200, body }))
   }
   
