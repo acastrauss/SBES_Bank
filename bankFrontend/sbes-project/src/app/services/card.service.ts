@@ -8,7 +8,7 @@ import { CardModel } from '../models/card.model';
 })
 export class CardService {
   private cards : Observable<CardModel[]>;
-  private cardsUrl = "http://localhost:3001/cards/";
+  private cardsUrl = "http://localhost:3001/cards/createCard";
   
   constructor(private http: HttpClient) {
     this.cards = new Observable<CardModel[]>(); 
@@ -22,5 +22,12 @@ export class CardService {
 
   public getCards() : Observable<CardModel[]>{
     return this.cards;
+  }
+
+  public createCard(formData : any) : Observable<CardModel>{
+    const body = {
+      ...formData
+    };
+    return this.http.post<CardModel>(this.cardsUrl,body);
   }
 }

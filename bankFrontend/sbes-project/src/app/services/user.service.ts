@@ -7,7 +7,6 @@ import { UserModel } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-
   private users: Observable<UserModel[]>;
   private usersUrl = "http://127.0.0.1:8000/api/sbesbank/loginuser";
 

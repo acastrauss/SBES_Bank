@@ -4,10 +4,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router';
 import { EventEmitter } from '@angular/core'
 import { UserModel } from '../models/user.model';
-import { UserService } from '../services/user.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { HomeComponent } from '../home/home.component';
 import { of, throwError } from 'rxjs';
+import { ClientModel } from '../models/client.model';
+import { ClientService } from '../services/client.service';
 
 
 @Component({
@@ -17,17 +18,21 @@ import { of, throwError } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
 
-  public users : UserModel[] ;
-  public loginFrom : FormGroup;
-  public userName : any;
+  //public users : UserModel[] ;
   /*
+  public loginUser: UserModel;
+  public userId : number;
+  
   private  loginUserId : any;
   private loginUserUrl = "htpp://localhost:3001/login/";
   */
+ 
+  public loginFrom : FormGroup;
+  public userName : any;
   constructor(private formBuilder : FormBuilder,
-    private UserService : UserService,private http:HttpClient) {
+    private ClientService : ClientService,private http:HttpClient,private router : Router) {
 
-      this.users = JSON.parse(localStorage.getItem('users')!);  /////////
+     // this.users = JSON.parse(localStorage.getItem('users')!);  /////////
 
       this.loginFrom = this.formBuilder.group({
         username:['',[Validators.required]],
@@ -46,7 +51,7 @@ export class LoginComponent implements OnInit {
     return this.loginFrom.get('password') ;
   }
 
-  public submitForm(data : UserModel){
+  public submitForm(data : ClientModel){
     console.log(data);
     
     if(!this.loginFrom.valid){
@@ -54,15 +59,16 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.UserService.logIn(data).subscribe((user : UserModel) =>{
+    this.ClientService.logIn(data).subscribe((client : ClientModel) =>{
       // this.authenticate(data);
-      window.alert('Korisnik ${user.username} uspjesno logovan!');
-      localStorage.setItem('user',JSON.stringify(data));
+      this.router.navigate(['/']);
+      localStorage.setItem('client',JSON.stringify(client));
+      alert("Korisnik uspjesno logovan!");
       this.loginFrom.reset();
     })
   }
 
-
+/*
   public authenticate(formData : any){
 
     const user = this.users.find(x=> x.username === formData.username  && x.password === formData.password);
@@ -82,13 +88,13 @@ export class LoginComponent implements OnInit {
         billingAddress : user.billingAddress
     })
   }
-
+*/
 }
+/*
 function ok(body? : UserModel) {
   return of(new HttpResponse({ status: 200, body }))
 }
-
 function error(message : string) {
   return throwError({ error: { message } });
 }
-
+*/

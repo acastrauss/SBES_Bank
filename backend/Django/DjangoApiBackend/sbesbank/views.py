@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -8,13 +7,17 @@ from modules.Certificates.selfSigned import getCertAuthorityName
 import os
 from sbesbank.models import *
 from sbesbank.serializers import *
-from modules.Shared.BankNumbers import *
+from modules.Shared.Enums.CreditCardProcessor import CreditCardProcessor
 from modules.Shared.Enums.CardType import CardType
-from datetime import datetime, timedelta
+from modules.Shared.BankNumbers import (
+    BankNumbers
+)
+
+from datetime import datetime
 import json
 import copy
 
-from django.db import models
+# # from django.db import models
 
 from modules.paymentCodes.parse import (
     Parse
@@ -28,9 +31,9 @@ from modules.exchangeRates.parse import (
 def ModelsExistsFields(
     model:models.Model,
     dataDict:dict,
-    keys:list[str],
+    keys,
     all:bool
-) -> list[str]:
+):
     """
         Return list of fields that already exist in DB
     """
@@ -54,7 +57,7 @@ def ModelsExistsFields(
 def ModelExists(
     model:models.Model,
     dataDict:dict,
-    keys:list[str])->bool:
+    keys)->bool:
     """
         Model is Django model\n
         Data Dict are key-value pairs with 
@@ -142,10 +145,11 @@ def TrAcTransfer(request, id):
 
 
 @api_view(['GET'])
-def TrMyAcc(request, id):
+def TrMyAcc(request):
+    id = request.GET.get("id")
     obj = TrMyAccountInfo.objects.get(id=id)
     serializer = TrMyAccountInfoSerializer(obj) 
-
+    
     return JsonResponse(serializer.data)
 
 
@@ -258,17 +262,22 @@ def IUserData(request, id):
 
 
 @api_view(['GET'])
-def AccInfo(request, id):
-    obj1 = Account.objects.get(id=id) 
-    obj2 = list(Card.objects.filter(accountFK=id))
-    serializer1 =  AccountSerializer(obj1)
-    serializer2 = CardSerializer(obj2,many = True)
+def AccInfo(request):
 
+    print(request)
+    accId = request.GET.get("id")
+    obj1 = list(Account.objects.filter(
+        clientId=accId
+    ))
+
+    print(obj1)
+    # obj1 = Account.objects.get(clientId_id=accId) 
+    # obj2 = list(Card.objects.filter(accountFK=id))
+    serializer1 =  AccountSerializer(obj1, many=True)
+    # serializer2 = CardSerializer(obj2,many = True)
     return JsonResponse(
-        {
-            "Account": serializer1.data,
-            "Cards": serializer2.data
-            }
+            serializer1.data, safe=False
+            # "Cards": serializer2.data
     )
 
 
@@ -294,7 +303,7 @@ def AccTransactions(request, id):
 
 @api_view(['GET'])
 def ChangeAccount(request, id, currency):
-    curr = Currency(getCurrency(currency))
+    curr = Currency[currency]
     account =Account.objects.get(clientId = id, currency = curr)
     cards = list(Card.objects.filter(accountFK = account.id))
     serializer_acc = AccountSerializer(account)
@@ -338,7 +347,7 @@ def createAccountPOST(request, clientId,currency):
     account = Account()
     account = createAccount()
     account.clientId = Client.objects.get(id = clientId)
-    account.currency = Currency(getCurrency(currency))
+    account.currency = Currency[currency]
     account.save()
     account_serialized = AccountSerializer(account)
     return JsonResponse(account_serialized.data)
@@ -389,8 +398,8 @@ def createCard(cardHolder,cardType,accountNumber):
     except:
         card.id = 1
     card.cardHolder= cardHolder
-    card.cardNumber = BankNumbers.GenerateCardNumber(cardProcessor= CreditCardProcessor.CreditCardProcessor.MASTER_CARD)
-    card.cardProcessor = CreditCardProcessor.CreditCardProcessor.MASTER_CARD
+    card.cardNumber = BankNumbers.GenerateCardNumber(cardProcessor=CreditCardProcessor.MASTER_CARD)
+    card.cardProcessor = CreditCardProcessor.MASTER_CARD
     card.pin = BankNumbers.GeneratePIN(card.cardNumber,accountNumber)    
     card.validUntil =  (datetime.now()).strftime("%Y-%m-%d")
     card.cardType = cardType
@@ -443,7 +452,7 @@ def AddTransaction(request):
                 provision = transaction_data['provision'],
                 referenceNumber = transaction_data['referenceNumber'],
                 transactionType = Transaction.TRANSACTION_TYPE[typetr][1],
-                currency = Currency(getCurrency(transaction_data['currency'])),
+                currency = Currency[transaction_data['currency']],
                 myAccInfoFK = myAccInfoFK,
                 transferAccInfoFK = transferAccInfoFK
             )
@@ -458,25 +467,3 @@ def AddTransaction(request):
     = status.HTTP_400_BAD_REQUEST)
     
 
-
-def getCurrency(currency):
-    currencyId = 0
-    if currency=='USD':
-        currencyId = 1
-    elif currency=='EUR':
-        currencyId = 2
-    elif currency=='CHF':
-        currencyId = 3
-    elif currency=='GBP':
-        currencyId = 4
-    elif currency=='RUB':
-        currencyId = 5
-    elif currency=='CNY':
-        currencyId = 6
-    elif currency=='CAD':
-        currencyId = 7
-    elif currency=='AUD':
-        currencyId = 8
-    elif currency=='RSD':
-        currencyId = 9       
-    return currencyId

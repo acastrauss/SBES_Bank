@@ -1,10 +1,9 @@
 export interface AccountModel{
    accountBalance : number,
-   accountNumber : number,
+   accountNumber : string,
    blocked : boolean,
    currency : Currency,
    dataCreated : Date,
-   maintenanceCost : number
 }
 
 enum Currency{

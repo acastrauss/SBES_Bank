@@ -1,6 +1,9 @@
-    <div *ngIf="userName === null; else odjava">
-        <img src="assets/login.jpg" height="50" size="50" alt="Login" [routerLink]="['/login']">
-    </div>
-    <ng-template #odjava>
-        <img src="assets/logout.jpg" height="50" size="50" alt="Login" [routerLink]="['/']">
-    </ng-template>
+<div class="container" *ngIf="userAccounts !== null">
+    <app-account-spliter [userAccounts]="userAccounts">
+    </app-account-spliter>
+ </div>
+ <hr>
+ <div class="container" *ngIf="cardsAccount !== null">
+    <app-card-spliter [cardsAccount]="cardsAccount">
+    </app-card-spliter>
+ </div>

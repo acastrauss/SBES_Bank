@@ -1,0 +1,30 @@
+<!-- carousel -->
+<div class="carousel">
+    <ng-container *ngFor="let account of userAccounts; let i = index">
+    <div *ngIf="i === currentSlide" >
+      <table>
+        <tr>
+          <th>Account Number</th>
+          <th>Currency</th>
+          <th>Balance</th>
+        </tr>
+        <tr>
+          <td>{{account.accountNumber}}</td>
+          <td>{{account.currency}}</td>
+          <td>{{account.accountBalance}}</td>
+        </tr>
+      </table>
+    <button 
+    *ngIf="i === currentSlide"
+    class="mod-button"
+	  [routerLink]="['/account',account.accountNumber]">Account Info</button>  
+  </div>  
+  </ng-container>
+      <!-- controls -->
+      <button class="control prev" (click)="onPreviousClick()">
+        <span class="arrow left"></span>
+      </button>
+      <button class="control next" (click)="onNextClick()">
+        <span class="arrow right"></span>
+      </button>
+    </div>
