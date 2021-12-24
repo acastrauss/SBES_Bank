@@ -4,15 +4,13 @@ import json
 import copy
 from bs4 import BeautifulSoup
 
-
-htmlPath = DownloadFile()
-
 class MyParser():
     def __init__(self) -> None:
         self.dataDict = {}
+        self.htmlPath = DownloadFile()
 
     def Parse(self):
-        with open(htmlPath, encoding='utf-8') as fp:
+        with open(self.htmlPath, encoding='utf-8') as fp:
             soup = BeautifulSoup(fp, 'html.parser')
             tables = soup.find_all(
                 'table'

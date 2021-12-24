@@ -2,6 +2,12 @@ from django.db import models
 from django.db.models.fields import DateField
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import FloatField
+
+from django.core.validators import (
+    MaxValueValidator,
+    MinValueValidator
+)
+
 from enumchoicefield import ChoiceEnum, EnumChoiceField
 
 from enum import Enum, unique
@@ -26,7 +32,13 @@ class IUser(models.Model):
     billingAddress = models.CharField(max_length = 50 )
     genders = (('female','female'), ('male','male'))
     gender = models.CharField(choices = genders, max_length = 20)
-    jmbg = models.BigIntegerField(unique = True)
+    jmbg = models.BigIntegerField(
+        unique=True,
+        validators=[
+            MaxValueValidator(pow(10, 14) - 1),
+            MinValueValidator(pow(10, 13)),
+        ]
+    )
     birthDate  = models.DateField()
     userTypes = (('admin','admin'),('client','client'))
     userType = models.CharField(choices = userTypes, max_length = 40)
@@ -35,19 +47,18 @@ class IUser(models.Model):
         db_table = "iuser"
 
 class Client(models.Model):
-    userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
+    userId = models.ForeignKey(IUser, on_delete=models.CASCADE, unique=False)
     class Meta:
         db_table = "client"
 
 class Certificate(models.Model):
     """
-        User certificates to cipher paths!
+        User certificate and private key !
     """
     userId = models.ForeignKey(IUser, on_delete = models.CASCADE, unique = True)
     authorityName = models.CharField(max_length = 50)
-    cerPath = models.CharField(max_length = 200, unique = True)
-    pfxPath = models.CharField(max_length = 200, unique = True)
-    pvkPath = models.CharField(max_length = 200, unique = True)
+    pemPath = models.CharField(max_length = 200, unique = True)
+    keyPath = models.CharField(max_length = 200, unique = True)
     certificateName = models.CharField(max_length = 100, unique = True)
     class Meta:
         db_table = "certificate"
@@ -63,7 +74,10 @@ class Currency(ChoiceEnum):
     CAD = "CAD"
     AUD = "AUD"
     RSD = "RSD"
-
+    DKK = "DKK"
+    NOK = "NOK"
+    SEK = "SEK"
+    JPY = "JPY"
 
 
 class PaymentCode(models.Model):
@@ -95,12 +109,14 @@ class ExchangeRate(models.Model):
             https://nbs.rs/sr/drugi-nivo-navigacije/servisi/sistem-veb-servisa-NBS/
         )
     """
-    id = models.IntegerField(primary_key = True)
     currency = EnumChoiceField(
         enum_class=Currency,
-        unique = True
+        unique=True,
+        primary_key=True
     )
     
+    dateModified = models.DateField()
+
     rateInDinar = models.FloatField()
     class Meta:
         db_table = "exchangerate"

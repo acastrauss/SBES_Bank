@@ -59,7 +59,6 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 ROOT_URLCONF = 'DjangoApiBackend.urls'
 
 TEMPLATES = [
@@ -89,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sbesbank',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'KINGrobert543',
         'HOST': 'localhost',
         'PORT': '5432',
     }

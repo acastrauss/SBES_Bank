@@ -1,27 +1,135 @@
-
-from typing import KeysView
-from django.forms.widgets import ClearableFileInput
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.utils import translation
 from rest_framework.decorators import api_view
-from Shared.Enums.CardType import CardType
-# from Shared.Enums.CreditCardProcessor import CreditCardProcessor
+from rest_framework import status
+from rest_framework.parsers import JSONParser 
+
 from sbesbank.models import *
 from sbesbank.serializers import *
-from rest_framework import status
+from modules.Shared.BankNumbers import *
+from modules.Shared.Enums.CardType import CardType
+from datetime import datetime, timedelta
 import json
+import copy
 
-# from Shared.BankNumbers import (
-#     BankNumbers
-# )
-#from Shared.BankNumbers import *
-from sbesbank.models import *
-from datetime import datetime
-from rest_framework.parsers import JSONParser
+from django.db import models
 
-# Create your views here.
+from modules.paymentCodes.parse import (
+    Parse
+)
 
+from modules.exchangeRates.parse import (
+    MyParser
+)
+
+
+def ModelsExistsFields(
+    model:models.Model,
+    dataDict:dict,
+    keys:list[str],
+    all:bool
+) -> list[str]:
+    """
+        Return list of fields that already exist in DB
+    """
+    fieldsExists:list[str] = []
+
+    for key in dataDict:
+        if str(key) in keys:
+            dictCopy = {}
+            dictCopy[copy.deepcopy(key)] = copy.deepcopy(dataDict[key]) 
+            
+            if model.objects.filter(**dictCopy).exists():
+                fieldsExists.append(str(key))
+
+    if all:
+        return [] if len(fieldsExists) != len(keys) else fieldsExists
+    else:
+        fieldsExists
+
+
+
+def ModelExists(
+    model:models.Model,
+    dataDict:dict,
+    keys:list[str])->bool:
+    """
+        Model is Django model\n
+        Data Dict are key-value pairs with 
+        key as column name and value as column value\n
+        Keys are column names that need to be checked
+    """
+    dictCopy = {}
+
+    for key in dataDict:
+        if str(key) in keys:
+            dictCopy[copy.deepcopy(key)] = copy.deepcopy(dataDict[key]) 
+
+    return model.objects.filter(**dictCopy).exists()
+
+
+def GetNextId(model:models.Model):
+    if(len(model.objects.all()) > 0):
+        return model.objects.all().order_by('-id')[0].id + 1
+    else:
+        return 1
+
+def CreateModel(model:models.Model, dataDict:dict) -> models.Model: 
+    m = model(**dataDict)
+    m.save()
+    return m
+
+
+
+@api_view(['GET'])
+def InitCurrencies(request):
+
+    # Enter payment codes
+    # paymentCodes = Parse()
+
+    # for k in paymentCodes.keys():
+    #     PaymentCode.objects.create(
+    #         code=k,
+    #         description=paymentCodes[k]
+    #     )
+
+    # Enter exchange rates
+    dateModified = date.today()
+    rates = ExchangeRate.objects.all()    
+    updated = False
+
+    if(len(rates) > 0):
+        updated = rates[0].dateModified >= dateModified
+
+    if(not updated):
+        exchangeRateParser = MyParser()
+        exchangeRateParser.Parse()
+        
+        for k in exchangeRateParser.dataDict:
+            if(ModelsExistsFields(
+                ExchangeRate, 
+                {'currency': Currency[k]},
+                ['currency'], True
+            )):
+                er = ExchangeRate.objects.get(
+                    currency=Currency[k]
+                )
+                er.dateModified = dateModified
+                er.rateInDinar=exchangeRateParser.dataDict[k]
+                er.save()
+
+            else:
+                ExchangeRate.objects.create(
+                    currency=Currency[k],
+                    dateModified=dateModified,
+                    rateInDinar=exchangeRateParser.dataDict[k]
+                )
+  
+    return JsonResponse(
+        1,
+        status=200,
+        safe=False
+    )
 
 @api_view(['GET'])
 def TrAcTransfer(request, id):
@@ -40,18 +148,19 @@ def TrMyAcc(request):
     return JsonResponse(serializer.data)
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 49a168748992e232e74ba5fbba7fb22372b30339
 @api_view(['POST'])
 def LogInUser(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
+    bodyUnicode = request.body.decode('utf-8')
+    body = json.loads(bodyUnicode)
 
     user = IUser.objects.get(
         username=body['username'],
         password=body['password']
     )
-
-    print(user)
 
     client = Client.objects.get(
         userId=user
@@ -63,9 +172,42 @@ def LogInUser(request):
 
 
 
+@api_view(['POST'])
+def RegisterUser(request):
+    body = json.loads(
+        request.body.decode('utf-8')
+    )
 
+    userFound = ModelsExistsFields(
+        IUser, body, ["username", "jmbg", "userType"], True
+    )
+    
+    if(len(userFound) != 0):
+        retStr = "User with "
+        for f in userFound:
+            retStr += f"{f}={body[f]}, "
+        
+        retStr += " already exists."
 
+        return JsonResponse(retStr, status=409, safe=False)
 
+    
+    body['id'] = GetNextId(IUser)
+    user = CreateModel(IUser, body)
+
+    if (body['userType'] == 'client'):
+        client = CreateModel(Client, {
+            'id' : GetNextId(Client),
+            'userId' : user
+        })
+
+        return JsonResponse(
+            ClientSerializer(client).data
+        )
+    else:
+        return JsonResponse(
+            IUserSerializer(user).data
+        )
 
 
 @api_view(['GET'])
@@ -136,10 +278,26 @@ def AccTransactions(request, id):
     return JsonResponse(serializer.data)
 
 
+
+@api_view(['GET'])
+def ChangeAccount(request, id, currency):
+    curr = Currency(getCurrency(currency))
+    account =Account.objects.get(clientId = id, currency = curr)
+    cards = list(Card.objects.filter(accountFK = account.id))
+    serializer_acc = AccountSerializer(account)
+    serializer_cards = CardSerializer(cards,many = True)
+
+    return JsonResponse(
+        {
+            "Account": serializer_acc.data,
+            "Cards": serializer_cards.data
+        }
+    )
+
 @api_view(['POST'])
 def createUser(request):
     iuser_data = JSONParser().parse(request)
-    iuser_serializer = IUserSerializer(data = iuser_data)
+    iuser_serializer = IUserSerializer(data=iuser_data)
     if iuser_serializer.is_valid():
         iuser_serializer.save()
         return JsonResponse(iuser_serializer.data)
@@ -152,7 +310,7 @@ def createUser(request):
 @api_view(['POST'])
 def createClient(request):
     client_data = JSONParser().parse(request)
-    userr = IUser.objects.get(id = client_data['userId'])
+    userr = IUser.objects.get(id=client_data['userId'])
     client = Client()
     client.userId = userr
     client.save()
@@ -163,16 +321,14 @@ def createClient(request):
 
 
 @api_view(['POST'])
-def createAccount(request):
-    account_data = JSONParser().parse(request)
-    account_serializer = AccountSerializer(data = account_data)
-    if account_serializer.is_valid():
-        account_serializer.save()
-        return JsonResponse(account_serializer.data)
-    else:
-        return JsonResponse(
-            account_serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST)
+def createAccountPOST(request, clientId,currency):
+    account = Account()
+    account = createAccount()
+    account.clientId = Client.objects.get(id = clientId)
+    account.currency = Currency(getCurrency(currency))
+    account.save()
+    account_serialized = AccountSerializer(account)
+    return JsonResponse(account_serialized.data)
 
 
 @api_view(['POST'])
@@ -188,47 +344,44 @@ def createNewClientAccount(request):
         account = Account()
         account = createAccount()
         client1 = Client.objects.get(userId =iuser_data['id'])
-        ids = Account.objects.values('id')
-        account.id = ids.order_by('-id').first()['id'] + 1 
         account.clientId = client1
         account.save()
-        # card = createCard(userr.fullName,CardType.DEBIT,account.accountNumber)
-        # card.accountFK = account
-        # idss = Card.objects.values('id')
-        # card.id = idss.order_by('-id').first()['id'] + 1
-        # card.save()
+        card = createCard(userr.fullName,CardType.DEBIT,account.accountNumber)
+        card.accountFK = account
+        card.save()
         return JsonResponse(iuser_serializer.data)
     else:
-        return JsonResponse(
-            iuser_serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return JsonResponse(iuser_serializer.errors, status
+        = status.HTTP_400_BAD_REQUEST)
 
+def createAccount():
+    account = Account()
+    ids = Account.objects.values('id')
+    try:
+        account.id = ids.order_by('-id').first()['id'] + 1 
+    except:
+        account.id = 1
+    account.accountBalance = 0.0
+    account.accountNumber = BankNumbers.GenerateAccountNumber()
+    account.blocked = False
+    account.currency = Currency.RSD
+    account.dateCreated = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+    return account
 
-# @api_view(['POST'])
-# def createAccount():
-#     account = Account()
-#     account.accountBalance = 0.0
-#     account.accountNumber = BankNumbers.GenerateAccountNumber()
-#     account.blocked = False
-#     account.currency = Currency.RSD
-#     account.dateCreated = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
-#     return account
-
-
-# @api_view(['POST'])
-# def createCard(cardHolder,cardType,accountNumber):
-#     card = Card()
-#     card.cardHolder= cardHolder
-#     card.cardNumber = BankNumbers.GenerateCardNumber(cardProcessor= CreditCardProcessor.CreditCardProcessor.MASTER_CARD)
-#     card.cardProcessor = CreditCardProcessor.CreditCardProcessor.MASTER_CARD
-#     card.pin = BankNumbers.GeneratePIN(card.cardNumber,accountNumber)
-#     card.validUntil =  (datetime.now()).strftime("%Y-%m-%d")
-#     card.cardType = cardType
-#     return card
-#       return JsonResponse(iuser_serializer.errors, status
-#        = status.HTTP_400_BAD_REQUEST)
-#
+def createCard(cardHolder,cardType,accountNumber):
+    card = Card()
+    idss = Card.objects.values('id')
+    try:
+        card.id = idss.order_by('-id').first()['id'] + 1    
+    except:
+        card.id = 1
+    card.cardHolder= cardHolder
+    card.cardNumber = BankNumbers.GenerateCardNumber(cardProcessor= CreditCardProcessor.CreditCardProcessor.MASTER_CARD)
+    card.cardProcessor = CreditCardProcessor.CreditCardProcessor.MASTER_CARD
+    card.pin = BankNumbers.GeneratePIN(card.cardNumber,accountNumber)    
+    card.validUntil =  (datetime.now()).strftime("%Y-%m-%d")
+    card.cardType = cardType
+    return card
 
 @api_view(['POST'])
 def AddTransaction(request):
@@ -256,7 +409,7 @@ def AddTransaction(request):
             idmyac = TrMyAccountInfo.objects.values('id')
             idtr = Transaction.objects.values('id')
 
-           # transaction_serializer.paymentCodeFK = PaymentCodeSerializer(data = pym)
+            #transaction_serializer.paymentCodeFK = PaymentCodeSerializer(data = pym)
             transferAccInfoFK = TrAcTransferInfo.objects.get(id= idtrac.order_by('-id').first()['id'])
             myAccInfoFK = TrMyAccountInfo.objects.get(id = idmyac.order_by('-id').first()['id'])
             #transaction_serializer.id = 
@@ -266,26 +419,7 @@ def AddTransaction(request):
                 typetr = 0
             else:
                 typetr = 1
-            currencyId = 0
-            if transaction_data['currency']=='USD':
-                currencyId = 1
-            elif transaction_data['currency']=='EUR':
-                currencyId = 2
-            elif transaction_data['currency']=='CHF':
-                currencyId = 3
-            elif transaction_data['currency']=='GBP':
-                currencyId = 4
-            elif transaction_data['currency']=='RUB':
-                currencyId = 5
-            elif transaction_data['currency']=='CNY':
-                currencyId = 6
-            elif transaction_data['currency']=='CAD':
-                currencyId = 7
-            elif transaction_data['currency']=='AUD':
-                currencyId = 8
-            elif transaction_data['currency']=='RSD':
-                currencyId = 9
-
+            
             transaction = Transaction.objects.create(
                 id = idtrr,
                 amount =transaction_data['amount'],
@@ -296,7 +430,7 @@ def AddTransaction(request):
                 provision = transaction_data['provision'],
                 referenceNumber = transaction_data['referenceNumber'],
                 transactionType = Transaction.TRANSACTION_TYPE[typetr][1],
-                currency = Currency(currencyId),
+                currency = Currency(getCurrency(transaction_data['currency'])),
                 myAccInfoFK = myAccInfoFK,
                 transferAccInfoFK = transferAccInfoFK
             )
@@ -310,3 +444,26 @@ def AddTransaction(request):
         return JsonResponse(myacc_serializer.errors, status
     = status.HTTP_400_BAD_REQUEST)
     
+
+
+def getCurrency(currency):
+    currencyId = 0
+    if currency=='USD':
+        currencyId = 1
+    elif currency=='EUR':
+        currencyId = 2
+    elif currency=='CHF':
+        currencyId = 3
+    elif currency=='GBP':
+        currencyId = 4
+    elif currency=='RUB':
+        currencyId = 5
+    elif currency=='CNY':
+        currencyId = 6
+    elif currency=='CAD':
+        currencyId = 7
+    elif currency=='AUD':
+        currencyId = 8
+    elif currency=='RSD':
+        currencyId = 9       
+    return currencyId
