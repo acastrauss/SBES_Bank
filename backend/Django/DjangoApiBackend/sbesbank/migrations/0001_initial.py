@@ -48,6 +48,7 @@ class Migration(migrations.Migration):
                 ('fullName', models.CharField(max_length=50)),
                 ('password', models.CharField(max_length=64)),
                 ('username', models.CharField(max_length=40, unique=True)),
+                ('email', models.EmailField(max_length=150, unique=True)),
                 ('billingAddress', models.CharField(max_length=50)),
                 ('gender', models.CharField(choices=[('female', 'female'), ('male', 'male')], max_length=20)),
                 ('jmbg', models.BigIntegerField(unique=True, validators=[django.core.validators.MaxValueValidator(99999999999999), django.core.validators.MinValueValidator(10000000000000)])),

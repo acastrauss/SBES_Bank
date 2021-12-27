@@ -33,7 +33,7 @@ class BankNumbers():
 
         return digits
 
-    def GenerateAccountNumber()-> str:
+    def GenerateAccountNumber():
         digits = []
         conf = BankConfigParser()
         

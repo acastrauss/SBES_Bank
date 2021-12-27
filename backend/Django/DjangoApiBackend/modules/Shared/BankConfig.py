@@ -5,7 +5,7 @@ import configparser
 class BankConfigParser():
     def __init__(self) -> None:
         configFile = os.path.join(
-            os.getcwd(), 'Shared', 'bankConfig.ini'
+            os.getcwd(), 'modules','Shared', 'bankConfig.ini'
         )
 
         if os.path.isfile(configFile):

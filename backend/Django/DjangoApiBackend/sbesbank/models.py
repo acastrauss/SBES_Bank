@@ -27,7 +27,7 @@ class IUser(models.Model):
     """
         Hash value has 64 length
     """
-    
+    email = models.EmailField(max_length= 150, unique= True)
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
     genders = (('female','female'), ('male','male'))
@@ -70,7 +70,6 @@ class Currency(ChoiceEnum):
     CHF = "CHF"
     GBP = "GBP"
     RUB = "RUB"
-    CNY = "CNY"
     CAD = "CAD"
     AUD = "AUD"
     RSD = "RSD"
