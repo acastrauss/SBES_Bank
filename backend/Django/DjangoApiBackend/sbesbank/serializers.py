@@ -87,68 +87,6 @@ class TrMyAccountInfoSerializer(serializers.ModelSerializer):
     )
 
 
-class CardSerializer(serializers.ModelSerializer):
-    """
-        Card model\n
-        CVC and PIN are save as Hash (SHA256) values
-    """
-    class Meta:
-        model = Card
-        fields = [
-            'id',
-            'cardHolder',
-            'cardNumber',
-            'cvc',
-            'pin',
-            'cardProcessor',
-            'cardType',
-            'validUntil'
-        ]
-
-    cardHolder = serializers.CharField(
-        max_length=100
-    )
-
-    cardNumber = serializers.CharField(
-        max_length=20
-    )
-
-    """
-        Hash value has 64 length
-    """
-    cvc = serializers.CharField(
-        max_length=64
-    )
-
-    """
-        Hash value has 64 length
-    """
-    pin = serializers.CharField(
-        max_length=64
-    )
-
-    CARD_PROCESSOR = [
-        ('VISA','VISA'),
-        ('MASTER_CARD','MASTER_CARD'),
-        ('AMERICAN_EXPRESS','AMERICAN_EXPRESS')
-    ]
-    
-    cardProcessor = TypedChoiceField(
-        choices=CARD_PROCESSOR
-    )
-
-    CARD_TYPE = [
-        ('DINA', 'DINA'),
-        ('CREDIT', 'CREDIT')
-    ]
-
-    cardType = TypedChoiceField(
-        choices=CARD_TYPE
-    )
-
-    validUntil = serializers.DateField()
-
-
 class TransactionSerializer(serializers.ModelSerializer):
     transferAccInfoFK = TrAcTransferInfoSerializer()
     myAccInfoFK = TrMyAccountInfoSerializer()
@@ -281,6 +219,91 @@ class AccountSerializer(serializers.ModelSerializer):
             'dateCreated',
             'clientId'
         ]
+
+
+class CardSerializer2(serializers.ModelSerializer):
+    """
+        Card model\n
+        CVC and PIN are save as Hash (SHA256) values
+    """
+    class Meta:
+        model = Card
+        fields = [
+            'id',
+            'cardHolder',
+            'cardNumber',
+            'cvc',
+            'pin',
+            'cardProcessor',
+            'cardType',
+            'validUntil'
+        ]
+
+
+class CardSerializer(serializers.ModelSerializer):
+    """
+        Card model\n
+        CVC and PIN are save as Hash (SHA256) values
+    """
+    
+    accountFK = AccountSerializer()
+    class Meta:
+        model = Card
+        fields = [
+            'id',
+            'cardHolder',
+            'cardNumber',
+            'cvc',
+            'pin',
+            'cardProcessor',
+            'cardType',
+            'validUntil',
+            'accountFK'
+        ]
+
+    cardHolder = serializers.CharField(
+        max_length=100
+    )
+
+    cardNumber = serializers.CharField(
+        max_length=20
+    )
+
+    """
+        Hash value has 64 length
+    """
+    cvc = serializers.CharField(
+        max_length=64
+    )
+
+    """
+        Hash value has 64 length
+    """
+    pin = serializers.CharField(
+        max_length=64
+    )
+
+    CARD_PROCESSOR = [
+        ('VISA','VISA'),
+        ('MASTER_CARD','MASTER_CARD'),
+        ('AMERICAN_EXPRESS','AMERICAN_EXPRESS')
+    ]
+    
+    cardProcessor = TypedChoiceField(
+        choices=CARD_PROCESSOR
+    )
+
+    CARD_TYPE = [
+        ('DINA', 'DINA'),
+        ('CREDIT', 'CREDIT')
+    ]
+
+    cardType = TypedChoiceField(
+        choices=CARD_TYPE
+    )
+
+    validUntil = serializers.DateField()
+
 
 class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
