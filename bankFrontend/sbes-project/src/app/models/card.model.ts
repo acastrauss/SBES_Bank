@@ -1,11 +1,12 @@
 export interface CardModel{
+    id:number,
     cardHolder : string,
     cardNumber: string,
+    cvc : string,            
+    pin : string,
     cardType : CardType,
-    cvc : number,            
-    pin : number,
     validUntil : Date,
-    processor : CreditCardProcessor
+    cardProcessor : CreditCardProcessor
 }
 enum CardType {
     DEBIT,

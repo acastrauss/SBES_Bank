@@ -1,10 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
-import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -14,14 +14,14 @@ import { UserService } from '../services/user.service';
 export class RegisterComponent implements OnInit {
   
   public users : ClientModel[] ;
-  public registerFrom : FormGroup;
+  public registerForm : FormGroup;
 
-  constructor(private formBuilder : FormBuilder,
+  constructor(private formBuilder : FormBuilder,private router : Router,
               private ClientService : ClientService) {
 
     this.users = JSON.parse(localStorage.getItem('users')!);  /////////
 
-    this.registerFrom = this.formBuilder.group({
+    this.registerForm = this.formBuilder.group({
       username:['',[Validators.required]],
       password:['',[Validators.required]],
       billingAddress:['',[Validators.required]],
@@ -37,52 +37,53 @@ export class RegisterComponent implements OnInit {
   }
 
   public get username() {
-    return this.registerFrom.get('username');
+    return this.registerForm.get('username');
   }
 
   public get password() {
-    return this.registerFrom.get('password') ;
+    return this.registerForm.get('password') ;
   }
 
   public get billingAddress() {
-    return this.registerFrom.get('billingAddress');
+    return this.registerForm.get('billingAddress');
   }
 
   public get birthDate() {
-    return this.registerFrom.get('birthDate') ;
+    return this.registerForm.get('birthDate') ;
   }
 
   public get email() {
-    return this.registerFrom.get('email');
+    return this.registerForm.get('email');
   }
 
   public get fullName() {
-    return this.registerFrom.get('fullName') ;
+    return this.registerForm.get('fullName') ;
   }
 
   public get gender() {
-    return this.registerFrom.get('gender');
+    return this.registerForm.get('gender');
   }
 
   public get jmbg() {
-    return this.registerFrom.get('jmbg') ;
+    return this.registerForm.get('jmbg') ;
   }
 
 
-  public submitForm(data : ClientModel){
+  public submitForm(data : any){
     console.log(data);
     
-    if(!this.registerFrom.valid){
+    if(!this.registerForm.valid){
       window.alert('Not valid!');
       return;
     }
 
     this.ClientService.register(data).subscribe((user : ClientModel) =>{
-      this.authenticate(data);
-      window.alert('Korisnik ${user.username} uspjesno registrovan!');
-      this.users.push(data);///mozda cu morati data kastovati 
-      localStorage.setItem('users', JSON.stringify(this.users));      
-      this.registerFrom.reset();
+     // this.authenticate(user);
+      window.alert('Korisnik uspjesno registrovan!');
+      this.router.navigate(['/login']);
+     // this.users.push(data);///mozda cu morati data kastovati 
+     // localStorage.setItem('users', JSON.stringify(this.users));      
+      this.registerForm.reset();
     })
   }
 
@@ -103,7 +104,8 @@ export class RegisterComponent implements OnInit {
           fullName : user.userId.fullName,
           email: user.userId.email,
           birthDate : user.userId.birthDate,
-          billingAddress : user.userId.billingAddress
+          billingAddress : user.userId.billingAddress,
+          userType:"client"
         }
     })
     return error('Korisnik ${user.fullName} vec postoji,pokusajte ponovo!');

@@ -30,6 +30,7 @@ class IUser(models.Model):
     
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
+    email = models.EmailField(max_length=150,unique=True)
     genders = (('female','female'), ('male','male'))
     gender = models.CharField(choices = genders, max_length = 20)
     jmbg = models.BigIntegerField(

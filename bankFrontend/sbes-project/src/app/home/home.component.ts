@@ -17,13 +17,13 @@ export class HomeComponent implements OnInit{
   public userAccounts:AccountModel[];
   public cardsAccount:CardModel[];
   public logInClient : ClientModel ;
-  private loginUserUrl = "htpp://localhost:3001/login/";
+  public logInAdmin : UserModel;
   private userAccountsUrl = "http://127.0.0.1:8000/api/sbesbank/accountinfo/";
-  private userCardsUrl = "http://127.0.0.1:8000/api/sbesbank/card";
   constructor(private UserService : UserService,
               private route : ActivatedRoute,private http : HttpClient) { 
                 
-    this.logInClient= JSON.parse(localStorage.getItem('client')!);
+    this.logInClient = JSON.parse(localStorage.getItem('client')!);
+    this.logInAdmin = JSON.parse(localStorage.getItem('admin')!);
     this.getAccUser();   
     //this.getCardsUser();     
     }
@@ -51,23 +51,11 @@ export class HomeComponent implements OnInit{
 
   public getAccUser():AccountModel[]{
     if(this.logInClient!=null){
-      this.http.get<AccountModel[]>(this.userAccountsUrl,{params:new HttpParams().set('id',this.logInClient.userId.id)} ).subscribe((acc : AccountModel[])=>{
+      this.http.get<AccountModel[]>(this.userAccountsUrl,{params:new HttpParams().set('id',this.logInClient.id)} ).subscribe((acc : AccountModel[])=>{
         this.userAccounts=acc;
         localStorage.setItem('userAccounts',JSON.stringify(this.userAccounts));
       });
   }
   return this.userAccounts;
 }
-
-public getCardsUser():CardModel[]{
-  if(this.logInClient!=null){
-    this.http.get<CardModel[]>(this.userCardsUrl,{params:new HttpParams().set('id',this.logInClient.userId.id)} ).subscribe((card : CardModel[])=>{
-      this.cardsAccount=card;
-      localStorage.setItem('cardsAccount',JSON.stringify(this.cardsAccount));
-    });
-}
-return this.cardsAccount;
-}
-
-
 }

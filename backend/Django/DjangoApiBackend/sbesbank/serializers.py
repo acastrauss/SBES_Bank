@@ -202,7 +202,24 @@ class TransactionSerializer(serializers.ModelSerializer):
     currency = EnumChoiceField(
         enum_class=Currency
     )
-
+    
+class CardSerializer2(serializers.ModelSerializer):
+    """
+        Card model\n
+        CVC and PIN are save as Hash (SHA256) values
+    """
+    class Meta:
+        model = Card
+        fields = [
+            'id',
+            'cardHolder',
+            'cardNumber',
+            'cvc',
+            'pin',
+            'cardProcessor',
+            'cardType',
+            'validUntil'
+        ]
 
 class IUserSerializer(serializers.ModelSerializer):
    
@@ -213,6 +230,7 @@ class IUserSerializer(serializers.ModelSerializer):
             'fullName',
             'password',
             'username',
+            'email',
             'billingAddress',
             'gender',
             'jmbg',
@@ -255,6 +273,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = [
+            'id',
             'accountBalance',
             'accountNumber',
             'blocked',

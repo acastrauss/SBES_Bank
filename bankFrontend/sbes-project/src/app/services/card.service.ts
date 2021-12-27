@@ -8,7 +8,7 @@ import { CardModel } from '../models/card.model';
 })
 export class CardService {
   private cards : Observable<CardModel[]>;
-  private cardsUrl = "http://localhost:3001/cards/createCard";
+  private cardsUrl = "http://127.0.0.1:8000/api/sbesbank/createNewCard";
   
   constructor(private http: HttpClient) {
     this.cards = new Observable<CardModel[]>(); 

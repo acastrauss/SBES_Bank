@@ -9,6 +9,7 @@ import { UserModel } from '../models/user.model';
 export class UserService {
   private users: Observable<UserModel[]>;
   private usersUrl = "http://127.0.0.1:8000/api/sbesbank/loginuser";
+  private registerUrl = "http://127.0.0.1:8000/api/sbesbank/registeruser"
 
   constructor(private htpp : HttpClient) { 
     this.users = new Observable<UserModel[]>();
@@ -33,6 +34,6 @@ export class UserService {
     const body ={
       ...formData
     }
-    return this.htpp.post<UserModel>(this.usersUrl,body);
+    return this.htpp.post<UserModel>(this.registerUrl,body);
   }
 }

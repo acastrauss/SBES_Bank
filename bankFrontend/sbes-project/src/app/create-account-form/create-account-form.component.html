@@ -1,0 +1,33 @@
+<h2 class="form">Create Account</h2>
+<hr>
+<div class="form">
+    <form [formGroup]="accountForm" (ngSubmit)="submitForm(accountForm.value)">
+        <div class="form-group">
+            <label for="clientId"></label>
+            <input id="clientId" class="form-control" formControlName="clientId" [(ngModel)]="account.clientId.id" hidden> 
+        </div>
+        <div class="form-group">
+            <label for="clientName">Account Owner</label>
+            <input id="clientName" class="form-control" formControlName="clientName" [(ngModel)]="account.clientId.userId.fullName" readonly> 
+        </div>
+        <div class="form-group">
+            <label for="currency">Currency</label>
+            <select id="currency" name="currency" class="form-control" formControlName="currency">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="CHF">CHF</option>
+                <option value="GBR">GBP</option>
+                <option value="RUB">RUB</option>
+                <option value="CAD">CAD</option>
+                <option value="AUD">AUD</option>
+                <option value="RSD">RSD</option>
+                <option value="DKK">DKK</option>
+                <option value="SEK">SEK</option>
+                <option value="NOK">NOK</option>
+                <option value="JPY">JPY</option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="currency.errors?.['required']">Currency is required</div>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!accountForm.valid">Submit</button>
+    </form>
+</div>

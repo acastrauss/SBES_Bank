@@ -21,11 +21,12 @@ import { UserModel } from 'src/app/models/user.model';
 })
 export class AccountSpliterComponent implements OnInit {
 
-  public client : UserModel = JSON.parse(localStorage.getItem('client')!);
+  public client : UserModel = JSON.parse(localStorage.getItem('user')!);
   
-  @Input() userAccounts : AccountModel[]; 
+  @Input() userAccounts : AccountModel[] = []; 
 
-  constructor() {}
+  constructor() {
+ }
 
   ngOnInit(): void {
   }

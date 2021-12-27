@@ -1,5 +1,6 @@
 import { getLocaleWeekEndRange } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
@@ -7,8 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-
-  constructor() { }
+  constructor(private router : Router) { }
 
   ngOnInit(): void {
   }
@@ -16,8 +16,14 @@ export class NavigationComponent implements OnInit {
   public loggedIn(){
       return localStorage.getItem('client');
   }
+  public loggedInAdmin(){
+    return localStorage.getItem('admin');
+  }
 
   public onLogOut(){
-    localStorage.removeItem('client');
+    localStorage.clear();
+    this.router.navigate(['login']);
+    localStorage.removeItem('admin');
+    //localStorage.removeItem('client');
   }
 }

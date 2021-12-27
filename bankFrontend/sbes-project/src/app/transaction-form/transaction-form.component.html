@@ -1,0 +1,62 @@
+<h2 class="form">Create transaction</h2>
+<hr>
+<div class="form">
+    <form [formGroup]="transactionForm" (ngSubmit)="submitForm(transactionForm.value)">
+        
+        <div class="form-group">
+            <label for="accountTo">Account To</label>
+            <input type="text"id="accountTo" class="form-control" formControlName="accountTo"> 
+        </div>
+        <div class="error-message" *ngIf="accountTo.errors?.['required']">Account To is required</div>
+        
+        <div class="form-group">
+            <label for="accountToName">Account To Name</label>
+            <input type="text" id="accountToName" class="form-control" formControlName="accountToName">
+        </div>
+        <div class="error-message" *ngIf="accountToName.errors?.['required']">Account To Name is required</div>
+        
+        <div class="form-group">
+            <label for="accountToBillingAdress">Account To Billing Adress</label>
+            <input type="text" id="accountToBillingAdress" class="form-control" formControlName="accountToBillingAdress">
+        </div>
+        <div class="error-message" *ngIf="accountToBillingAdress.errors?.['required']">Account To Billing Adress is required</div>
+        
+        <div class="form-group">
+            <label for="modelCode">Model Code</label>
+            <input type="number" id="modelCode" class="form-control" formControlName="modelCode">
+        </div>
+        <div class="error-message" *ngIf="modelCode.errors?.['required']">Model Code is required</div>
+        
+        <div class="form-group">
+            <label for="code">Code</label>
+            <input type="number" id="code" class="form-control" formControlName="code">
+        </div>
+        <div class="error-message" *ngIf="code.errors?.['required']">Code is required</div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" class="form-control" formControlName="description">
+        </div>
+        <div class="error-message" *ngIf="description.errors?.['required']">Description is required</div>
+        
+        <div class="form-group">
+            <label for="paymentPurpose">Payment Purpose</label>
+            <input type="text" id="paymentPurpose" class="form-control" formControlName="paymentPurpose">
+        </div>
+        <div class="error-message" *ngIf="paymentPurpose.errors?.['required']">Payment Purpose is required</div>
+        
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" class="form-control" formControlName="amount">
+        </div>
+        <div class="error-message" *ngIf="amount.errors?.['required']">Amount is required</div>
+        
+        <div class="form-group">
+            <label for="referenceNumber">Reference Number </label>
+            <input type="number" id="referenceNumber" class="form-control" formControlName="referenceNumber">
+        </div>
+        <div class="error-message" *ngIf="referenceNumber.errors?.['required']">Reference Number is required</div>
+
+        <br><button type="submit" class="btn btn-primary btn-block" [disabled]="!transactionForm.valid">Submit</button>
+    </form>
+</div>

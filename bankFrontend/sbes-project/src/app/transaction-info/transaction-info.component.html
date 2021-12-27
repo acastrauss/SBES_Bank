@@ -1,0 +1,63 @@
+<table class="content-table">
+    <thead>
+      <tr>
+        <th>Id Transaction</th>
+        <th>Amount</th>
+        <th>Model Code</th>
+        <th colspan="2">Payment</th>
+        <th>Purpose</th>
+        <th>Precise Time</th>
+        <th>Provision</th>
+        <th>Reference Number</th>
+        <th>Transaction Type</th>
+        <th>Currency</th>
+        <th colspan="5">Account From</th>
+        <th colspan="3">Account To</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Payment Code</th>
+        <th>Payment Description</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Full Name</th>
+        <th>Billing Adress</th>
+        <th>Account Number</th>
+        <th>Balance Before</th>
+        <th>Balance After</th>
+        <th>Account Number</th>
+        <th>Billing Adress</th>
+        <th>Full Name</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{transaction.id}}</td>
+        <td>{{transaction.amount}}</td>
+        <td>{{transaction.modelCode}}</td>
+        <td>{{transaction.paymentCodeFK.code}}</td>
+        <td>{{transaction.paymentCodeFK.description}}</td>
+        <td>{{transaction.paymentPurpose}}</td>
+        <td>{{transaction.preciseTime}}</td>
+        <td>{{transaction.provision}}</td>
+        <td>{{transaction.referenceNumber}}</td>
+        <td>{{transaction.transactionType}}</td>
+        <td>{{transaction.currency}}</td>
+        <td>{{transaction.myAccInfoFK.fullName}}</td>
+        <td>{{transaction.myAccInfoFK.billingAddress}}</td>
+        <td>{{transaction.myAccInfoFK.accountNumber}}</td>
+        <td>{{transaction.myAccInfoFK.balanceBefore}}</td>
+        <td>{{transaction.myAccInfoFK.balanceAfter}}</td>
+        <td>{{transaction.transferAccInfoFK.accountNumber}}</td>
+        <td>{{transaction.transferAccInfoFK.billingAddress}}</td>
+        <td>{{transaction.transferAccInfoFK.fullName}}</td>
+      </tr>
+    </tbody>
+  </table>

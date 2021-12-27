@@ -1,0 +1,22 @@
+<table class="content-table" *ngIf="admin">
+    <thead>
+      <tr>
+        <th>Client Name</th>
+        <th>Account Number</th>
+        <th>Date Created</th>
+        <th>Balance</th>
+        <th>State Account</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let account of accounts; let i = index">
+        <td>{{account.clientId.userId.fullName}}</td>
+        <td>{{account.accountNumber}}</td>
+        <td>{{account.dateCreated}}</td>
+        <td>{{account.accountBalance}}  {{" "}} {{account.currency}}</td>
+        <td>
+            <input (change)="checkValue($event,account.accountNumber)" [(ngModel)]="account.blocked" type="checkbox"/>
+        </td>
+      </tr>
+    </tbody>
+  </table>

@@ -1,19 +1,26 @@
+import { ClientModel } from "./client.model";
+
 export interface AccountModel{
    accountBalance : number,
    accountNumber : string,
    blocked : boolean,
-   currency : Currency,
-   dataCreated : Date,
+   clientId : ClientModel,
+   currency : string,
+   dateCreated : Date,
+   id : number
 }
 
 enum Currency{
     USD,
     EUR,
     CHF,
-    GBR,
+    GBP,
     RUB,
-    CNY,
     CAD,
     AUD,
-    RSD
+    RSD,
+    DKK,
+    SEK,
+    NOK,
+    JPY
 }

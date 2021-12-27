@@ -11,6 +11,7 @@ export class ClientService {
   private clients: Observable<ClientModel[]>;
   private usersUrl = "http://127.0.0.1:8000/api/sbesbank/loginuser";
 
+  private registerUrl = "http://127.0.0.1:8000/api/sbesbank/registeruser"
 
   constructor(private htpp : HttpClient) { 
     this.clients = new Observable<ClientModel[]>();
@@ -24,18 +25,18 @@ export class ClientService {
     this.clients=this.htpp.get<ClientModel[]>(this.usersUrl);
     return this.clients;
   }
-  public logIn(formData : any) : Observable<ClientModel>{
+  public logIn(formData : any) : Observable<any>{
     const body = {
       ...formData
     };
-    return this.htpp.post<ClientModel>(this.usersUrl,body);
+    return this.htpp.post<any>(this.usersUrl,body);
   }
 
-  public register(formData : any) : Observable<ClientModel>{
+  public register(data : ClientModel) : Observable<ClientModel>{
     const body ={
-      ...formData
+      ...data
     }
-    return this.htpp.post<ClientModel>(this.usersUrl,body);
+    return this.htpp.post<ClientModel>(this.registerUrl,body);
   }
 
 }

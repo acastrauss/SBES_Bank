@@ -7,10 +7,12 @@ export interface UserModel {
     id : number,
     jmbg : number,
     password : string,
-    username : string
+    username : string,
+    userType:string
 }
 
 enum Gender { 
     MALE,
     FEMALE
 }
+

@@ -1,21 +1,24 @@
 <!-- carousel -->
 <div class="carousel">
     <ng-container *ngFor="let card of cardsAccount; let i = index">
-        <div class="grid-container">
-            <div class="item1">
-                <p>{{card.cardType}}</p>
+          <div *ngIf="i === currentSlide" >
+            <table>
+              <tr>
+                <th>Card Holder</th>
+                <th>Card Number</th>
+                <th>Valid Until</th>
+                <th>Card Processor</th>
+                <th>Card Type</th>
+              </tr>
+              <tr>
+                <td>{{card.cardHolder}}</td>
+                <td>{{card.cardNumber}}</td>
+                <td>{{card.validUntil}}</td>
+                <td>{{card.cardProcessor}}</td>
+                <td>{{card.cardType}}</td>
+              </tr>
+            </table>
             </div>
-            <div class="item3">
-                <p>{{card.processor}}</p><br>
-                <p>{{card.validUntil}}</p><br>
-                <p>{{card.validUntil}}</p><br>
-
-            </div> 
-            <div class="item5">
-                <h2>{{card.cardHolder}}</h2>
-                <h3>{{card.cardNumber}}</h3>
-            </div>
-          </div>
      </ng-container>
       <!-- controls -->
       <button class="control prev" (click)="onPreviousClick()">

@@ -5,7 +5,7 @@
 
             <img src="assets/bank.jpg" height="48" size="10" alt="Bank" [routerLink]="['/']">
             <div>
-                <ul class="navbar-nav ml-auto">
+                <ul class="nav navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" [routerLink]="['/']">Home</a>
                     </li>
@@ -13,14 +13,17 @@
             </div>
             <div>
                 <ul class="nav navbar-nav">
-                    <li *ngIf="!loggedIn()" class="nav-item">
+                    <li *ngIf="!loggedIn() && !loggedInAdmin()" class="nav-item">
                         <a class="nav-link" [routerLink]="['/register']">Register</a>
                     </li>
-                    <li *ngIf="!loggedIn()" class="nav-item">
+                    <li *ngIf="!loggedIn() && !loggedInAdmin()" class="nav-item">
                         <a class="nav-link" [routerLink]="['/login']">Log in</a>
                     </li>
-                    <li *ngIf="loggedIn()" class="nav-item">
+                    <li *ngIf="loggedIn() || loggedInAdmin()" class="nav-item">
                         <a class="nav-link" (click)="onLogOut()">Log out</a>
+                    </li>
+                    <li *ngIf="loggedIn() && !loggedInAdmin()" class="nav-item">
+                        <a class="nav-link" [routerLink]="['/exchange-form']">Exchange</a>
                     </li>
                 </ul>
             </div>

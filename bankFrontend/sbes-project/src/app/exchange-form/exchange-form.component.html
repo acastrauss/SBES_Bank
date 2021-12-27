@@ -1,0 +1,36 @@
+<h2 class="form">Create transaction</h2>
+<hr>
+<div class="form">
+    <form [formGroup]="exchangeForm" (ngSubmit)="submitForm(exchangeForm.value)">
+        <div class="form-group">
+            <label for="accountFrom">Account To Name</label>
+            <select id="accountFrom" class="form-control" formControlName="accountFrom"> 
+                <option *ngFor="let account of accounts;let i=index"
+                [value]="account.accountNumber" id="account.accountNumber">
+                {{account.accountNumber}} -> {{account.currency}}
+            </option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="accountFrom.errors?.['required']">Account From is required</div>
+
+        <div class="form-group">
+            <label for="accountTo">Account To</label>
+            <select id="accountTo" class="form-control" formControlName="accountTo"> 
+                <option *ngFor="let account of accounts;let i=index"
+                [value]="account.accountNumber" >
+                {{account.accountNumber}} -> {{account.currency}}
+            </option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="accountTo.errors?.['required']">Account To is required</div>
+
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" class="form-control" formControlName="amount">
+        </div>
+        <div class="error-message" *ngIf="amount.errors?.['required']">Amount is required</div>
+        
+        <br><button type="submit" class="btn btn-primary btn-block" [disabled]="!exchangeForm.valid">Submit</button>
+    </form>
+</div>
+

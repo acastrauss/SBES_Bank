@@ -17,17 +17,19 @@ export class CardComponent implements OnInit {
   public cardHolder : ClientModel;
   public accNum : AccountModel ;
   public cardForm : FormGroup;
-
+  public cards : CardModel[];
+  public cardPostoji : CardModel;
   constructor(private formBuilder : FormBuilder,private cardService : CardService,private router : Router) { 
     
     this.accNum= JSON.parse(localStorage.getItem('account')!);
     this.cardHolder = JSON.parse(localStorage.getItem('client')!);
+    this.cards= JSON.parse(localStorage.getItem('cardsAccount')!);
 
     this.cardForm = this.formBuilder.group({
       accNum :[''],
       cardHolder :[''],
       cardType:['',[Validators.required]],
-      processor:['',[Validators.required]]
+      cardProcessor:['',[Validators.required]]
     });
     
   }
@@ -39,8 +41,8 @@ export class CardComponent implements OnInit {
     return this.cardForm.get('cardType');
   }
 
-  public get processor() {
-    return this.cardForm.get('processor') ;
+  public get cardProcessor() {
+    return this.cardForm.get('cardProcessor') ;
   }
 
   public submitForm(data : CardModel){
@@ -50,13 +52,26 @@ export class CardComponent implements OnInit {
       window.alert('Not valid!');
       return;
     }
+    this.authenticate(data);
+  }
 
-    this.cardService.createCard(data).subscribe((card : CardModel) =>{
-      this.router.navigate(['/']);
-      //localStorage.setItem('card',JSON.stringify(card));
-      alert("Kartica uspjesno kreirana!");
-      this.cardForm.reset();
-    })
+
+  public authenticate(data : any){
+ 
+    this.cardPostoji = this.cards.filter((accF : CardModel)=>accF.cardType === data.cardType && accF.cardProcessor === data.cardProcessor)[0];
+
+    if(this.cardPostoji){
+      alert("Vec posjedujete takvu karticu!");
+    }
+    else
+    {
+      this.cardService.createCard(data).subscribe((card : CardModel) =>{
+        this.router.navigate(['/']);
+        //localStorage.setItem('card',JSON.stringify(card));
+        alert("Kartica uspjesno kreirana!");
+        this.cardForm.reset();
+      });
+    }
   }
 
 

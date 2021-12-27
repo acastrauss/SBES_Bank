@@ -18,15 +18,6 @@ import { ClientService } from '../services/client.service';
 })
 export class LoginComponent implements OnInit {
 
-  //public users : UserModel[] ;
-  /*
-  public loginUser: UserModel;
-  public userId : number;
-  
-  private  loginUserId : any;
-  private loginUserUrl = "htpp://localhost:3001/login/";
-  */
- 
   public loginFrom : FormGroup;
   public userName : any;
   constructor(private formBuilder : FormBuilder,
@@ -51,7 +42,8 @@ export class LoginComponent implements OnInit {
     return this.loginFrom.get('password') ;
   }
 
-  public submitForm(data : ClientModel){
+  public submitForm(data : any){
+    
     console.log(data);
     
     if(!this.loginFrom.valid){
@@ -59,42 +51,21 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.ClientService.logIn(data).subscribe((client : ClientModel) =>{
-      // this.authenticate(data);
-      this.router.navigate(['/']);
-      localStorage.setItem('client',JSON.stringify(client));
-      alert("Korisnik uspjesno logovan!");
-      this.loginFrom.reset();
+    this.ClientService.logIn(data).subscribe((client : any) =>{
+      console.log(client.userType);
+      if(client.userType == "admin"){
+        this.router.navigate(['/admin']);
+        localStorage.setItem('admin',JSON.stringify(client));
+        alert("Admin uspjesno logovan!");
+        this.loginFrom.reset();
+      }
+      else{
+        this.router.navigate(['/']);
+        localStorage.setItem('client',JSON.stringify(client));
+        alert("Korisnik uspjesno logovan!");
+        this.loginFrom.reset();
+      }
+
     })
   }
-
-/*
-  public authenticate(formData : any){
-
-    const user = this.users.find(x=> x.username === formData.username  && x.password === formData.password);
-    
-    if (!user) 
-      return error('Korisnicko ime ili lozinka nije korektna!');
-    
-      return ok({
-        id:user.id,
-        jmbg: user.jmbg,
-        username: user.username,
-        password: user.password,
-        gender: user.gender,
-        fullName : user.fullName,
-        email: user.email,
-        birthDate : user.birthDate,
-        billingAddress : user.billingAddress
-    })
-  }
-*/
 }
-/*
-function ok(body? : UserModel) {
-  return of(new HttpResponse({ status: 200, body }))
-}
-function error(message : string) {
-  return throwError({ error: { message } });
-}
-*/

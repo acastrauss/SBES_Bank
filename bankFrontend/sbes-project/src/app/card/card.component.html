@@ -13,20 +13,20 @@
         <div class="form-group">
             <label for="cardType">Credit type</label>
             <select id="cardType" name="cardType" class="form-control" formControlName="cardType">
-                <option value="debit">DEBIT</option>
-                <option value="credit">CREDIT</option>
+                <option value="DEBIT">DEBIT</option>
+                <option value="CREDIT">CREDIT</option>
             </select>
         </div>
         <div class="error-message" *ngIf="cardType.errors?.['required']">Card type is required</div>
         <div class="form-group">
-            <label for="processor">Processor</label>
-            <select id="processor" name="processor" class="form-control" formControlName="processor">
-                <option value="visa">VISA</option>
-                <option value="master-card">MASTER CARD</option>
-                <option value="american-express">AMERICAN EXPRESS</option>
+            <label for="cardProcessor">Processor</label>
+            <select id="cardProcessor" name="cardProcessor" class="form-control" formControlName="cardProcessor">
+                <option value="VISA">VISA</option>
+                <option value="MASTER_CARD">MASTER CARD</option>
+                <option value="AMERICAN_EXPRESS">AMERICAN EXPRESS</option>
             </select>
         </div>
-        <div class="error-message" *ngIf="processor.errors?.['required']">Processor is required</div>
+        <div class="error-message" *ngIf="cardProcessor.errors?.['required']">Processor is required</div>
         <br><button type="submit" class="btn btn-primary btn-block" [disabled]="!cardForm.valid">Submit</button>
     </form>
 </div>

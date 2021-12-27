@@ -1,0 +1,30 @@
+<!-- carousel -->
+<div class="carousel">
+    <ng-container *ngFor="let trans of transactionsAcc; let i = index">
+    <div *ngIf="i === currentSlide" >
+      <table>
+        <tr>
+          <th>From Account</th>
+          <th>To Account</th>
+          <th>Amount</th>
+        </tr>
+        <tr>
+          <td>{{trans.myAccInfoFK.accountNumber}}</td>
+          <td>{{trans.transferAccInfoFK.accountNumber}}</td>
+          <td>{{trans.amount}}</td>
+        </tr>
+      </table>
+    <button 
+    *ngIf="i === currentSlide"
+    class="mod-button"
+	  [routerLink]="['/transaction-info',trans.id]">Transaction Account Info</button>  
+  </div>  
+  </ng-container>
+      <!-- controls -->
+      <button class="control prev" (click)="onPreviousClick()">
+        <span class="arrow left"></span>
+      </button>
+      <button class="control next" (click)="onNextClick()">
+        <span class="arrow right"></span>
+      </button>
+    </div>
