@@ -35,10 +35,24 @@ from sbesbank.helpMethods.dbAccess.dbAccess import (
 
 from modules.Certificates.Cypher import *
 
+
 #region UserViews
 @api_view(['POST'])
 def LogInUser(request):
     body = json.loads(request.body.decode('utf-8'))
+
+    userPublicPath = GetCertificateFilePath(
+        True, body['username']
+    )
+
+    password = copy.deepcopy(body['password'])
+
+    print('pass before enc:', password)
+    password = EncryptText(password, LoadKey(userPublicPath))
+    print('pass after enc:', password)
+
+    body['password'] = password
+
 
     if(ModelsExistsFields(
         IUser,
@@ -95,17 +109,25 @@ def RegisterUser(request):
     # body['userType']='client'
     # userType should be sent from frontend!
 
-    user = CreateModel(IUser, body)
     
-    pemPath,keyPath = NewUserCert(
+    pemPath, keyPath = NewUserCert(
             os.path.join(
                 os.getcwd(),
                 'modules',
-                'Certificates',
-                'UserCertificates'
+                'Certificates'
             ),
             body['username']
     )
+
+    password = copy.deepcopy(body['password'])
+
+    print('pass before enc:', password)
+    password = EncryptText(password, LoadKey(pemPath))
+    print('pass after enc:', password)
+
+    body['password'] = password
+
+    user = CreateModel(IUser, body)
        
     certificate = CreateModel(Certificate, {
         'id' : GetNextId(Certificate),

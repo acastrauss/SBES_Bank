@@ -23,7 +23,7 @@ class IUser(models.Model):
     )
     
     fullName = models.CharField(max_length = 50, unique=False)
-    password = models.CharField(max_length = 64)
+    password = models.CharField(max_length = 2000)
     """
         Hash value has 64 length
     """

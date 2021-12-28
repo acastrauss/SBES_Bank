@@ -30,6 +30,10 @@ def NewUserCert(path,username):
     cert.set_pubkey(key)
     cert.sign(ca_key, "sha1")
 
+    path = os.path.join(
+        path, "UserCertificates"
+    )
+
     pub=crypto.dump_certificate(crypto.FILETYPE_PEM, cert)
     cert_path = os.path.join(path, username + '.pem')
     with open(cert_path, "wt") as fcer: 
