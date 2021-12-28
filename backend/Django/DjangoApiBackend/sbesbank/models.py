@@ -27,7 +27,6 @@ class IUser(models.Model):
     """
         Hash value has 64 length
     """
-    email = models.EmailField(max_length= 150, unique= True)
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
     email = models.EmailField(max_length=150,unique=True)
