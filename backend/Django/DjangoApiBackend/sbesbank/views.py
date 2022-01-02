@@ -331,6 +331,72 @@ def createCardPOST(request):
 #endregion
 
 #region TransactionViews
+
+#r
+def TemplatePaymentCode(code:int, description:str)->PaymentCode:
+
+    paymentCodeFK = CreateModel(PaymentCode,{
+            'code':code,
+            'description':description
+        })
+
+    return paymentCodeFK
+
+#r
+def TemplateTrMyAccountInfo(balanceBefore:float, balanceAfter:float, 
+        accountNumber:str, billingAddress:str, fullName:str
+        )->TrMyAccountInfo:
+
+    myAccountInfo = CreateModel(TrMyAccountInfo,{
+                'id':GetNextId(TrMyAccountInfo),
+                'balanceBefore':balanceBefore,
+                'balanceAfter':balanceAfter,
+                'accountNumber':accountNumber,
+                'billingAddress':billingAddress,
+                'fullName':fullName
+            })
+
+    return myAccountInfo
+
+#r
+def TemplateTrAccountTransferInfo(accountNumber:str, billingAddress:str,
+        fullName:str)->TrMyAccountInfo:
+
+    trTransferAccInfo = CreateModel(TrAcTransferInfo,{
+            'id':GetNextId(TrAcTransferInfo),
+            'accountNumber':accountNumber,
+            'billingAddress':billingAddress,
+            'fullName':fullName
+        })
+
+    return trTransferAccInfo    
+
+#r
+def TemplateTransaction(amount:float, modelCode:int, 
+        paymentCodeFK:PaymentCode, paymentPurpose:str, 
+        preciseTime:datetime, provision:float,
+        referenceNumber:int, transactionType:str, 
+        currency:Currency, trMyAccInfo:TrMyAccountInfo,
+        trTransferAccInfo:TrAcTransferInfo
+        )->Transaction:
+
+    transaction = CreateModel(Transaction,{
+            'id': GetNextId(Transaction),
+            'amount':amount,
+            'modelCode':modelCode,
+            'paymentCodeFK':paymentCodeFK,
+            'paymentPurpose': paymentPurpose,
+            'preciseTime': preciseTime,
+            'provision': provision,
+            'referenceNumber': referenceNumber,
+            'transactionType':transactionType,
+            'currency': currency,
+            'myAccInfoFK': trMyAccInfo,
+            'transferAccInfoFK': trTransferAccInfo
+        }
+        )
+    return transaction
+
 @api_view(['GET'])
 def TrAcTransfer(request):
     id = request.GET.get("id")
@@ -355,6 +421,7 @@ def TrAcTransfer(request):
             status=404,
             safe=False
         )
+
 
 @api_view(['GET'])
 def TrMyAcc(request):
@@ -383,49 +450,48 @@ def TrMyAcc(request):
 @api_view(['POST'])
 def CreatePayment(request):
     '''
-        When client pays money to his/hers account
+        When client pays money to himself/herself account
     '''
     inflow_data = JSONParser().parse(request) 
     accountNum = inflow_data['accNum']
     amount = inflow_data['amount']
     thisAccount = Account.objects.get(accountNumber = accountNum)
-    thisClient = Client.objects.get(id = thisAccount.clientId.id)
-    thisUser = IUser.objects.get(id = thisClient.userId.id)
+
     try:
-        # create code from parameters
-        paymentCodeFK = CreateModel(PaymentCode,{
-            'code':263,
-            'description':'Ostali transferi '
-        })
-        myAccInfo = CreateModel(TrMyAccountInfo,{
-            'id':GetNextId(TrMyAccountInfo),
-            'balanceBefore':thisAccount.accountBalance,
-            'balanceAfter':thisAccount.accountBalance+amount,
-            'accountNumber':thisAccount.accountNumber,
-            'billingAddress':thisUser.billingAddress,
-            'fullName':thisUser.fullName
-        })
-        trTrAcInfo = CreateModel(TrAcTransferInfo,{
-            'id':GetNextId(TrAcTransferInfo),
-            'accountNumber':thisAccount.accountNumber,
-            'billingAddress':thisUser.billingAddress,
-            'fullName':thisUser.fullName
-        })
         
-        transaction = CreateModel(Transaction,{
-            'id': GetNextId(Transaction),
-            'amount':amount,
-            'modelCode':0,
-            'paymentCodeFK':paymentCodeFK,
-            'paymentPurpose': 'Uplata novca sebi',
-            'preciseTime':datetime.now(),
-            'provision':0,
-            'referenceNumber':0,
-            'transactionType':'INFLOW',
-            'currency':thisAccount.currency,
-            'myAccInfoFK':myAccInfo,
-            'transferAccInfoFK':trTrAcInfo
-        }
+        paymentCodeFK = TemplatePaymentCode(
+            263,
+            'Ostali transferi '
+        )
+
+        balanceAfter = thisAccount.accountBalance + amount
+
+        myAccInfo = TemplateTrMyAccountInfo(
+            thisAccount.accountBalance,
+            balanceAfter,
+            thisAccount.accountNumber,
+            thisAccount.clientId.userId.billingAddress,
+            thisAccount.clientId.userId.fullName
+        )
+
+        trTrAcInfo = TemplateTrAccountTransferInfo(
+            thisAccount.accountNumber,
+            thisAccount.clientId.userId.billingAddress,
+            thisAccount.clientId.userId.fullName
+        )
+        
+        transaction = TemplateTransaction(
+            amount,
+            0,
+            paymentCodeFK,
+            'Payment to yourself',
+            datetime.now(),
+            0,
+            0,
+            'INFLOW',
+            thisAccount.currency,
+            myAccInfo,
+            trTrAcInfo
         )
         
         thisAccount.accountBalance += amount
@@ -464,44 +530,45 @@ def DoTransaction(request):
     transferInfoFK = transaction_data['transferAccInfoFK']
     paymentC = transaction_data['paymentCodeFK']
     myAccData = transaction_data['myAccInfoFK']
-    
+
+    account = Account.objects.get(accountNumber= myAccData['accountNumber'])
     try:
-        paymentCodeFK = CreateModel(PaymentCode,{
-            'code':paymentC['code'],
-            'description':paymentC['description']
-        })
-        myAccInfo = CreateModel(TrMyAccountInfo,{
-            'id':GetNextId(TrMyAccountInfo),
-            'balanceBefore':myAccData['balanceBefore'],
-            'balanceAfter':myAccData['balanceAfter'],
-            'accountNumber':myAccData['accountNumber'],
-            'billingAddress':myAccData['billingAddress'],
-            'fullName':myAccData['fullName']
-        })
-        trTrAcInfo = CreateModel(TrAcTransferInfo,{
-            'id':GetNextId(TrAcTransferInfo),
-            'accountNumber':transferInfoFK['accountNumber'],
-            'billingAddress':transferInfoFK['billingAddress'],
-            'fullName':transferInfoFK['fullName']
-        })
-        transaction = CreateModel(Transaction,{
-            'id': GetNextId(Transaction),
-            'amount':transaction_data['amount'],
-            'modelCode':transaction_data['modelCode'],
-            'paymentCodeFK':paymentCodeFK,
-            'paymentPurpose': transaction_data['paymentPurpose'],
-            'preciseTime':datetime.now(),
-            'provision':transaction_data['provision'],
-            'referenceNumber':transaction_data['referenceNumber'],
-            'transactionType':transaction_data['transactionType'],
-            'currency':Currency[transaction_data['currency']],
-            'myAccInfoFK':myAccInfo,
-            'transferAccInfoFK':trTrAcInfo
-        }
+        paymentCodeFK = TemplatePaymentCode(
+            paymentC['code'],
+            paymentC['description']
         )
-        account = Account.objects.get(accountNumber= myAccData['accountNumber'])
+    
+        myAccInfo = TemplateTrMyAccountInfo(
+            myAccData['balanceBefore'],
+            myAccData['balanceAfter'],
+            myAccData['accountNumber'],
+            myAccData['billingAddress'],
+            myAccData['fullName']
+        )
+
+        trTrAcInfo = TemplateTrAccountTransferInfo(
+            transferInfoFK['accountNumber'],
+            transferInfoFK['billingAddress'],
+            transferInfoFK['fullName']
+        )
+        
+        transaction = TemplateTransaction(
+            transaction_data['amount'],
+            transaction_data['modelCode'],
+            paymentCodeFK,
+            transaction_data['paymentPurpose'],
+            datetime.now(),
+            transaction_data['provision'],
+            transaction_data['referenceNumber'],
+            transaction_data['transactionType'],
+            Currency[transaction_data['currency']],
+            myAccInfo,
+            trTrAcInfo
+        )        
+        
         account.accountBalance =  myAccData['balanceAfter'] 
         account.save()
+
         serializer = TransactionSerializer(transaction) 
         
         DoTransactionTransfer(transaction_data)
@@ -514,55 +581,46 @@ def DoTransactionTransfer(tracData):
 
     paymentC = transaction_data['paymentCodeFK']
     trAcTransf = transaction_data['myAccInfoFK']
-    myAcInfo = transaction_data['transferAccInfoFK']
-    
-    # tracinfo iz requesta mi postaje myaccinfo
-    #  s tim sto baalance before i after moram da podesim
-    # fullname je isti 
-    # billing adres isti
-    #
-    # myacinfo iz requesta postaje tracinfo 
-    # imam sve podatke 
-    # adresa acc num  i full name
+    myAcInfo = transaction_data['transferAccInfoFK'] 
     thisAcc = Account.objects.get(accountNumber= myAcInfo['accountNumber'])
-    # accountTo.accountBalance += transaction_data['amount']
-
+    
     try:
-        paymentCodeFK = CreateModel(PaymentCode,{
-            'code':paymentC['code'],
-            'description':paymentC['description']
-        })
-        myAccInfo = CreateModel(TrMyAccountInfo,{
-            'id':GetNextId(TrMyAccountInfo),
-            'balanceBefore':thisAcc.accountBalance,
-            'balanceAfter':thisAcc.accountBalance+transaction_data['amount'],
-            'accountNumber':myAcInfo['accountNumber'],
-            'billingAddress':myAcInfo['billingAddress'],
-            'fullName':myAcInfo['fullName']
-        })
+        paymentCodeFK = TemplatePaymentCode(
+            paymentC['code'],
+            paymentC['description']
+        )
+        
+        balanceAfter = thisAcc.accountBalance + transaction_data['amount']
 
-        trTrAcInfo = CreateModel(TrAcTransferInfo,{
-            'id':GetNextId(TrAcTransferInfo),
-            'accountNumber':trAcTransf['accountNumber'],
-            'billingAddress':trAcTransf['billingAddress'],
-            'fullName':trAcTransf['fullName']
-        })
-        transaction = CreateModel(Transaction,{
-            'id': GetNextId(Transaction),
-            'amount':transaction_data['amount'],
-            'modelCode':transaction_data['modelCode'],
-            'paymentCodeFK':paymentCodeFK,
-            'paymentPurpose': transaction_data['paymentPurpose'],
-            'preciseTime':datetime.now(),
-            'provision':transaction_data['provision'],
-            'referenceNumber':transaction_data['referenceNumber'],
-            'transactionType':'INFLOW',
-            'currency':Currency[transaction_data['currency']],
-            'myAccInfoFK':myAccInfo,
-            'transferAccInfoFK':trTrAcInfo
-        })
+        myAccInfo = TemplateTrMyAccountInfo(
+            thisAcc.accountBalance,
+            balanceAfter,
+            myAcInfo['accountNumber'],
+            myAcInfo['billingAddress'],
+            myAcInfo['fullName']
+        )
+        
+        trTrAcInfo = TemplateTrAccountTransferInfo(
+            trAcTransf['accountNumber'],
+            trAcTransf['billingAddress'],
+            trAcTransf['fullName']
+        )
+        
+        transaction = TemplateTransaction(
+            transaction_data['amount'],
+            transaction_data['modelCode'],
+            paymentCodeFK,
+            transaction_data['paymentPurpose'],
+            datetime.now(),
+            transaction_data['provision'],
+            transaction_data['referenceNumber'],
+            'INFLOW',
+            Currency[transaction_data['currency']],
+            myAccInfo,
+            trTrAcInfo
+        )
        
-        thisAcc.accountBalance = thisAcc.accountBalance+transaction_data['amount']
+        thisAcc.accountBalance = balanceAfter
         thisAcc.save()
         serializer = TransactionSerializer(transaction) 
 
@@ -574,60 +632,53 @@ def DoTransactionTransfer(tracData):
 @api_view(['POST'])
 def ExchangeMoney(request):
     exchange_data = JSONParser().parse(request)
-    
-    # accountFrom
-    # accountTo
-    # amount
     accountFrom = exchange_data['accountFrom']
     accountTo = exchange_data['accountTo']
     amount = exchange_data['amount']
  
-
-    
     try:
         accountF = Account.objects.get(accountNumber= accountFrom)
-        accountT = Account.objects.get(accountNumber= accountTo)
         
-        clientEx = Client.objects.get(id = accountF.clientId.id)
-        userEx = IUser.objects.get(id = clientEx.userId.id)
-
-        paymentCodeFK = CreateModel(PaymentCode,{
-            'code':986,
-            'description':'Kupoprodaja deviza'
-        })
-
-        myAccInfo = CreateModel(TrMyAccountInfo,{
-            'id':GetNextId(TrMyAccountInfo),
-            'balanceBefore':accountF.accountBalance,
-            'balanceAfter':accountF.accountBalance-amount,
-            'accountNumber':accountFrom,
-            'billingAddress':userEx.billingAddress,
-            'fullName':userEx.fullName
-        })
-        trTrAcInfo = CreateModel(TrAcTransferInfo,{
-            'id':GetNextId(TrAcTransferInfo),
-            'accountNumber':accountTo,
-            'billingAddress':userEx.billingAddress,
-            'fullName':userEx.fullName
-        })
-        transaction = CreateModel(Transaction,{
-            'id': GetNextId(Transaction),
-            'amount':amount,
-            'modelCode':0,
-            'paymentCodeFK':paymentCodeFK,
-            'paymentPurpose':'konverzija',
-            'preciseTime':datetime.now(),
-            'provision':0,
-            'referenceNumber':0,
-            'transactionType':'OUTFLOW',
-            'currency':accountF.currency,
-            'myAccInfoFK':myAccInfo,
-            'transferAccInfoFK':trTrAcInfo
-        }
+        paymentCodeFK = TemplatePaymentCode(
+            986,
+            'Kupoprodaja deviza'
         )
-        accountF.accountBalance = accountF.accountBalance - amount
+        
+        balanceAfter = accountF.accountBalance - amount
+
+        myAccInfo = TemplateTrMyAccountInfo(
+            accountF.accountBalance,
+            balanceAfter,
+            accountFrom,
+            accountF.clientId.userId.billingAddress,
+            accountF.clientId.userId.fullName
+        )
+
+        trTrAcInfo = TemplateTrAccountTransferInfo(
+            accountTo,
+            accountF.clientId.userId.billingAddress,
+            accountF.clientId.userId.fullName
+        )
+
+        transaction = TemplateTransaction(
+            amount,
+            0,
+            paymentCodeFK,
+            'konverzija',
+            datetime.now(),
+            0,
+            0,
+            'OUTFLOW',
+            accountF.currency,
+            myAccInfo,
+            trTrAcInfo
+        )
+
+        accountF.accountBalance = balanceAfter
         accountF.save()
+
         DoExchangeTransfer(exchange_data)
+
         return JsonResponse(TransactionSerializer(transaction).data)
     except:
         return JsonResponse({"Error":"Error when exchange money"})
@@ -641,48 +692,45 @@ def DoExchangeTransfer(exchange_data):
     amount = exchange_data['amount']
     try:
         accountF = Account.objects.get(accountNumber = accountFrom)
-
         accountT = Account.objects.get(accountNumber = accountTo)
-        clientEx = Client.objects.get(id = accountF.clientId.id)
-        userEx = IUser.objects.get(id = clientEx.userId.id)
-        paymentCodeFK = CreateModel(PaymentCode,{
-            'code':986,
-            'description':'Kupoprodaja deviza'
-        })
+         
+        paymentCodeFK = TemplatePaymentCode(
+            986,
+            'Kupoprodaja deviza'
+        )
         exchangedMoney = ExchangeAmount(accountT.currency, amount, accountF.currency)
         
-       
-        myAccInfo = CreateModel(TrMyAccountInfo,{
-            'id':GetNextId(TrMyAccountInfo),
-            'balanceBefore':accountF.accountBalance,
-            'balanceAfter':accountF.accountBalance+exchangedMoney,
-            'accountNumber':accountFrom,
-            'billingAddress':userEx.billingAddress,
-            'fullName':userEx.fullName
-        })
-        trTrAcInfo = CreateModel(TrAcTransferInfo,{
-            'id':GetNextId(TrAcTransferInfo),
-            'accountNumber':accountTo,
-            'billingAddress':userEx.billingAddress,
-            'fullName':userEx.fullName
-        })
-        transaction = CreateModel(Transaction,{
-            'id': GetNextId(Transaction),
-            'amount':exchangedMoney,
-            'modelCode':0,
-            'paymentCodeFK':paymentCodeFK,
-            'paymentPurpose':'konverzija',
-            'preciseTime':datetime.now(),
-            'provision':0,
-            'referenceNumber':0,
-            'transactionType':'INFLOW',
-            'currency':accountF.currency,
-            'myAccInfoFK':myAccInfo,
-            'transferAccInfoFK':trTrAcInfo
-        }
+        balanceAfter = accountF.accountBalance + exchangedMoney
+
+        myAccInfo = TemplateTrMyAccountInfo(
+            accountF.accountBalance,
+            balanceAfter,
+            accountFrom,
+            accountF.clientId.userId.billingAddress,
+            accountF.clientId.userId.fullName
         )
-        accountF.accountBalance = accountF.accountBalance + exchangedMoney
+        trTrAcInfo = TemplateTrAccountTransferInfo(
+            accountTo,
+            accountF.clientId.userId.billingAddress,
+            accountF.clientId.userId.fullName
+        )
+        transaction = TemplateTransaction(
+            exchangedMoney,
+            0,
+            paymentCodeFK,
+            'konverzija',
+            datetime.now(),
+            0,
+            0,
+            'INFLOW',
+            accountF.currency,
+            myAccInfo,
+            trTrAcInfo
+        )
+
+        accountF.accountBalance = balanceAfter
         accountF.save()
+
         serializer = TransactionSerializer(transaction) 
 
         return JsonResponse(serializer.data)

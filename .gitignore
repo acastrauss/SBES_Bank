@@ -3,3 +3,7 @@
 *__pycache__
 *node_modules
 *.ldb
+*.pem
+*.key
+!certAuthority.pem
+!certAuthority.key
