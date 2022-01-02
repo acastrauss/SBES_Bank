@@ -47,4 +47,11 @@ urlpatterns = [
     url(r'^api/sbesbank/initpaymentcodes',views.InitPaymentCodes),
     url(r'^api/sbesbank/getpaymentcodes',views.GetPaymentCodes),
     #endregion
+
+    #region CertificateUrls
+    url(r'^api/sbesbank/serverpublickey',views.GetServerPublicKey),
+    url(r'^api/sbesbank/userpublickey',views.GetUserPublicKey),
+
+
+    #endregion
 ]

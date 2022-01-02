@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import JSONParser
+from modules.Certificates.selfSigned import makeCertAuthority
 from modules.Certificates.newCertMaker import NewUserCert
 from modules.Certificates.selfSigned import getCertAuthorityName
 import os
@@ -86,7 +87,7 @@ def LogInUser(request):
         )
 
 @api_view(['POST'])
-def RegisterUser(request):
+def RegisterUser(request): 
     body = json.loads(
         request.body.decode('utf-8')
     )
@@ -121,9 +122,9 @@ def RegisterUser(request):
 
     password = copy.deepcopy(body['password'])
 
-    print('pass before enc:', password)
-    password = EncryptText(password, LoadKey(pemPath))
-    print('pass after enc:', password)
+    # print('pass before enc:', password)
+    # password = EncryptText(password, LoadKey(pemPath))
+    # print('pass after enc:', password)
 
     body['password'] = password
 
@@ -379,7 +380,6 @@ def TrMyAcc(request):
             safe=False
         )
 
-#r
 @api_view(['POST'])
 def CreatePayment(request):
     '''
@@ -436,21 +436,36 @@ def CreatePayment(request):
     except:
         return JsonResponse({"Error message":"Invalid transaction data"},status = status.HTTP_400_BAD_REQUEST)
 
-#r
 @api_view(['POST'])
 def DoTransaction(request):
     '''
         When client sends money to other client
     '''
-    #proveri postojanje drugog racuna
     transaction_data = JSONParser().parse(request) 
+    
+    #region check pin and cvc
+    if(not ModelsExistsFields(
+        Card,
+        transaction_data,
+        ['cardNumber', 'cvc', 'pin'],
+        True
+    )):
+        return JsonResponse(
+            "Invalid CVC/PIN for given card number.",
+            status=400,
+            safe=False
+        )
+
+    del transaction_data['cardNumber']
+    del transaction_data['cvc']
+    del transaction_data['pin']
+    #endregion
+
     transferInfoFK = transaction_data['transferAccInfoFK']
     paymentC = transaction_data['paymentCodeFK']
     myAccData = transaction_data['myAccInfoFK']
     
     try:
-        # obj = Account.objects.get(accountNumber=transferInfoFK['accountNumber'])
-        # obj['accountBalance'] += transaction_data['amount']
         paymentCodeFK = CreateModel(PaymentCode,{
             'code':paymentC['code'],
             'description':paymentC['description']
@@ -494,7 +509,6 @@ def DoTransaction(request):
     except:
         return JsonResponse({"Error message":"Invalid transaction data"},status = status.HTTP_400_BAD_REQUEST)
 
-#r
 def DoTransactionTransfer(tracData):
     transaction_data = tracData
 
@@ -560,6 +574,7 @@ def DoTransactionTransfer(tracData):
 @api_view(['POST'])
 def ExchangeMoney(request):
     exchange_data = JSONParser().parse(request)
+    
     # accountFrom
     # accountTo
     # amount
@@ -797,4 +812,40 @@ def GetPaymentCodes(request):
         safe=False
     )
     
+#endregion
+
+#region CertificateViews
+
+@api_view(['GET'])
+def GetServerPublicKey(request):
+    try:
+        publicKey = LoadKey(
+            GetCertificateFilePath(True)
+        )
+
+        return JsonResponse(
+            publicKey.export_key().decode('utf-8'),
+            status=200,
+            safe=False
+        )
+    except Exception:
+        return JsonResponse(status=404, safe=False)
+
+@api_view(['GET'])
+def GetUserPublicKey(request):
+    try:
+        username = request.GET.get('username')
+        publicKey = LoadKey(
+            GetCertificateFilePath(True, username)
+        )
+        
+        return JsonResponse(
+            publicKey.export_key().decode('utf-8'),
+            status=200,
+            safe=False
+        )
+
+    except Exception as e:
+        return JsonResponse(status=404, safe=False)
+
 #endregion

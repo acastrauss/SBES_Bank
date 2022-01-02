@@ -32,7 +32,7 @@ def GetCertificateFilePath(public:bool, username:str=None)->str:
 
     cerPath:str = ""
 
-    if username:
+    if username:        
         cerPath = os.path.join(
             listPath[0],
             listPath[1],
@@ -40,6 +40,7 @@ def GetCertificateFilePath(public:bool, username:str=None)->str:
             'UserCertificates',
             username + extension
         )
+
     else:
         CN = selfSigned.getCertAuthorityName()
 
@@ -78,8 +79,8 @@ def LoadKey(path:str)->RSA.RsaKey:
 
     return caKey
 
-def EncryptText(text:str, key:RSA.RsaKey)->str:
+def EncryptTextRSA(text:str, key:RSA.RsaKey)->str:
     return PKCS1_OAEP.new(key).encrypt(text.encode('utf-8'))
 
-def DecryptServerCAPublicKey(text:str, key:RSA.RsaKey)->str:
+def DecryptTextRSA(text:str, key:RSA.RsaKey)->str:
     return PKCS1_OAEP.new(key).decrypt(text.encode('utf-8'))

@@ -1,4 +1,4 @@
-import OpenSSL
+import OpenSSL.crypto
 from os.path import join
 import random
 
