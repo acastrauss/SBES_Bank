@@ -2,7 +2,29 @@
 <hr>
 <div class="form">
     <form [formGroup]="transactionForm" (ngSubmit)="submitForm(transactionForm.value)">
-        
+        <div class="form-group">
+            <label for="cards">Cards Client</label>
+            <select id="cards" class="form-control" formControlName="cards"> 
+                <option *ngFor="let card of cardsAccount;let i=index"
+                [value]="card.cardNumber" id="card.cardNumber">
+                {{card.cardNumber}}
+            </option>
+            </select>
+        </div>
+        <div class="error-message" *ngIf="cards.errors?.['required']">Cards Client is required</div>
+
+        <div class="form-group">
+            <label for="cvv">CVV </label>
+            <input type="number" minlength="3" maxlength="3" id="cvv" class="form-control" formControlName="cvv"> 
+        </div>
+        <div class="error-message" *ngIf="cvv.errors?.['required']">CVV is required</div>
+
+        <div class="form-group">
+            <label for="pin">PIN </label>
+            <input type="number" minlength="4" maxlength="4"  id="pin" class="form-control" formControlName="pin"> 
+        </div>
+        <div class="error-message" *ngIf="pin.errors?.['required']">PIN is required</div>
+
         <div class="form-group">
             <label for="accountTo">Account To</label>
             <input type="text"id="accountTo" class="form-control" formControlName="accountTo"> 

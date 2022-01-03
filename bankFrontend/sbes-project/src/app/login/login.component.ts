@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
       window.alert('Not valid!');
       return;
     }
-
+    
     this.ClientService.logIn(data).subscribe((client : any) =>{
       console.log(client.userType);
       if(client.userType == "admin"){

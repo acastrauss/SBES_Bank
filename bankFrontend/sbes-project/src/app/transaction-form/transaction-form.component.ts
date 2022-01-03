@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AccountModel } from '../models/account.model';
 import { AccTransactionsModel } from '../models/accTransactions.model';
+import { CardModel } from '../models/card.model';
 import { MyAccInfoFKModel } from '../models/myAccInfoFK.model';
 import { PaymentCodeFKModel } from '../models/paymentCodeFK.model';
 import { TransferAccInfoFKModel } from '../models/transferAccInfoFK.model';
@@ -20,9 +21,12 @@ export class TransactionFormComponent implements OnInit {
   public transactionForm : FormGroup;
   public account : AccountModel;
   public currency : string;
-
+  public cardsAccount : CardModel[] = [];
   constructor(private formBuilder : FormBuilder,private TransService : TransactionService,private router: Router) {
     this.transactionForm = this.formBuilder.group({
+      cards : ['',Validators.required],
+      pin:['',Validators.required],
+      cvv:['',Validators.required],
       accountTo:['',[Validators.required]],
       accountToName:['',[Validators.required]],
       accountToBillingAdress:['',[Validators.required]],
@@ -34,6 +38,7 @@ export class TransactionFormComponent implements OnInit {
       referenceNumber:['',[Validators.required]]
     })
     this.account= JSON.parse(localStorage.getItem('account')!);
+    this.cardsAccount = JSON.parse(localStorage.getItem('cardsAccount')!);
     this.transactionObject = <AccTransactionsModel>{};
     this.transactionObject.transferAccInfoFK = <TransferAccInfoFKModel>{};        //initialize
     this.transactionObject.myAccInfoFK = <MyAccInfoFKModel>{};
@@ -41,6 +46,19 @@ export class TransactionFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+
+  public get cards(){
+    return this.transactionForm.get('cards');
+  }
+
+  public get pin(){
+    return this.transactionForm.get('pin');
+  }
+
+  public get cvv(){
+    return this.transactionForm.get('cvv');
   }
 
   public get accountTo() {
@@ -117,10 +135,7 @@ export class TransactionFormComponent implements OnInit {
     this.TransService.checkCurrency(this.transactionObject.transferAccInfoFK.accountNumber).subscribe((curr : any)=>{
       this.currency = curr['Currency'];
       console.log(this.currency);
-    });
-
-    
-    
+    }); 
 
     if(this.account.accountBalance < transaction.amount + transaction.amount* transaction.provision){
       return window.alert('Nemate dovoljno sredstava da izvrsite transakciju!');

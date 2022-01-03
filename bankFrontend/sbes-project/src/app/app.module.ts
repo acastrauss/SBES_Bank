@@ -22,6 +22,7 @@ import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
 import { CreateAccountFormComponent } from './create-account-form/create-account-form.component';
 import { CreatePaymentFormComponent } from './create-payment-form/create-payment-form.component';
+import { RegisterAdminComponent } from './register-admin/register-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,8 @@ import { CreatePaymentFormComponent } from './create-payment-form/create-payment
     ExchangeFormComponent,
     AdminComponent,
     CreateAccountFormComponent,
-    CreatePaymentFormComponent
+    CreatePaymentFormComponent,
+    RegisterAdminComponent
   ],
   imports: [
     BrowserModule,

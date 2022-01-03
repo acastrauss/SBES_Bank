@@ -11,9 +11,9 @@ export class ClientService {
   private clients: Observable<ClientModel[]>;
   private usersUrl = "http://127.0.0.1:8000/api/sbesbank/loginuser";
 
-  private registerUrl = "http://127.0.0.1:8000/api/sbesbank/registeruser"
+  private registerUrl = "http://127.0.0.1:8000/api/sbesbank/registeruser";
 
-  constructor(private htpp : HttpClient) { 
+  constructor(private http : HttpClient) { 
     this.clients = new Observable<ClientModel[]>();
     this.refreshUsers();
   }
@@ -22,21 +22,21 @@ export class ClientService {
     return this.clients;
   }
   private refreshUsers(){
-    this.clients=this.htpp.get<ClientModel[]>(this.usersUrl);
+    this.clients=this.http.get<ClientModel[]>(this.usersUrl);
     return this.clients;
   }
   public logIn(formData : any) : Observable<any>{
     const body = {
       ...formData
     };
-    return this.htpp.post<any>(this.usersUrl,body);
+    return this.http.post<any>(this.usersUrl,body);
   }
 
   public register(data : ClientModel) : Observable<ClientModel>{
     const body ={
       ...data
     }
-    return this.htpp.post<ClientModel>(this.registerUrl,body);
+    return this.http.post<ClientModel>(this.registerUrl,body);
   }
 
 }

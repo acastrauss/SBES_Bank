@@ -1,4 +1,4 @@
-<h2 class="form">Register</h2>
+<h2 class="form">Register Admin</h2>
 <hr>
 <div class="form">
     <form [formGroup]="registerForm" (ngSubmit)="submitForm(registerForm.value)">
@@ -30,7 +30,6 @@
         </div>
         <div class="error-message" *ngIf="jmbg.errors?.['required']">Jmbg is required</div>
         <div class="error-message" *ngIf="email.errors?.['pattern']">Jmbg is not correct</div>
-    
         <br>
         <div class="form-group">
             <label for="email">Email</label>

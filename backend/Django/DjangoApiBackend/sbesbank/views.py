@@ -1,4 +1,4 @@
-import re
+
 from django.core import exceptions
 from django.http import JsonResponse
 from django.http.response import Http404
@@ -40,7 +40,7 @@ def ModelsExistsFields(
     """
         Return list of fields that already exist in DB
     """
-    fieldsExists:list[str] = []
+    fieldsExists:dict[str] = []
 
     for key in dataDict:
         if str(key) in keys:

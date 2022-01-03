@@ -8,6 +8,7 @@ import { CreatePaymentFormComponent } from './create-payment-form/create-payment
 import { ExchangeFormComponent } from './exchange-form/exchange-form.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterAdminComponent } from './register-admin/register-admin.component';
 import { RegisterComponent } from './register/register.component';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { TransactionInfoComponent } from './transaction-info/transaction-info.component';
@@ -23,7 +24,8 @@ const routes: Routes = [
   {path: 'exchange-form',component:ExchangeFormComponent},
   {path : 'admin',component: AdminComponent},
   {path : 'create-payment-form',component:CreatePaymentFormComponent},
-  {path : 'create-account-form',component:CreateAccountFormComponent}
+  {path : 'create-account-form',component:CreateAccountFormComponent},
+  {path : 'register-admin',component:RegisterAdminComponent}
 ];
 
 @NgModule({

@@ -14,6 +14,7 @@ import { UserService } from '../services/user.service';
 })
 export class HomeComponent implements OnInit{
   //public userAccounts : Observable<AccountModel[]>;
+  public path : string = "http://127.0.0.1:8000/api/sbesbank/";
   public userAccounts:AccountModel[];
   public cardsAccount:CardModel[];
   public logInClient : ClientModel ;
@@ -21,7 +22,9 @@ export class HomeComponent implements OnInit{
   private userAccountsUrl = "http://127.0.0.1:8000/api/sbesbank/accountinfo/";
   constructor(private UserService : UserService,
               private route : ActivatedRoute,private http : HttpClient) { 
-                
+
+    localStorage.setItem('path',JSON.stringify(this.path));
+
     this.logInClient = JSON.parse(localStorage.getItem('client')!);
     this.logInAdmin = JSON.parse(localStorage.getItem('admin')!);
     this.getAccUser();   
