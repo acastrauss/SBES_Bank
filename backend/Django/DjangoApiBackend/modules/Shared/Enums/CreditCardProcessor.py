@@ -15,3 +15,6 @@ class CreditCardProcessor(Enum):
     VISA = 0
     MASTER_CARD = 1
     AMERICAN_EXPRESS = 2
+
+    def __str__(self) -> str:
+        return str(self.value)

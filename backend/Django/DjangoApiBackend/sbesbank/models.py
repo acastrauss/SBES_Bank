@@ -23,11 +23,10 @@ class IUser(models.Model):
     )
     
     fullName = models.CharField(max_length = 50, unique=False)
-    password = models.CharField(max_length = 64)
+    password = models.CharField(max_length = 2000)
     """
         Hash value has 64 length
     """
-    email = models.EmailField(max_length= 150, unique= True)
     username = models.CharField(max_length = 40, unique = True)
     billingAddress = models.CharField(max_length = 50 )
     email = models.EmailField(max_length=150,unique=True)

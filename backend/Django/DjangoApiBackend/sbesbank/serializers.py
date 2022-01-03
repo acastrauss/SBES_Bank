@@ -2,6 +2,8 @@ from django.forms.fields import TypedChoiceField
 from rest_framework import serializers
 from sbesbank.models import *
 from django.db.models import *
+
+
 class PaymentCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentCode
