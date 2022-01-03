@@ -25,10 +25,11 @@ export class ClientService {
     this.clients=this.http.get<ClientModel[]>(this.usersUrl);
     return this.clients;
   }
-  public logIn(formData : any) : Observable<any>{
+  public logIn(data : any) : Observable<any>{
     const body = {
-      ...formData
+      data
     };
+    console.log(body);
     return this.http.post<any>(this.usersUrl,body);
   }
 

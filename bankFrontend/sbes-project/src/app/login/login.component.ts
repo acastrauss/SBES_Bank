@@ -9,7 +9,7 @@ import { HomeComponent } from '../home/home.component';
 import { of, throwError } from 'rxjs';
 import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
-
+import * as Forge from 'node-forge';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +20,15 @@ export class LoginComponent implements OnInit {
 
   public loginFrom : FormGroup;
   public userName : any;
+  private publicKey : string;
+  private dataString : string;
+
   constructor(private formBuilder : FormBuilder,
     private ClientService : ClientService,private http:HttpClient,private router : Router) {
 
      // this.users = JSON.parse(localStorage.getItem('users')!);  /////////
+
+     this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
 
       this.loginFrom = this.formBuilder.group({
         username:['',[Validators.required]],
@@ -43,14 +48,16 @@ export class LoginComponent implements OnInit {
   }
 
   public submitForm(data : any){
-    
-    console.log(data);
-    
+  
     if(!this.loginFrom.valid){
       window.alert('Not valid!');
       return;
     }
     
+    this.dataString = JSON.stringify(data);
+    console.log(this.dataString.length)
+    data = this.encryptWithPublicKey(this.dataString);
+    console.log(data.length)
     this.ClientService.logIn(data).subscribe((client : any) =>{
       console.log(client.userType);
       if(client.userType == "admin"){
@@ -68,4 +75,13 @@ export class LoginComponent implements OnInit {
 
     })
   }
+
+
+  public encryptWithPublicKey(valueToEncrypt: string): string {
+    const rsa = Forge.pki.publicKeyFromPem(this.publicKey);
+    
+    return rsa.encrypt(valueToEncrypt);
+  }
+
+
 }

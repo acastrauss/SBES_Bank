@@ -26,7 +26,7 @@ class BankNumbers():
     @staticmethod 
     def GetDigitsFromInt(a:int):
         temp = copy.deepcopy(a)
-        digits:list[int] = []
+        digits = []
         while temp != 0:
             digits.insert(0, temp % 10)
             temp //= 10

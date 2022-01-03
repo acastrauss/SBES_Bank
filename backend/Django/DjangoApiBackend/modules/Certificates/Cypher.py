@@ -1,8 +1,12 @@
+from typing import ByteString
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
+
 from OpenSSL import crypto
 import modules.Certificates.selfSigned as selfSigned
 import os
+
+
 
 def getPathForDB(path)->str:
     '''
@@ -83,4 +87,8 @@ def EncryptTextRSA(text:str, key:RSA.RsaKey)->str:
     return PKCS1_OAEP.new(key).encrypt(text.encode('utf-8'))
 
 def DecryptTextRSA(text:str, key:RSA.RsaKey)->str:
-    return PKCS1_OAEP.new(key).decrypt(text.encode('utf-8'))
+    bs = bytearray(text, 'utf-8')
+    print(len(bs)) 
+    return PKCS1_OAEP.new(key).decrypt(
+        
+    )

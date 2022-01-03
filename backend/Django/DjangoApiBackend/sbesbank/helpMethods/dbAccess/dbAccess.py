@@ -11,7 +11,7 @@ def ModelsExistsFields(
     """
         Return list of fields that already exist in DB
     """
-    fieldsExists:list[str] = []
+    fieldsExists = []
 
     for key in dataDict:
         if str(key) in keys:

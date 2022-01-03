@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 
 from django.core import exceptions
-=======
 from re import T
->>>>>>> 4d8fd98a14e792763890dd421e4367d567351f7b
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -45,20 +42,19 @@ from modules.Certificates.Cypher import *
 #region UserViews
 @api_view(['POST'])
 def LogInUser(request):
-    body = json.loads(request.body.decode('utf-8'))
+    
+    requestStr = json.loads(request.body.decode('utf-8'))
+    decrypted = DecryptTextRSA(
+        requestStr['data'],
+        LoadKey(GetCertificateFilePath(False))     
+    )
+    print(decrypted)
+
+    body = json.loads(decrypted)
 
     userPublicPath = GetCertificateFilePath(
         True, body['username']
     )
-
-    password = copy.deepcopy(body['password'])
-
-    print('pass before enc:', password)
-    password = EncryptText(password, LoadKey(userPublicPath))
-    print('pass after enc:', password)
-
-    body['password'] = password
-
 
     if(ModelsExistsFields(
         IUser,
@@ -78,6 +74,8 @@ def LogInUser(request):
             ser = ClientSerializer(client)
         else:
             ser = IUserSerializer(user)
+
+
 
         return JsonResponse(
             ser.data,
@@ -125,13 +123,6 @@ def RegisterUser(request):
             body['username']
     )
 
-    password = copy.deepcopy(body['password'])
-
-    # print('pass before enc:', password)
-    # password = EncryptText(password, LoadKey(pemPath))
-    # print('pass after enc:', password)
-
-    body['password'] = password
 
     user = CreateModel(IUser, body)
        
@@ -512,6 +503,7 @@ def DoTransaction(request):
     '''
         When client sends money to other client
     '''
+
     transaction_data = JSONParser().parse(request) 
     
     #region check pin and cvc
@@ -577,7 +569,7 @@ def DoTransaction(request):
         serializer = TransactionSerializer(transaction) 
         
         DoTransactionTransfer(transaction_data)
-        return JsonResponse(serializer.data)
+        return JsonResponse(serializer.data, status=200)
     except:
         return JsonResponse({"Error message":"Invalid transaction data"},status = status.HTTP_400_BAD_REQUEST)
 

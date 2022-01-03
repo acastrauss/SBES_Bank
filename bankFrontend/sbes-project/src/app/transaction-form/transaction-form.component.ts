@@ -26,7 +26,7 @@ export class TransactionFormComponent implements OnInit {
     this.transactionForm = this.formBuilder.group({
       cards : ['',Validators.required],
       pin:['',Validators.required],
-      cvv:['',Validators.required],
+      cvc:['',Validators.required],
       accountTo:['',[Validators.required]],
       accountToName:['',[Validators.required]],
       accountToBillingAdress:['',[Validators.required]],
@@ -57,8 +57,8 @@ export class TransactionFormComponent implements OnInit {
     return this.transactionForm.get('pin');
   }
 
-  public get cvv(){
-    return this.transactionForm.get('cvv');
+  public get cvc(){
+    return this.transactionForm.get('cvc');
   }
 
   public get accountTo() {
