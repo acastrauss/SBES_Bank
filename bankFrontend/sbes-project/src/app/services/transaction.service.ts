@@ -45,10 +45,10 @@ export class TransactionService {
     return this.http.post(this.checkCurrencynUrl,body);
   }
 
-  public createPayment(fromData : any) : Observable<any>{
-    const body = { 
-      ...fromData
-    }
+  public createPayment(data : any) : Observable<any>{
+    const body = {
+      data
+    };
     return this.http.post<any>(this.createPaymentUrl,body);
   }
 

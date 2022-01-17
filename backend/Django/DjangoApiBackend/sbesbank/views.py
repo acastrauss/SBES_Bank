@@ -17,6 +17,7 @@ from modules.Shared.BankNumbers import (
     BankNumbers
 )
 
+from Crypto.Hash import SHA256
 from datetime import datetime, timedelta
 import json
 import copy
@@ -91,9 +92,18 @@ def LogInUser(request):
 
 @api_view(['POST'])
 def RegisterUser(request): 
-    body = json.loads(
-        request.body.decode('utf-8')
-    )
+    requestStr = json.loads(request.body.decode('utf-8'))
+    body = {}
+    for s in requestStr:
+        body[s] = DecryptTextRSA(
+            requestStr[s],
+            LoadKey(GetCertificateFilePath(False))  
+        )
+
+    # decrypted = requestStr
+    # print(decrypted)
+
+    # body = json.loads(decrypted)
 
     userFound = ModelsExistsFields(
         IUser, body, ["username", "jmbg", "userType","email"], True
@@ -163,8 +173,8 @@ def RegisterUser(request):
             'id': GetNextId(Card),
             'cardHolder': body['fullName'],
             'cardNumber': cardNumber,
-            'cvc': BankNumbers.GenerateCVC(cardNumber, accountNumber),
-            'pin': BankNumbers.GeneratePIN(cardNumber, accountNumber),
+            'cvc': SHA256.new(data = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8')).hexdigest(),
+            'pin': SHA256.new(data = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')).hexdigest(),
             'cardProcessor':cardProcessor.__str__(),
             'cardType' :cardType.__str__(),
             'validUntil': validUntil,
@@ -448,9 +458,30 @@ def CreatePayment(request):
     '''
         When client pays money to himself/herself account
     '''
-    inflow_data = JSONParser().parse(request) 
-    accountNum = inflow_data['accNum']
-    amount = inflow_data['amount']
+    # requestStr = json.loads(request.body.decode('utf-8'))
+    # print(requestStr)
+    # accountNum =  DecryptTextRSA(
+    #         requestStr['accNum'],
+    #         LoadKey(GetCertificateFilePath(False))  
+    #     )
+    # amount =  DecryptTextRSA(
+    #         requestStr['amount'],
+    #         LoadKey(GetCertificateFilePath(False))  
+    #     )
+    # print(amount)
+    # print(accountNum)
+
+    requestStr = json.loads(request.body.decode('utf-8'))
+    decrypted = DecryptTextRSA(
+        requestStr['data'],
+        LoadKey(GetCertificateFilePath(False))     
+    )
+    print(decrypted)
+
+    body = json.loads(decrypted)
+
+    accountNum = body['accNum']
+    amount = body['amount']
     thisAccount = Account.objects.get(accountNumber = accountNum)
 
     try:

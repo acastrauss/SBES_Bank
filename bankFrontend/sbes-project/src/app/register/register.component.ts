@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
+import * as CryptoJS from 'crypto-js';
+import {JSEncrypt} from 'jsencrypt';
 
 @Component({
   selector: 'app-register',
@@ -15,11 +17,16 @@ export class RegisterComponent implements OnInit {
   
   public users : ClientModel[] ;
   public registerForm : FormGroup;
+  private publicKey : string;
+  private dataString : string;
 
   constructor(private formBuilder : FormBuilder,private router : Router,
               private ClientService : ClientService) {
 
     this.users = JSON.parse(localStorage.getItem('users')!);  /////////
+    
+    this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
+    
 
     this.registerForm = this.formBuilder.group({
       username:['',[Validators.required]],
@@ -71,12 +78,20 @@ export class RegisterComponent implements OnInit {
 
   public submitForm(data : any){
     console.log(data);
-    
+    data.userType = "client";
+
     if(!this.registerForm.valid){
       window.alert('Not valid!');
       return;
     }
+    data['password']= CryptoJS.SHA256(data['password']).toString();
+   
+    for(var i in data){
+      data[i]= this.encryptWithPublicKey(data[i]);
+    }
 
+    this.dataString = JSON.stringify(data);
+    console.log(data);
     this.ClientService.register(data).subscribe((user : ClientModel) =>{
      // this.authenticate(user);
       window.alert('Korisnik uspjesno registrovan!');
@@ -85,6 +100,15 @@ export class RegisterComponent implements OnInit {
      // localStorage.setItem('users', JSON.stringify(this.users));      
       this.registerForm.reset();
     })
+  }
+
+  
+
+  public encryptWithPublicKey(valueToEncrypt: string): string {
+
+    let encrypt = new JSEncrypt();
+    encrypt.setPublicKey(this.publicKey);
+    return encrypt.encrypt(valueToEncrypt);
   }
 
   public authenticate(formData : any){
@@ -119,5 +143,4 @@ export class RegisterComponent implements OnInit {
   function error(message : string) {
     return throwError({ error: { message } });
   }
-
 

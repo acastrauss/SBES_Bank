@@ -9,7 +9,8 @@ import { HomeComponent } from '../home/home.component';
 import { of, throwError } from 'rxjs';
 import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
-import * as Forge from 'node-forge';
+import * as CryptoJS from 'crypto-js';
+import {JSEncrypt} from 'jsencrypt';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
      // this.users = JSON.parse(localStorage.getItem('users')!);  /////////
 
      this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
+
 
       this.loginFrom = this.formBuilder.group({
         username:['',[Validators.required]],
@@ -53,11 +55,16 @@ export class LoginComponent implements OnInit {
       window.alert('Not valid!');
       return;
     }
-    
+    console.log(data['password']);
+    data['password']= CryptoJS.SHA256(data['password']).toString();
+    console.log(data['password']);
+
     this.dataString = JSON.stringify(data);
-    console.log(this.dataString.length)
+
     data = this.encryptWithPublicKey(this.dataString);
-    console.log(data.length)
+    
+    console.log(data);
+
     this.ClientService.logIn(data).subscribe((client : any) =>{
       console.log(client.userType);
       if(client.userType == "admin"){
@@ -78,9 +85,10 @@ export class LoginComponent implements OnInit {
 
 
   public encryptWithPublicKey(valueToEncrypt: string): string {
-    const rsa = Forge.pki.publicKeyFromPem(this.publicKey);
-    
-    return rsa.encrypt(valueToEncrypt);
+
+    let encrypt = new JSEncrypt();
+    encrypt.setPublicKey(this.publicKey);
+    return encrypt.encrypt(valueToEncrypt);
   }
 
 

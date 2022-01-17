@@ -1,12 +1,15 @@
 from typing import ByteString
-from Crypto.Cipher import PKCS1_OAEP
-from Crypto.PublicKey import RSA
 
 from OpenSSL import crypto
 import modules.Certificates.selfSigned as selfSigned
 import os
 
 
+   
+import base64
+
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.PublicKey import RSA
 
 def getPathForDB(path)->str:
     '''
@@ -22,7 +25,6 @@ def getAbsolutePath(dbPath)->str:
     '''
     absPath = os.path.join(os.getcwd(), dbPath)
     return absPath
-
 
 def GetCertificateFilePath(public:bool, username:str=None)->str:
     '''
@@ -84,11 +86,13 @@ def LoadKey(path:str)->RSA.RsaKey:
     return caKey
 
 def EncryptTextRSA(text:str, key:RSA.RsaKey)->str:
-    return PKCS1_OAEP.new(key).encrypt(text.encode('utf-8'))
+    return PKCS1_v1_5.new(key).encrypt(text.encode('utf-8'))
 
 def DecryptTextRSA(text:str, key:RSA.RsaKey)->str:
-    bs = bytearray(text, 'utf-8')
-    print(len(bs)) 
-    return PKCS1_OAEP.new(key).decrypt(
-        
-    )
+    """Decrypt's the given string input. The library works on bytes."""
+
+    message_bytes = text.encode("utf-8")
+    cipher = PKCS1_v1_5.new(key)
+    decrypted_bytes = cipher.decrypt(base64.b64decode(message_bytes), "dummy text")
+    # convert the bytes to string and return
+    return decrypted_bytes.decode("utf-8")
