@@ -90,7 +90,6 @@ export class RegisterComponent implements OnInit {
       data[i]= this.encryptWithPublicKey(data[i]);
     }
 
-    this.dataString = JSON.stringify(data);
     console.log(data);
     this.ClientService.register(data).subscribe((user : ClientModel) =>{
      // this.authenticate(user);
@@ -104,11 +103,11 @@ export class RegisterComponent implements OnInit {
 
   
 
-  public encryptWithPublicKey(valueToEncrypt: string): string {
+  public encryptWithPublicKey(valueToEncrypt: any): string {
 
     let encrypt = new JSEncrypt();
     encrypt.setPublicKey(this.publicKey);
-    return encrypt.encrypt(valueToEncrypt);
+    return encrypt.encrypt(String(valueToEncrypt));
   }
 
   public authenticate(formData : any){

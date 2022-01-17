@@ -57,13 +57,10 @@ export class CreatePaymentFormComponent implements OnInit {
         this.paymentForm.reset();
     });
   }
-
   
-  public encryptWithPublicKey(valueToEncrypt: string): string {
-
+  public encryptWithPublicKey(valueToEncrypt: any): string {
     let encrypt = new JSEncrypt();
     encrypt.setPublicKey(this.publicKey);
-    return encrypt.encrypt(valueToEncrypt);
+    return encrypt.encrypt(String(valueToEncrypt));
   }
-
 }

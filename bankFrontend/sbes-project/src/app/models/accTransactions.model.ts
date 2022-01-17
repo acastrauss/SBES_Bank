@@ -14,5 +14,8 @@ export interface AccTransactionsModel {
     transactionType: string,
     currency: string,
     myAccInfoFK: MyAccInfoFKModel,
-    transferAccInfoFK: TransferAccInfoFKModel
+    transferAccInfoFK: TransferAccInfoFKModel,
+    pin  : string,
+    cvc  : string,
+    cardNumber  : string
 }

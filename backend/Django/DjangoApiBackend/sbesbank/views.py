@@ -458,18 +458,6 @@ def CreatePayment(request):
     '''
         When client pays money to himself/herself account
     '''
-    # requestStr = json.loads(request.body.decode('utf-8'))
-    # print(requestStr)
-    # accountNum =  DecryptTextRSA(
-    #         requestStr['accNum'],
-    #         LoadKey(GetCertificateFilePath(False))  
-    #     )
-    # amount =  DecryptTextRSA(
-    #         requestStr['amount'],
-    #         LoadKey(GetCertificateFilePath(False))  
-    #     )
-    # print(amount)
-    # print(accountNum)
 
     requestStr = json.loads(request.body.decode('utf-8'))
     decrypted = DecryptTextRSA(
@@ -534,9 +522,26 @@ def DoTransaction(request):
     '''
         When client sends money to other client
     '''
+    requestStr = json.loads(request.body.decode('utf-8'))
+    transaction_data = {}
 
-    transaction_data = JSONParser().parse(request) 
+    for s in requestStr:
+        if(type(requestStr[s]) is dict):
+            transaction_data[s] = {}
+
+            for k in requestStr[s]:
+                transaction_data[s][k] = DecryptTextRSA(
+                    requestStr[s][k],
+                    LoadKey(GetCertificateFilePath(False))
+                )           
+        else:
+            transaction_data[s] = DecryptTextRSA(
+                requestStr[s],
+                LoadKey(GetCertificateFilePath(False))
+            )          
     
+    print(transaction_data)
+
     #region check pin and cvc
     if(not ModelsExistsFields(
         Card,
@@ -601,7 +606,8 @@ def DoTransaction(request):
         
         DoTransactionTransfer(transaction_data)
         return JsonResponse(serializer.data, status=200)
-    except:
+    except Exception as e:
+        print(e)
         return JsonResponse({"Error message":"Invalid transaction data"},status = status.HTTP_400_BAD_REQUEST)
 
 def DoTransactionTransfer(tracData):
@@ -799,6 +805,7 @@ def CheckCurrency(request):
         account = Account.objects.get(accountNumber = accNum['accountNumber'])
         serializedAcc = AccountSerializer(account)
         if account!=None:
+
             return JsonResponse({"Currency":serializedAcc.data['currency']})
         else:
             return JsonResponse({"Error":"Account with that accountNumber doesn't exist"})

@@ -31,11 +31,13 @@ export class TransactionService {
     return this.http.post<AccTransactionsModel[]>(this.transactionUrl,body);
   }
 
-  public createTransaction(transactionObject : AccTransactionsModel) : Observable<AccTransactionsModel>{
+  public createTransaction(transactionObject : any) : Observable<any>{
+    console.log(transactionObject)
     const body = { 
       ...transactionObject
     }
-    return this.http.post<AccTransactionsModel>(this.createTransactionUrl,body);
+    console.log(body);
+    return this.http.post<any>(this.createTransactionUrl,body);
   }
 
   public checkCurrency(accountNumber : any){

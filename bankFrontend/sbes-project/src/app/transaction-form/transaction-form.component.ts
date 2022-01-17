@@ -10,19 +10,29 @@ import { PaymentCodeFKModel } from '../models/paymentCodeFK.model';
 import { TransferAccInfoFKModel } from '../models/transferAccInfoFK.model';
 import { TransactionService } from '../services/transaction.service';
 
+import * as CryptoJS from 'crypto-js';
+import {JSEncrypt} from 'jsencrypt';
 @Component({
   selector: 'app-transaction-form',
   templateUrl: './transaction-form.component.html',
   styleUrls: ['./transaction-form.component.css']
 })
 export class TransactionFormComponent implements OnInit {
+  
+  private publicKey : string;
+  private dataString : string;
 
   public transactionObject : AccTransactionsModel;
   public transactionForm : FormGroup;
   public account : AccountModel;
   public currency : string;
+  public json : any;
+  public json2: any;
   public cardsAccount : CardModel[] = [];
   constructor(private formBuilder : FormBuilder,private TransService : TransactionService,private router: Router) {
+    
+    this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
+
     this.transactionForm = this.formBuilder.group({
       cards : ['',Validators.required],
       pin:['',Validators.required],
@@ -99,7 +109,6 @@ export class TransactionFormComponent implements OnInit {
 
   public submitForm(data : any){
 
-
     this.transactionObject.amount = data.amount;
     this.transactionObject.modelCode=data.modelCode;
     this.transactionObject.paymentCodeFK.code = data.code;
@@ -126,27 +135,66 @@ export class TransactionFormComponent implements OnInit {
       window.alert('Not valid!');
       return;
     }
-
-    this.authenticate(this.transactionObject);
+  
+    this.transactionObject.cardNumber = data['cards'];
+    data['pin']= CryptoJS.SHA256(String(data['pin'])).toString();
+    data['cvc']= CryptoJS.SHA256(String(data['cvc'])).toString();
+    this.transactionObject.pin =  data['pin'];
+    this.transactionObject.cvc =  data['cvc']; 
+    
+    this.authenticate(this.transactionObject, data);
   }
 
-  public authenticate(transaction : AccTransactionsModel){
+  
+  public encryptWithPublicKey(valueToEncrypt: any): string {
+
+    let encrypt = new JSEncrypt();
+    encrypt.setPublicKey(this.publicKey);
+    return encrypt.encrypt(String(valueToEncrypt));
+  }
+
+  public authenticate(transaction : AccTransactionsModel, data:any){
  
     this.TransService.checkCurrency(this.transactionObject.transferAccInfoFK.accountNumber).subscribe((curr : any)=>{
-      this.currency = curr['Currency'];
-      console.log(this.currency);
+      transaction.currency = curr['Currency'];
     }); 
-
+    
     if(this.account.accountBalance < transaction.amount + transaction.amount* transaction.provision){
       return window.alert('Nemate dovoljno sredstava da izvrsite transakciju!');
     }
-    else if (this.currency !== this.account.currency)
+    else if (transaction.currency !== this.account.currency)
     {
       return window.alert('Racun na koji zelite da posaljete novac nije u vasoj valuti');
     }else{
       //this.users.push(data);///mozda cu morati data kastovati 
-      //localStorage.setItem('users', JSON.stringify(this.users));                  // ne vodim trenutno racuna o transakcijama
-      this.TransService.createTransaction(transaction).subscribe((trans : AccTransactionsModel) =>{
+      //localStorage.setItem('users', JSON.stringify(this.users));   
+      // ne vodim trenutno racuna o transakcijama
+      
+      transaction.pin=this.transactionObject.pin;
+      transaction.cvc= this.transactionObject.cvc;
+      
+      this.json = JSON.parse(JSON.stringify(transaction));
+
+      for(var i in this.json){
+
+        if(i==="myAccInfoFK"){
+          for(var j in this.json[i])
+            this.json[i][j]=this.encryptWithPublicKey(this.json[i][j])
+        }else if(
+          i==="paymentCodeFK"
+        ){
+          for(var j in this.json[i])
+          this.json[i][j]=this.encryptWithPublicKey(this.json[i][j])
+        }else if(
+          i==="transferAccInfoFK"  
+        ){
+          for(var j in this.json[i])
+          this.json[i][j]=this.encryptWithPublicKey(this.json[i][j])
+        }else{
+      this.json[i]=this.encryptWithPublicKey(this.json[i]);}
+      };
+
+      this.TransService.createTransaction(this.json).subscribe((trans : AccTransactionsModel) =>{
 
         this.router.navigate(['/account',this.account.accountNumber]);
         this.transactionForm.reset();
