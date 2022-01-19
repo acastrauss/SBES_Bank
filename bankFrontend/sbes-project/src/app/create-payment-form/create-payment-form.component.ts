@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountModel } from '../models/account.model';
 import { TransactionService } from '../services/transaction.service';
-import * as CryptoJS from 'crypto-js';
 import {JSEncrypt} from 'jsencrypt';
 
 @Component({

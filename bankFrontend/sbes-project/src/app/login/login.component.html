@@ -16,3 +16,8 @@
     </form>
 </div>
 
+<input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+<div class="file-upload">
+        <button mat-mini-fab color="primary" class="btn btn-primary btn-block" (click)="fileUpload.click()">File Upload</button>
+</div>

@@ -20,6 +20,7 @@ class Gender(Enum):
     def __int__(self) -> int:
         return int(self.value)
 
+
     def GetFromStr(value:str):
         if(value.strip().upper() == "MALE"):
             return Gender.MALE

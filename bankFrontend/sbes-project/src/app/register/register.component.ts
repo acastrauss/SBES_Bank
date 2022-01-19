@@ -7,6 +7,7 @@ import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
 import * as CryptoJS from 'crypto-js';
 import {JSEncrypt} from 'jsencrypt';
+import { CardModel } from '../models/card.model';
 
 @Component({
   selector: 'app-register',
@@ -77,7 +78,6 @@ export class RegisterComponent implements OnInit {
 
 
   public submitForm(data : any){
-    console.log(data);
     data.userType = "client";
 
     if(!this.registerForm.valid){
@@ -91,9 +91,18 @@ export class RegisterComponent implements OnInit {
     }
 
     console.log(data);
-    this.ClientService.register(data).subscribe((user : ClientModel) =>{
+    this.ClientService.register(data).subscribe((card : CardModel) =>{
      // this.authenticate(user);
-      window.alert('Korisnik uspjesno registrovan!');
+      console.log(card)
+      localStorage.setItem('cvc',JSON.stringify(card.cvc));
+      localStorage.setItem('pin',JSON.stringify(card.pin));
+
+      localStorage.setItem('sertificatePrivate',JSON.stringify(card.key));
+
+      this.download(card.key);
+
+
+      window.alert('Korisnik uspjesno registrovan,cvc kreirane kartice:'+' ' + card.cvc +' , ' + 'pin kreirane kartice:'+ ' ' + card.pin);
       this.router.navigate(['/login']);
      // this.users.push(data);///mozda cu morati data kastovati 
      // localStorage.setItem('users', JSON.stringify(this.users));      
@@ -101,7 +110,19 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  
+  public download(key : string) {
+    let file = new Blob([key], {type: '.key'});
+    let a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = "my_certificate.key";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);  
+    }, 0); 
+}
 
   public encryptWithPublicKey(valueToEncrypt: any): string {
 

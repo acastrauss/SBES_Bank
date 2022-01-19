@@ -4,7 +4,7 @@ from OpenSSL import crypto
 import modules.Certificates.selfSigned as selfSigned
 import os
 
-
+from Crypto.Hash import SHA256
    
 import base64
 
@@ -49,6 +49,8 @@ def GetCertificateFilePath(public:bool, username:str=None)->str:
             username + extension
         )
 
+        print(cerPath)
+
     else:
         CN = selfSigned.getCertAuthorityName()
 
@@ -92,7 +94,6 @@ def EncryptTextRSA(text:str, key:RSA.RsaKey)->str:
 
 def DecryptTextRSA(text:str, key:RSA.RsaKey)->str:
     """Decrypt's the given string input. The library works on bytes."""
-
     message_bytes = text.encode("utf-8")
     cipher = PKCS1_v1_5.new(key)
     decrypted_bytes = cipher.decrypt(base64.b64decode(message_bytes), "dummy text")
@@ -109,15 +110,10 @@ def CheckUserSignature(username:str, message:str, signature:str)->bool:
     else:
         signValidator = sign.new(userPublicKey)
         try:
-            signValidator.verify(SHA256.new(data=message), signature.encode('utf-8'))
+            s = SHA256.new(data=message.encode('utf-8'))
+            s.update(message.encode('utf-8'))
+
+            signValidator.verify(s, signature.encode('utf-8'))
             return True
         except ValueError:
             return False
-
-        # hashedMsg = SHA256.new(data=message).hexdigest().decode('utf-8')
-
-        # decrypted = DecryptTextRSA(
-        #     signature, userPublicKey
-        # )
-
-        # return hashedMsg == decrypted

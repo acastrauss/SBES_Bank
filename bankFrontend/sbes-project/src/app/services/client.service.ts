@@ -30,10 +30,10 @@ export class ClientService {
       data
     };
     console.log(body);
-    return this.http.post<any>(this.usersUrl,body);
+    return this.http.post<any>(this.usersUrl,data);
   }
 
-  public register(data : ClientModel) : Observable<ClientModel>{
+  public register(data : ClientModel) : Observable<any>{
     const body ={
       ...data
     }

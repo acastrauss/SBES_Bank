@@ -1,5 +1,6 @@
 
-from tabnanny import check
+# from tabnanny import check
+# from lib2to3.pgen2.token import CIRCUMFLEXEQUAL
 from django.core import exceptions
 from re import T
 from django.http import JsonResponse
@@ -44,8 +45,8 @@ from modules.Certificates.Cypher import *
 #region UserViews
 @api_view(['POST'])
 def LogInUser(request):
-    
     requestStr = json.loads(request.body.decode('utf-8'))
+<<<<<<< HEAD
 
     decrypted = DecryptTextRSA(
         requestStr['data'],
@@ -54,6 +55,19 @@ def LogInUser(request):
 
     body = json.loads(decrypted)
 
+=======
+    body = {}
+
+    for k in requestStr:
+        if(k != 'signature'):
+            body[k] = DecryptTextRSA(
+                requestStr[k],
+                LoadKey(GetCertificateFilePath(False))     
+            )  
+        else:
+            body[k] = requestStr[k]
+
+>>>>>>> 7a2be1d8c8425548f959a93301dc5b68a66d72dc
     if(body['signature'] and body['message']):
         # check user signature
         if(
@@ -61,8 +75,12 @@ def LogInUser(request):
             ModelsExistsFields(IUser, body, ['username'], True)
         ):
             user = IUser.objects.get(
+<<<<<<< HEAD
                 username=body['username'],
                 password=body['password']
+=======
+                username=body['username']
+>>>>>>> 7a2be1d8c8425548f959a93301dc5b68a66d72dc
             )
 
             if user.userType==IUser.userTypes[1][1]:
@@ -111,6 +129,7 @@ def LogInUser(request):
             safe=False
         )
 
+
 @api_view(['POST'])
 def RegisterUser(request): 
     requestStr = json.loads(request.body.decode('utf-8'))
@@ -146,16 +165,7 @@ def RegisterUser(request):
     )
 
     user = CreateModel(IUser, body)
-       
-    certificate = CreateModel(Certificate, {
-        'id' : GetNextId(Certificate),
-        'authorityName' : getCertAuthorityName(),
-        'pemPath' : getPathForDB(pemPath),
-        'keyPath' : getPathForDB(keyPath),
-        'certificateName' : body['username'],
-        'userId' : user
-    })
-
+    
     if (body['userType'].lower() == 'client'):
         client = CreateModel(Client, {
             'id' : GetNextId(Client),
@@ -192,6 +202,7 @@ def RegisterUser(request):
             'validUntil': validUntil,
             'accountFK' : account
         })
+<<<<<<< HEAD
 
         card.pin = pin
         card.cvc = cvc 
@@ -199,6 +210,17 @@ def RegisterUser(request):
 
         jsonRet = cardserializer.data
         jsonRet['key'] = LoadKey(keyPath)
+=======
+        card.pin = pin.decode('utf-8')
+        card.cvc = cvc.decode('utf-8')
+        cardserializer=CardSerializer(card) 
+
+        # cardserializer.data['key'] = 
+        jsonRet = copy.deepcopy(dict(cardserializer.data))
+        jsonRet['key'] = LoadKey(keyPath).export_key().decode('utf-8')
+
+        print(jsonRet)
+>>>>>>> 7a2be1d8c8425548f959a93301dc5b68a66d72dc
 
         return JsonResponse(
             jsonRet,
@@ -210,7 +232,6 @@ def RegisterUser(request):
         return JsonResponse(
             IUserSerializer(user).data
         )
-
 
 #endregion
 
@@ -277,7 +298,6 @@ def AccInfo(request):
 
 @api_view(['POST'])
 def AccTransactions(request):
-    
     body = JSONParser().parse(request)
     accNum = body['accountNumber']
     obj =list(TrMyAccountInfo.objects.filter(accountNumber = accNum))
@@ -296,7 +316,15 @@ def CreateAccount(request):
     '''
         Create new account for existing client
     '''
-    account_data = JSONParser().parse(request)
+    requestStr = json.loads(request.body.decode('utf-8'))
+    
+    account_data = json.loads(
+            DecryptTextRSA(
+            requestStr['fromData'],
+            LoadKey(GetCertificateFilePath(False))     
+        )
+    )
+
     account_curr = account_data['currency']
     client_id = account_data['clientId']
     try:
