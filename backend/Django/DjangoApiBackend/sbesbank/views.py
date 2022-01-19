@@ -46,16 +46,6 @@ from modules.Certificates.Cypher import *
 @api_view(['POST'])
 def LogInUser(request):
     requestStr = json.loads(request.body.decode('utf-8'))
-<<<<<<< HEAD
-
-    decrypted = DecryptTextRSA(
-        requestStr['data'],
-        LoadKey(GetCertificateFilePath(False))     
-    )
-
-    body = json.loads(decrypted)
-
-=======
     body = {}
 
     for k in requestStr:
@@ -67,7 +57,6 @@ def LogInUser(request):
         else:
             body[k] = requestStr[k]
 
->>>>>>> 7a2be1d8c8425548f959a93301dc5b68a66d72dc
     if(body['signature'] and body['message']):
         # check user signature
         if(
@@ -75,12 +64,7 @@ def LogInUser(request):
             ModelsExistsFields(IUser, body, ['username'], True)
         ):
             user = IUser.objects.get(
-<<<<<<< HEAD
-                username=body['username'],
-                password=body['password']
-=======
                 username=body['username']
->>>>>>> 7a2be1d8c8425548f959a93301dc5b68a66d72dc
             )
 
             if user.userType==IUser.userTypes[1][1]:
@@ -202,15 +186,6 @@ def RegisterUser(request):
             'validUntil': validUntil,
             'accountFK' : account
         })
-<<<<<<< HEAD
-
-        card.pin = pin
-        card.cvc = cvc 
-        cardserializer=CardSerializer(card) 
-
-        jsonRet = cardserializer.data
-        jsonRet['key'] = LoadKey(keyPath)
-=======
         card.pin = pin.decode('utf-8')
         card.cvc = cvc.decode('utf-8')
         cardserializer=CardSerializer(card) 
@@ -220,7 +195,6 @@ def RegisterUser(request):
         jsonRet['key'] = LoadKey(keyPath).export_key().decode('utf-8')
 
         print(jsonRet)
->>>>>>> 7a2be1d8c8425548f959a93301dc5b68a66d72dc
 
         return JsonResponse(
             jsonRet,
