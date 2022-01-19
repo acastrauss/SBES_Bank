@@ -1,4 +1,5 @@
 
+from tabnanny import check
 from django.core import exceptions
 from re import T
 from django.http import JsonResponse
@@ -45,43 +46,63 @@ from modules.Certificates.Cypher import *
 def LogInUser(request):
     
     requestStr = json.loads(request.body.decode('utf-8'))
+
     decrypted = DecryptTextRSA(
         requestStr['data'],
         LoadKey(GetCertificateFilePath(False))     
     )
-    print(decrypted)
 
     body = json.loads(decrypted)
 
-    userPublicPath = GetCertificateFilePath(
-        True, body['username']
-    )
-
-    if(ModelsExistsFields(
-        IUser,
-        body,
-        ['username', 'password'],
-        True
-    )):
-        user = IUser.objects.get(
-            username=body['username'],
-            password=body['password']
-        )
-
-        if user.userType==IUser.userTypes[1][1]:
-            client = Client.objects.get(
-                userId=user
+    if(body['signature'] and body['message']):
+        # check user signature
+        if(
+            CheckUserSignature(body['username'], body['message'], body['signature']) and
+            ModelsExistsFields(IUser, body, ['username'], True)
+        ):
+            user = IUser.objects.get(
+                username=body['username'],
+                password=body['password']
             )
-            ser = ClientSerializer(client)
+
+            if user.userType==IUser.userTypes[1][1]:
+                client = Client.objects.get(
+                    userId=user
+                )
+                ser = ClientSerializer(client)
+            else:
+                ser = IUserSerializer(user)
+
+            return JsonResponse(
+                ser.data,
+                status=200
+            )
+
         else:
-            ser = IUserSerializer(user)
+            return JsonResponse(
+                "Invalid signature for given username.",
+                status=404,
+                safe=False
+            )
+            
+    elif (ModelsExistsFields(IUser, body, ['username', 'password'], True)):
+            user = IUser.objects.get(
+                username=body['username'],
+                password=body['password']
+            )
 
+            if user.userType==IUser.userTypes[1][1]:
+                client = Client.objects.get(
+                    userId=user
+                )
+                ser = ClientSerializer(client)
+            else:
+                ser = IUserSerializer(user)
 
-
-        return JsonResponse(
-            ser.data,
-            status=200
-        )
+            return JsonResponse(
+                ser.data,
+                status=200
+            )
 
     else:
         return JsonResponse(
@@ -100,11 +121,6 @@ def RegisterUser(request):
             LoadKey(GetCertificateFilePath(False))  
         )
 
-    # decrypted = requestStr
-    # print(decrypted)
-
-    # body = json.loads(decrypted)
-
     userFound = ModelsExistsFields(
         IUser, body, ["username", "jmbg", "userType","email"], True
     )
@@ -120,10 +136,6 @@ def RegisterUser(request):
 
     body['id'] = GetNextId(IUser)
 
-    # body['userType']='client'
-    # userType should be sent from frontend!
-
-    
     pemPath, keyPath = NewUserCert(
             os.path.join(
                 os.getcwd(),
@@ -132,7 +144,6 @@ def RegisterUser(request):
             ),
             body['username']
     )
-
 
     user = CreateModel(IUser, body)
        
@@ -168,21 +179,34 @@ def RegisterUser(request):
         cardNumber = BankNumbers.GenerateCardNumber(cardProcessor)
         td = timedelta(days= 365*4)
         validUntil = (datetime.now()+ td).strftime("%Y-%m-%d")
-        
+        pin = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8') #VRATITI NA FRONT PRILIKOM REGISTROVANJA DA BI KORISNIK ZNAO PIN I CVC 
+        cvc = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')
         card = CreateModel(Card,{
             'id': GetNextId(Card),
             'cardHolder': body['fullName'],
             'cardNumber': cardNumber,
-            'cvc': SHA256.new(data = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8')).hexdigest(),
-            'pin': SHA256.new(data = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')).hexdigest(),
+            'cvc': SHA256.new(data = cvc).hexdigest(),
+            'pin': SHA256.new(data = pin).hexdigest(),
             'cardProcessor':cardProcessor.__str__(),
             'cardType' :cardType.__str__(),
             'validUntil': validUntil,
             'accountFK' : account
         })
+
+        card.pin = pin
+        card.cvc = cvc 
+        cardserializer=CardSerializer(card) 
+
+        jsonRet = cardserializer.data
+        jsonRet['key'] = LoadKey(keyPath)
+
+        return JsonResponse(
+            jsonRet,
+            status=200
+        )
         
-        return JsonResponse(ClientSerializer(client).data)
     else:
+        # admin
         return JsonResponse(
             IUserSerializer(user).data
         )
@@ -313,28 +337,54 @@ def createCardPOST(request):
     '''
         Create new card for existing client
     '''
-    body = JSONParser().parse(request)
+    
+    requestStr = json.loads(request.body.decode('utf-8'))
+ 
+    body = {}
+    for s in requestStr:
+        body[s] = DecryptTextRSA(
+            requestStr[s],
+            LoadKey(GetCertificateFilePath(False))  
+        )
     try:
         accountFK = Account.objects.get(accountNumber=body['accNum'])
     except:
         return JsonResponse({'Error':'Acc num not found'})
-    cardNumber = BankNumbers.GenerateCardNumber(body['cardProcessor'])
+
+    cardNumber = BankNumbers.GenerateCardNumber(CreditCardProcessor.GetFromStr(body['cardProcessor']))
     td = timedelta(days= 365*4)
     validUntil = (datetime.now()+ td).strftime("%Y-%m-%d")
+    cvc= BankNumbers.GenerateCVC(cardNumber, body['accNum'])
+    cvchash = SHA256.new(data = cvc.encode('utf-8')).hexdigest()
+    pin= BankNumbers.GeneratePIN(cardNumber,body['accNum']) #TREBA VRATITI NA FRONT DA BI KORISNIK ZNAO  PIN I CVC OD SVOJE KARTICE
+    pinhash = SHA256.new(data = pin.encode('utf-8')).hexdigest()
+    print(CreditCardProcessor[body['cardProcessor']])
+    print(int(CreditCardProcessor[body['cardProcessor']]))
+    
     card = CreateModel(Card,{
-    'id': GetNextId(Card),
-    'cardHolder': body['cardHolder'],
-    'cardNumber': cardNumber ,
-    'cvc': BankNumbers.GenerateCVC(cardNumber, body['accNum']),
-    'pin': BankNumbers.GeneratePIN(cardNumber,body['accNum']),
-    'cardProcessor': body['cardProcessor'],
-    'cardType' :body['cardType'],
-    'validUntil': validUntil,
-    'accountFK' : accountFK
+        'id': GetNextId(Card),
+        'cardHolder': body['cardHolder'],
+        'cardNumber': cardNumber ,
+        'cvc': cvchash ,
+        'pin': pinhash,
+        'cardProcessor':  CardSerializer.CARD_PROCESSOR[CreditCardProcessor[body['cardProcessor']].__int__()][1],
+        'cardType' : CardSerializer.CARD_TYPE[CardType[body['cardType']].__int__()][1],
+        'validUntil': validUntil,
+        'accountFK' : accountFK
         })
-    return JsonResponse(CardSerializer(card).data)
+    print(card.pin)
+    card.pin = pin
+    print(card.cardProcessor)
+    card.cvc = cvc
+    cardserializer=CardSerializer(card) 
+
+    return JsonResponse(
+        cardserializer.data,
+        status=200
+    )
+   
  
-#endregion
+#endregions
 
 #region TransactionViews
 
@@ -665,21 +715,29 @@ def DoTransactionTransfer(tracData):
 #r
 @api_view(['POST'])
 def ExchangeMoney(request):
-    exchange_data = JSONParser().parse(request)
+    requestStr = json.loads(request.body.decode('utf-8'))
+    exchange_data = {}
+    for s in requestStr:
+        exchange_data[s] = DecryptTextRSA(
+            requestStr[s],
+            LoadKey(GetCertificateFilePath(False))  
+        )
+
     accountFrom = exchange_data['accountFrom']
     accountTo = exchange_data['accountTo']
-    amount = exchange_data['amount']
- 
+    amount = int(exchange_data['amount'])
     try:
         accountF = Account.objects.get(accountNumber= accountFrom)
-        
         paymentCodeFK = TemplatePaymentCode(
             986,
             'Kupoprodaja deviza'
         )
         
-        balanceAfter = accountF.accountBalance - amount
 
+
+        balanceAfter = accountF.accountBalance - (amount)
+        
+        print(balanceAfter)
         myAccInfo = TemplateTrMyAccountInfo(
             accountF.accountBalance,
             balanceAfter,
@@ -707,15 +765,17 @@ def ExchangeMoney(request):
             myAccInfo,
             trTrAcInfo
         )
-
+        
         accountF.accountBalance = balanceAfter
+        
+        print(accountF.accountBalance)
         accountF.save()
 
         DoExchangeTransfer(exchange_data)
 
         return JsonResponse(TransactionSerializer(transaction).data)
     except:
-        return JsonResponse({"Error":"Error when exchange money"})
+        return JsonResponse({"Error":"Error when exchange money"},status=400)
 
 
 #r
@@ -723,7 +783,11 @@ def DoExchangeTransfer(exchange_data):
    
     accountFrom = exchange_data['accountTo']
     accountTo = exchange_data['accountFrom']
-    amount = exchange_data['amount']
+    amount = int(exchange_data['amount'])
+    
+    print(accountTo)
+    print(accountFrom)
+    print(amount)
     try:
         accountF = Account.objects.get(accountNumber = accountFrom)
         accountT = Account.objects.get(accountNumber = accountTo)
@@ -920,6 +984,24 @@ def GetUserPublicKey(request):
         username = request.GET.get('username')
         publicKey = LoadKey(
             GetCertificateFilePath(True, username)
+        )
+        
+        return JsonResponse(
+            publicKey.export_key().decode('utf-8'),
+            status=200,
+            safe=False
+        )
+
+    except Exception as e:
+        return JsonResponse(status=404, safe=False)
+
+
+@api_view(['GET'])
+def GetUserPrivateKey(request):
+    try:
+        username = request.GET.get('username')
+        publicKey = LoadKey(
+            GetCertificateFilePath(False, username)
         )
         
         return JsonResponse(

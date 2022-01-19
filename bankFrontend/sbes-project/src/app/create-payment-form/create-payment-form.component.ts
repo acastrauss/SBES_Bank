@@ -18,6 +18,7 @@ export class CreatePaymentFormComponent implements OnInit {
   public account : AccountModel;
   private publicKey : string;
   private dataString : string;
+  
   constructor(private formBuilder : FormBuilder,private transactionService : TransactionService,private router : Router) { 
 
 

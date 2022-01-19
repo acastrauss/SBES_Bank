@@ -18,3 +18,14 @@ class CreditCardProcessor(Enum):
 
     def __str__(self) -> str:
         return str(self.value)
+
+    def __int__(self) -> int:
+        return int(self.value)
+
+    def GetFromStr(value:str):
+        if(value.strip().upper() == "VISA"):
+            return CreditCardProcessor.VISA
+        elif(value.strip().upper() == "MASTER_CARD"):
+            return CreditCardProcessor.MASTER_CARD
+        else:
+            return CreditCardProcessor.AMERICAN_EXPRESS

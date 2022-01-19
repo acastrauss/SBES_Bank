@@ -51,6 +51,7 @@ urlpatterns = [
     #region CertificateUrls
     url(r'^api/sbesbank/serverpublickey',views.GetServerPublicKey),
     url(r'^api/sbesbank/userpublickey',views.GetUserPublicKey),
+    url(r'^api/sbesbank/userpivatekey',views.GetUserPrivateKey),
 
 
     #endregion

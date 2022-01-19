@@ -21,3 +21,30 @@ class Currency(Enum):
     CAD = 6
     AUD = 7
     RSD = 8
+
+    def __str__(self) -> str:
+        return str(self.value)
+    
+    def __int__(self) -> int:
+        return int(self.value)
+
+    def GetFromStr(value:str):
+        if(value.strip().upper() == "USD"):
+            return Currency.USD
+        elif(value.strip().upper() == "EUR"):
+            return Currency.EUR
+        elif(value.strip().upper() == "CHF"):
+            return Currency.CHF
+        elif(value.strip().upper() == "GBP"):
+            return Currency.GBP
+        elif(value.strip().upper() == "RUB"):
+            return Currency.RUB
+        elif(value.strip().upper() == "CNY"):
+            return Currency.CNY
+        elif(value.strip().upper() == "CAD"):
+            return Currency.CAD
+        elif(value.strip().upper() == "AUD"):
+            return Currency.AUD
+        else:
+            return Currency.RSD
+        

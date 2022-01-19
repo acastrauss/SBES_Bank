@@ -13,3 +13,15 @@ from enum import Enum
 class Gender(Enum):
     MALE = 0
     FEMALE = 1
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+    def __int__(self) -> int:
+        return int(self.value)
+
+    def GetFromStr(value:str):
+        if(value.strip().upper() == "MALE"):
+            return Gender.MALE
+        else:
+            return Gender.FEMALE
