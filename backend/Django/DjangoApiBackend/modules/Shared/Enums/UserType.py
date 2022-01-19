@@ -13,3 +13,15 @@ from enum import Enum
 class UserType(Enum):
     ADMIN = 0
     CLIENT = 1
+
+    def __str__(self) -> str:
+        return str(self.value)
+    
+    def __int__(self) -> int:
+        return int(self.value)
+
+    def GetFromStr(value:str):
+        if(value.strip().upper() == "ADMIN"):
+            return UserType.ADMIN
+        else:
+            return UserType.CLIENT

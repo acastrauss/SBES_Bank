@@ -6,7 +6,8 @@ export interface CardModel{
     pin : string,
     cardType : CardType,
     validUntil : Date,
-    cardProcessor : CreditCardProcessor
+    cardProcessor : CreditCardProcessor,
+    key : string
 }
 enum CardType {
     DEBIT,

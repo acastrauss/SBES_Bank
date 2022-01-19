@@ -16,3 +16,12 @@ class CardType(Enum):
 
     def __str__(self) -> str:
         return str(self.value)
+
+    def __int__(self) -> int:
+        return int(self.value)
+
+    def GetFromStr(value:str):
+        if (value.strip().upper() == "DEBIT"):
+            return CardType.DEBIT
+        else:
+            return CardType.CREDIT

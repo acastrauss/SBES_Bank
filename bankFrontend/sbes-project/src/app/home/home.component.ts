@@ -20,8 +20,7 @@ export class HomeComponent implements OnInit{
   public logInClient : ClientModel ;
   public logInAdmin : UserModel;
   private userAccountsUrl = "http://127.0.0.1:8000/api/sbesbank/accountinfo/";
-  private getSertificateUrl = "http://127.0.0.1:8000/api/sbesbank/serverpublickey";
-
+  private getSertificateUrl = "http://127.0.0.1:8000/api/sbesbank/serverpublickey"; 
 
   constructor(private UserService : UserService,
               private route : ActivatedRoute,private http : HttpClient) { 
@@ -31,7 +30,8 @@ export class HomeComponent implements OnInit{
     this.logInClient = JSON.parse(localStorage.getItem('client')!);
     this.logInAdmin = JSON.parse(localStorage.getItem('admin')!);
     this.getAccUser();   
-    this.getSertificate();
+    this.getSertificatePublic();
+
     //this.getCardsUser();     
     }
     /*
@@ -56,12 +56,11 @@ export class HomeComponent implements OnInit{
   ngOnInit(): void {
   }
 
-  public getSertificate(){
+  public getSertificatePublic(){
       this.http.get<any>(this.getSertificateUrl).subscribe((sert : string)=>{
         localStorage.setItem('sertificate',JSON.stringify(sert));
       });
   }
-
 
   public getAccUser():AccountModel[]{
     if(this.logInClient!=null){

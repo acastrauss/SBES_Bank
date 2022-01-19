@@ -36,7 +36,7 @@ export class AccountService {
 
   public createAccount(fromData : any) : Observable<any>{
     const body = { 
-      ...fromData
+      fromData
     }
     return this.http.post<any>(this.createAccountUrl,body);
   }

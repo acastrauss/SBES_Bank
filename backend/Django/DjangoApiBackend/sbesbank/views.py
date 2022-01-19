@@ -1,4 +1,5 @@
 
+from lib2to3.pgen2.token import CIRCUMFLEXEQUAL
 from django.core import exceptions
 from re import T
 from django.http import JsonResponse
@@ -43,45 +44,66 @@ from modules.Certificates.Cypher import *
 #region UserViews
 @api_view(['POST'])
 def LogInUser(request):
-    
     requestStr = json.loads(request.body.decode('utf-8'))
-    decrypted = DecryptTextRSA(
-        requestStr['data'],
-        LoadKey(GetCertificateFilePath(False))     
-    )
-    print(decrypted)
+    body = {}
 
-    body = json.loads(decrypted)
-
-    userPublicPath = GetCertificateFilePath(
-        True, body['username']
-    )
-
-    if(ModelsExistsFields(
-        IUser,
-        body,
-        ['username', 'password'],
-        True
-    )):
-        user = IUser.objects.get(
-            username=body['username'],
-            password=body['password']
-        )
-
-        if user.userType==IUser.userTypes[1][1]:
-            client = Client.objects.get(
-                userId=user
-            )
-            ser = ClientSerializer(client)
+    for k in requestStr:
+        if(k != 'signature'):
+            body[k] = DecryptTextRSA(
+                requestStr[k],
+                LoadKey(GetCertificateFilePath(False))     
+            )  
         else:
-            ser = IUserSerializer(user)
+            body[k] = requestStr[k]
 
+    if(body['signature'] and body['message']):
+        # check user signature
+        if(
+            CheckUserSignature(body['username'], body['message'], body['signature']) and
+            ModelsExistsFields(IUser, body, ['username'], True)
+        ):
+            user = IUser.objects.get(
+                username=body['username']
+            )
 
+            if user.userType==IUser.userTypes[1][1]:
+                client = Client.objects.get(
+                    userId=user
+                )
+                ser = ClientSerializer(client)
+            else:
+                ser = IUserSerializer(user)
 
-        return JsonResponse(
-            ser.data,
-            status=200
-        )
+            return JsonResponse(
+                ser.data,
+                status=200
+            )
+
+        else:
+            return JsonResponse(
+                "Invalid signature for given username.",
+                status=404,
+                safe=False
+            )
+            
+    elif (ModelsExistsFields(IUser, body, ['username', 'password'], True)):
+            user = IUser.objects.get(
+                username=body['username'],
+                password=body['password']
+            )
+
+            if user.userType==IUser.userTypes[1][1]:
+                client = Client.objects.get(
+                    userId=user
+                )
+                ser = ClientSerializer(client)
+            else:
+                ser = IUserSerializer(user)
+
+            return JsonResponse(
+                ser.data,
+                status=200
+            )
 
     else:
         return JsonResponse(
@@ -89,6 +111,7 @@ def LogInUser(request):
             status=404,
             safe=False
         )
+
 
 @api_view(['POST'])
 def RegisterUser(request): 
@@ -135,16 +158,7 @@ def RegisterUser(request):
 
 
     user = CreateModel(IUser, body)
-       
-    certificate = CreateModel(Certificate, {
-        'id' : GetNextId(Certificate),
-        'authorityName' : getCertAuthorityName(),
-        'pemPath' : getPathForDB(pemPath),
-        'keyPath' : getPathForDB(keyPath),
-        'certificateName' : body['username'],
-        'userId' : user
-    })
-
+    
     if (body['userType'].lower() == 'client'):
         client = CreateModel(Client, {
             'id' : GetNextId(Client),
@@ -168,25 +182,38 @@ def RegisterUser(request):
         cardNumber = BankNumbers.GenerateCardNumber(cardProcessor)
         td = timedelta(days= 365*4)
         validUntil = (datetime.now()+ td).strftime("%Y-%m-%d")
-        
+        pin = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8') #VRATITI NA FRONT PRILIKOM REGISTROVANJA DA BI KORISNIK ZNAO PIN I CVC 
+        cvc = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')
         card = CreateModel(Card,{
             'id': GetNextId(Card),
             'cardHolder': body['fullName'],
             'cardNumber': cardNumber,
-            'cvc': SHA256.new(data = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8')).hexdigest(),
-            'pin': SHA256.new(data = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')).hexdigest(),
+            'cvc': SHA256.new(data = cvc).hexdigest(),
+            'pin': SHA256.new(data = pin).hexdigest(),
             'cardProcessor':cardProcessor.__str__(),
             'cardType' :cardType.__str__(),
             'validUntil': validUntil,
             'accountFK' : account
         })
+        card.pin = pin.decode('utf-8')
+        card.cvc = cvc.decode('utf-8')
+        cardserializer=CardSerializer(card) 
+
+        # cardserializer.data['key'] = 
+        jsonRet = copy.deepcopy(dict(cardserializer.data))
+        jsonRet['key'] = LoadKey(keyPath).export_key().decode('utf-8')
+
+        print(jsonRet)
+
+        return JsonResponse(
+            jsonRet,
+            status=200
+        )
         
-        return JsonResponse(ClientSerializer(client).data)
     else:
         return JsonResponse(
             IUserSerializer(user).data
         )
-
 
 #endregion
 
@@ -253,7 +280,6 @@ def AccInfo(request):
 
 @api_view(['POST'])
 def AccTransactions(request):
-    
     body = JSONParser().parse(request)
     accNum = body['accountNumber']
     obj =list(TrMyAccountInfo.objects.filter(accountNumber = accNum))
@@ -272,7 +298,15 @@ def CreateAccount(request):
     '''
         Create new account for existing client
     '''
-    account_data = JSONParser().parse(request)
+    requestStr = json.loads(request.body.decode('utf-8'))
+    
+    account_data = json.loads(
+            DecryptTextRSA(
+            requestStr['fromData'],
+            LoadKey(GetCertificateFilePath(False))     
+        )
+    )
+
     account_curr = account_data['currency']
     client_id = account_data['clientId']
     try:

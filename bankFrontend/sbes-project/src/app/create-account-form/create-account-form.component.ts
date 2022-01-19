@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountModel } from '../models/account.model';
 import { AccountService } from '../services/account.service';
-
+import * as CryptoJS from 'crypto-js';
+import {JSEncrypt} from 'jsencrypt';
 @Component({
   selector: 'app-create-account-form',
   templateUrl: './create-account-form.component.html',
@@ -17,9 +18,13 @@ export class CreateAccountFormComponent implements OnInit {
   public accountNew : AccountModel;
   public accountPostoji : AccountModel;
   public accounts : AccountModel[];
+  private publicKey : string;
+  private dataString : string;
+
+
   constructor(private formBuilder : FormBuilder,private accountService : AccountService,private router : Router) { 
     this.accounts= JSON.parse(localStorage.getItem('userAccounts')!);
-
+    this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
     
     this.account = JSON.parse(localStorage.getItem('account')!);
     this.accountForm = this.formBuilder.group({
@@ -39,6 +44,10 @@ export class CreateAccountFormComponent implements OnInit {
   public submitForm(data : any){
     
     console.log(data);
+    this.dataString = JSON.stringify(data);
+
+    data = this.encryptWithPublicKey(this.dataString);
+    console.log(data)
     
     if(!this.accountForm.valid){
       window.alert('Not valid!');
@@ -65,4 +74,11 @@ export class CreateAccountFormComponent implements OnInit {
     });
     }
   }
+  public encryptWithPublicKey(valueToEncrypt: any): string {
+    let encrypt = new JSEncrypt();
+    encrypt.setPublicKey(this.publicKey);
+    return encrypt.encrypt(String(valueToEncrypt));
+  }
 }
+
+

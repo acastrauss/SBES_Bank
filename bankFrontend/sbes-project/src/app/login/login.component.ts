@@ -23,14 +23,14 @@ export class LoginComponent implements OnInit {
   public userName : any;
   private publicKey : string;
   private dataString : string;
+  private dataMess : string;
+  private fileName : string;
+  private privateKey : any;
 
   constructor(private formBuilder : FormBuilder,
     private ClientService : ClientService,private http:HttpClient,private router : Router) {
 
-     // this.users = JSON.parse(localStorage.getItem('users')!);  /////////
-
      this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
-
 
       this.loginFrom = this.formBuilder.group({
         username:['',[Validators.required]],
@@ -55,16 +55,24 @@ export class LoginComponent implements OnInit {
       window.alert('Not valid!');
       return;
     }
-    console.log(data['password']);
     data['password']= CryptoJS.SHA256(data['password']).toString();
-    console.log(data['password']);
 
-    this.dataString = JSON.stringify(data);
+    data.message = "bilo sta";
 
-    data = this.encryptWithPublicKey(this.dataString);
+    data.signature = CryptoJS.SHA256(data.message).toString();
     
-    console.log(data);
+    this.dataMess = JSON.stringify(data.signature);         //signature kriptovano,mess obicna por
+    data.signature = this.encryptWithPrivateKey(this.dataMess).toString();
+    
+    localStorage.setItem('signature', data.signature);
+    
+    for(var i in data){
+      if(i != 'signature'){
+        data[i]= this.encryptWithPublicKey(data[i]);
+      }
+    }
 
+    console.log(data);
     this.ClientService.logIn(data).subscribe((client : any) =>{
       console.log(client.userType);
       if(client.userType == "admin"){
@@ -83,7 +91,6 @@ export class LoginComponent implements OnInit {
     })
   }
 
-
   public encryptWithPublicKey(valueToEncrypt: string): string {
 
     let encrypt = new JSEncrypt();
@@ -91,5 +98,27 @@ export class LoginComponent implements OnInit {
     return encrypt.encrypt(valueToEncrypt);
   }
 
+  public encryptWithPrivateKey(valueToEncrypt: string): string {
 
+    let encrypt = new JSEncrypt();
+    encrypt.setPrivateKey(this.privateKey);
+    return encrypt.encrypt(valueToEncrypt);
+  }
+
+  public onFileSelected(event : any) {
+
+    const file:File = event.target.files[0];
+
+    let fileReader : FileReader = new FileReader();
+
+    if (file) {
+
+        this.fileName = file.name;
+        fileReader.onload = (event)=>{
+          this.privateKey = fileReader.result;
+        }
+        fileReader.readAsText(file);
+     
+    }
+}
 }

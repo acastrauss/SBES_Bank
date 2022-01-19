@@ -4,12 +4,14 @@ from OpenSSL import crypto
 import modules.Certificates.selfSigned as selfSigned
 import os
 
-
+from Crypto.Hash import SHA256
    
 import base64
 
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5 as sign
+
 
 def getPathForDB(path)->str:
     '''
@@ -46,6 +48,8 @@ def GetCertificateFilePath(public:bool, username:str=None)->str:
             'UserCertificates',
             username + extension
         )
+
+        print(cerPath)
 
     else:
         CN = selfSigned.getCertAuthorityName()
@@ -90,9 +94,26 @@ def EncryptTextRSA(text:str, key:RSA.RsaKey)->str:
 
 def DecryptTextRSA(text:str, key:RSA.RsaKey)->str:
     """Decrypt's the given string input. The library works on bytes."""
-
     message_bytes = text.encode("utf-8")
     cipher = PKCS1_v1_5.new(key)
     decrypted_bytes = cipher.decrypt(base64.b64decode(message_bytes), "dummy text")
     # convert the bytes to string and return
     return decrypted_bytes.decode("utf-8")
+
+def CheckUserSignature(username:str, message:str, signature:str)->bool:
+    userPublicKey = LoadKey(
+            GetCertificateFilePath(True, username)
+        )
+
+    if(userPublicKey is None): # user doesn't exists
+        return False
+    else:
+        signValidator = sign.new(userPublicKey)
+        try:
+            s = SHA256.new(data=message.encode('utf-8'))
+            s.update(message.encode('utf-8'))
+
+            signValidator.verify(s, signature.encode('utf-8'))
+            return True
+        except ValueError:
+            return False
