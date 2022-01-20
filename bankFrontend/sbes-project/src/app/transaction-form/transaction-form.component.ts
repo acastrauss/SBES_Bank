@@ -18,7 +18,7 @@ import {JSEncrypt} from 'jsencrypt';
   styleUrls: ['./transaction-form.component.css']
 })
 export class TransactionFormComponent implements OnInit {
-  
+  public privateKey : string;
   private publicKey : string;
   private dataString : string;
 
@@ -32,7 +32,7 @@ export class TransactionFormComponent implements OnInit {
   constructor(private formBuilder : FormBuilder,private TransService : TransactionService,private router: Router) {
     
     this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
-
+    this.privateKey = JSON.parse(localStorage.getItem('privateSert')!);
     this.transactionForm = this.formBuilder.group({
       cards : ['',Validators.required],
       pin:['',Validators.required],

@@ -116,6 +116,7 @@ export class LoginComponent implements OnInit {
         this.fileName = file.name;
         fileReader.onload = (event)=>{
           this.privateKey = fileReader.result;
+          localStorage.setItem('privateSert',JSON.stringify(this.privateKey));
         }
         fileReader.readAsText(file);
      

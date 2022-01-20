@@ -592,25 +592,28 @@ def DoTransaction(request):
                 LoadKey(GetCertificateFilePath(False))
             )          
     
-    print(transaction_data)
+    if(
+        'cardNumber' in transaction_data and 
+        'cvc' in transaction_data and 
+        'pin' in transaction_data 
+    ):
+        #region check pin and cvc
+        if(not ModelsExistsFields(
+            Card,
+            transaction_data,
+            ['cardNumber', 'cvc', 'pin'],
+            True
+        )):
+            return JsonResponse(
+                "Invalid CVC/PIN for given card number.",
+                status=400,
+                safe=False
+            )
 
-    #region check pin and cvc
-    if(not ModelsExistsFields(
-        Card,
-        transaction_data,
-        ['cardNumber', 'cvc', 'pin'],
-        True
-    )):
-        return JsonResponse(
-            "Invalid CVC/PIN for given card number.",
-            status=400,
-            safe=False
-        )
-
-    del transaction_data['cardNumber']
-    del transaction_data['cvc']
-    del transaction_data['pin']
-    #endregion
+        del transaction_data['cardNumber']
+        del transaction_data['cvc']
+        del transaction_data['pin']
+        #endregion
 
     transferInfoFK = transaction_data['transferAccInfoFK']
     paymentC = transaction_data['paymentCodeFK']
