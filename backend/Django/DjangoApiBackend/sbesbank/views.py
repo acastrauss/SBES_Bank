@@ -1,6 +1,7 @@
 
 # from tabnanny import check
 # from lib2to3.pgen2.token import CIRCUMFLEXEQUAL
+from sqlite3 import Cursor, connect
 from django.core import exceptions
 from re import T
 from django.http import JsonResponse
@@ -57,8 +58,10 @@ def LogInUser(request):
         else:
             body[k] = requestStr[k]
 
-    if(body['signature'] and body['message']):
+    if(body['signature'] != 'false'):
         # check user signature
+        print("Checking for user signature")
+        
         if(
             CheckUserSignature(body['username'], body['message'], body['signature']) and
             ModelsExistsFields(IUser, body, ['username'], True)
@@ -81,6 +84,7 @@ def LogInUser(request):
             )
 
         else:
+            print("Invalid signature.")
             return JsonResponse(
                 "Invalid signature for given username.",
                 status=404,
@@ -88,6 +92,8 @@ def LogInUser(request):
             )
             
     elif (ModelsExistsFields(IUser, body, ['username', 'password'], True)):
+            print("Checking for user password")
+            
             user = IUser.objects.get(
                 username=body['username'],
                 password=body['password']
@@ -504,7 +510,7 @@ def TrMyAcc(request):
             status=404,
             safe=False
         )
-
+        
 @api_view(['POST'])
 def CreatePayment(request):
     '''
@@ -1019,3 +1025,40 @@ def GetUserPrivateKey(request):
         return JsonResponse(status=404, safe=False)
 
 #endregion
+
+import psycopg2
+
+@api_view(['POST'])
+def TestSqlInjection(request): 
+    requestStr = json.loads(request.body.decode('utf-8'))
+    print(requestStr["message"])
+    connection = psycopg2.connect(
+        user= "postgres",
+        password="admin",
+        host = "localhost",
+        port="5432",
+        database= "sbesbank"
+    )
+
+    
+    cursor:Cursor = connection.cursor()
+    cursor.execute('''SELECT * FROM SQLINJECTIONTEST %s;''' % (requestStr["message"]))
+    
+
+
+    connection.commit();
+
+    cursor.execute('SELECT * FROM SQLINJECTIONTEST;')
+
+    res = cursor.fetchall();
+
+    cursor.close()
+    connection.close()
+
+    return JsonResponse(
+        "SQL injection succeded." if len(res) == 0 else "SQL injection failed.",
+        safe=False, 
+        status=200
+    )
+
+

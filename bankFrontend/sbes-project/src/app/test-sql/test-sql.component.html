@@ -1,0 +1,11 @@
+<h2 class="form">Test form sql injection</h2>
+<hr>
+<div class="form">
+    <form [formGroup]="testForm" (ngSubmit)="submitForm(testForm.value)">
+        <div class="form-group">
+            <label for="message">Message</label>
+            <input type="text"  id="message" name="message" [(ngModel)]="messageUpit" class="form-control" formControlName="message" readonly>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!testForm.valid">Submit</button>
+    </form>
+</div>

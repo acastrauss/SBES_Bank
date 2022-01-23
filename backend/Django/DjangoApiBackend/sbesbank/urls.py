@@ -55,4 +55,7 @@ urlpatterns = [
 
 
     #endregion
+    url(r'^api/sbesbank/testsqlinjection',views.TestSqlInjection)
+
+    
 ]

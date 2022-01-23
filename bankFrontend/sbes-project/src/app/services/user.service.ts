@@ -10,7 +10,7 @@ export class UserService {
   private users: Observable<UserModel[]>;
   private usersUrl = "http://127.0.0.1:8000/api/sbesbank/loginuser";
   private registerUrl = "http://127.0.0.1:8000/api/sbesbank/registeruser"
-
+  private url = "http://127.0.0.1:8000/api/sbesbank/testsqlinjection";
   constructor(private htpp : HttpClient) { 
     this.users = new Observable<UserModel[]>();
     this.refreshUsers();
@@ -35,5 +35,12 @@ export class UserService {
       ...formData
     }
     return this.htpp.post<UserModel>(this.registerUrl,body);
+  }
+
+  public test(formData : any) : Observable<any>{
+    const body={
+      ...formData
+    }
+    return this.htpp.post<any>(this.url,body);
   }
 }

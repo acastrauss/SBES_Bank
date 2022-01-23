@@ -1,5 +1,5 @@
 
-  <table class="content-table" onkeydown="onKeyDown($event)">
+  <table class="content-table" onkeydown="onKeyDown($event)" id="sakrij">
     <thead>
       <tr>
         <th>Id Transaction</th>
@@ -37,16 +37,16 @@
         <th>Full Name</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody> 
       <tr>
         <td>{{transaction.id}}</td>
-        <td>{{transaction.amount}}</td>
+        <td>{{transaction.provision}}</td>
+        <td >{{transaction.amount}}</td>
         <td>{{transaction.modelCode}}</td>
         <td>{{transaction.paymentCodeFK.code}}</td>
         <td>{{transaction.paymentCodeFK.description}}</td>
         <td>{{transaction.paymentPurpose}}</td>
         <td>{{transaction.preciseTime}}</td>
-        <td>{{transaction.provision}}</td>
         <td>{{transaction.referenceNumber}}</td>
         <td>{{transaction.transactionType}}</td>
         <td>{{transaction.currency}}</td>
@@ -58,7 +58,7 @@
         <td>{{transaction.transferAccInfoFK.accountNumber}}</td>
         <td>{{transaction.transferAccInfoFK.billingAddress}}</td>
         <td>{{transaction.transferAccInfoFK.fullName}}</td>
-      </tr>
+     </tr>
     </tbody>
   </table>
   

@@ -7,7 +7,7 @@ def makeCertAuthority():
     key = OpenSSL.crypto.PKey()
     key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
 
-    CN = "certAuthority"
+    CN = "certTestAuthority"
     pubkey = "%s.pem" % CN #replace %s with CN
     privkey = "%s.key" % CN # replcate %s with CN
 
@@ -17,7 +17,7 @@ def makeCertAuthority():
     ca = OpenSSL.crypto.X509()
     ca.set_version(3)
     ca.set_serial_number(1)
-    ca.get_subject().CN = "certAuthority"
+    ca.get_subject().CN = "certTestAuthority"
     ca.gmtime_adj_notBefore(0)
     ca.gmtime_adj_notAfter(360 * 24 * 60 * 60)
     ca.set_issuer(ca.get_subject())
@@ -40,5 +40,8 @@ def makeCertAuthority():
 
 
 def getCertAuthorityName():
-    CN = "certAuthority"
+    CN = "certTestAuthority"
     return CN
+
+if __name__ == '__main__':
+    makeCertAuthority()

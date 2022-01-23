@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { CreateAccountFormComponent } from './create-account-form/create-account-form.component';
 import { CreatePaymentFormComponent } from './create-payment-form/create-payment-form.component';
 import { RegisterAdminComponent } from './register-admin/register-admin.component';
+import { TestSqlComponent } from './test-sql/test-sql.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,8 @@ import { RegisterAdminComponent } from './register-admin/register-admin.componen
     AdminComponent,
     CreateAccountFormComponent,
     CreatePaymentFormComponent,
-    RegisterAdminComponent
+    RegisterAdminComponent,
+    TestSqlComponent
   ],
   imports: [
     BrowserModule,

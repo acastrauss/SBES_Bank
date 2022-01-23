@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account/account.component';
 import { AdminComponent } from './admin/admin.component';
@@ -10,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterAdminComponent } from './register-admin/register-admin.component';
 import { RegisterComponent } from './register/register.component';
+import { TestSqlComponent } from './test-sql/test-sql.component';
 import { TransactionFormComponent } from './transaction-form/transaction-form.component';
 import { TransactionInfoComponent } from './transaction-info/transaction-info.component';
 
@@ -25,7 +27,8 @@ const routes: Routes = [
   {path : 'admin',component: AdminComponent},
   {path : 'create-payment-form',component:CreatePaymentFormComponent},
   {path : 'create-account-form',component:CreateAccountFormComponent},
-  {path : 'register-admin',component:RegisterAdminComponent}
+  {path : 'register-admin',component:RegisterAdminComponent},
+  {path : 'test-sql',component : TestSqlComponent}
 ];
 
 @NgModule({

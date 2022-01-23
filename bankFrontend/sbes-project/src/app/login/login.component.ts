@@ -11,6 +11,7 @@ import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
 import * as CryptoJS from 'crypto-js';
 import {JSEncrypt} from 'jsencrypt';
+import * as rs from 'jsrsasign';
 
 @Component({
   selector: 'app-login',
@@ -49,7 +50,7 @@ export class LoginComponent implements OnInit {
     return this.loginFrom.get('password') ;
   }
 
-  public submitForm(data : any){
+  public async submitForm(data : any){
   
     if(!this.loginFrom.valid){
       window.alert('Not valid!');
@@ -58,12 +59,20 @@ export class LoginComponent implements OnInit {
     data['password']= CryptoJS.SHA256(data['password']).toString();
 
     data.message = "bilo sta";
-
     data.signature = CryptoJS.SHA256(data.message).toString();
-    
-    this.dataMess = JSON.stringify(data.signature);         //signature kriptovano,mess obicna por
+    this.dataMess = data.signature;
+             //signature kriptovano,mess obicna por
     data.signature = this.encryptWithPrivateKey(this.dataMess).toString();
     
+
+    // let pkey = rs.KEYUTIL.getKey(this.privateKey);
+    // var sign = new rs.KJUR.crypto.Signature({
+    //   "alg":"SHA1withRSA"
+    // });
+    // sign.init(pkey);
+    // var signVal = sign.signString(data.signature);
+    // data.signature = signVal;
+
     localStorage.setItem('signature', data.signature);
     
     for(var i in data){
