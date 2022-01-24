@@ -12,10 +12,15 @@ from enum import Enum
 
 class CardType(Enum):
     DEBIT = 0
-    CREDIT = 0
+    CREDIT = 1
 
     def __str__(self) -> str:
-        return str(self.value)
+        if(self.value == 0):
+            return "DEBIT"
+        elif(self.value):
+            return "CREDIT"
+        else:
+            return "UNDEFINED CARD TYPE"
 
     def __int__(self) -> int:
         return int(self.value)

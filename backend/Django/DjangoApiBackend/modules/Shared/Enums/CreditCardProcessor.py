@@ -17,7 +17,14 @@ class CreditCardProcessor(Enum):
     AMERICAN_EXPRESS = 2
 
     def __str__(self) -> str:
-        return str(self.value)
+        if(self.value == 0):
+            return "VISA"
+        elif(self.value == 1):
+            return "MASTER_CARD"
+        elif(self.value == 2):
+            return "AMERICAN_EXPRESS"
+        else:
+            return "UNDEFINED CARD TYPE"
 
     def __int__(self) -> int:
         return int(self.value)
