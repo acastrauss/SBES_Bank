@@ -1,12 +1,22 @@
-<div class="container" *ngIf="transactionsAcc !== null">
-    <app-transaction-spliter [transactionsAcc]="transactionsAcc">
-    </app-transaction-spliter>
- </div>
- <div class="container" *ngIf="cardsAccount !== null">
-    <app-card-spliter [cardsAccount]="cardsAccount">
-    </app-card-spliter>
- </div>
-<button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/card']" >Create Card</button>
-<button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/transaction-form']" >Create Transaction</button>
-<button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/create-account-form']" >Create Account</button>
-<button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/create-payment-form']" >Create Payment</button>
+<div class="grid-containerApp">
+   <div class="item1App">
+      <div class="container" *ngIf="transactionsAcc !== null">
+         <app-transaction-spliter [transactionsAcc]="transactionsAcc">
+         </app-transaction-spliter>
+      </div>
+   </div>
+   
+   <div class="item3App">
+      <div class="container" *ngIf="cardsAccount !== null">
+         <app-card-spliter [cardsAccount]="cardsAccount">
+         </app-card-spliter>
+      </div>
+   </div>
+  
+   <div class="item4App">
+      <button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/card']" >Create Card</button><br><hr style="color:white;background-color:white">
+      <button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/transaction-form']" >Create Transaction</button><br><hr style="color:white;background-color:white">
+      <button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/create-account-form']" >Create Account</button><br><hr style="color:white;background-color:white">
+      <button *ngIf="account.blocked === false" class="btn btn-primary" [routerLink]="['/create-payment-form']" >Create Payment</button><br><hr style="color:white;background-color:white">
+   </div>
+</div>

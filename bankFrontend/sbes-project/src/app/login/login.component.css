@@ -8,3 +8,39 @@
 .file-input {
     display: none;
 }
+
+.grid-containerApp {
+    display: grid;
+    grid-gap: 50px 100px;
+    /*grid-template-columns: repeat(3, 1fr);*/
+    /* grid-template-rows: minmax(300, auto); */
+  
+    grid-template-areas:
+      "c a a"
+      "a d d";
+    align-items: start;
+  }
+  
+  .item1App {
+    grid-area: a;
+  }
+  
+  .item2App {
+    grid-area: d;
+  }
+  
+  .item3App{
+    grid-area: b;
+  }
+  
+  .item4App{
+    grid-area: c;
+  }
+  
+  .item5App{
+    grid-area: e;
+  }
+  
+  .item6App{
+    grid-area: f;
+  }

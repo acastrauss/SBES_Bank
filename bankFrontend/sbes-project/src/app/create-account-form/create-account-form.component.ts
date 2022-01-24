@@ -20,7 +20,7 @@ export class CreateAccountFormComponent implements OnInit {
   public accounts : AccountModel[];
   private publicKey : string;
   private dataString : string;
-
+  private stringCurrency : string;
 
   constructor(private formBuilder : FormBuilder,private accountService : AccountService,private router : Router) { 
     this.accounts= JSON.parse(localStorage.getItem('userAccounts')!);
@@ -44,6 +44,7 @@ export class CreateAccountFormComponent implements OnInit {
   public submitForm(data : any){
     
     console.log(data);
+    this.stringCurrency = data.currency
     this.dataString = JSON.stringify(data);
 
     data = this.encryptWithPublicKey(this.dataString);
@@ -57,9 +58,10 @@ export class CreateAccountFormComponent implements OnInit {
   }
 
   public authenticate(data : any){
- 
-    this.accountPostoji = this.accounts.filter((accF : AccountModel)=>accF.currency === data.currency)[0];
+    console.log(data.currency)
+    this.accountPostoji = this.accounts.filter((accF : AccountModel)=>accF.currency == this.stringCurrency)[0];
 
+    console.log(this.accountPostoji)
     if(this.accountPostoji){
       alert("Vec posjedujete racun u istoj valuti!");
     }

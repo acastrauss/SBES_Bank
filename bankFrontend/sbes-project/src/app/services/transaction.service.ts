@@ -13,6 +13,7 @@ export class TransactionService {
   private createTransactionUrl="http://127.0.0.1:8000/api/sbesbank/doTransaction";
   private checkCurrencynUrl = "http://127.0.0.1:8000/api/sbesbank/checkCurrency";
   private createPaymentUrl = "http://127.0.0.1:8000/api/sbesbank/createpayment";
+  private getPaymentUrl = "http://127.0.0.1:8000/api/sbesbank/createpayment";
   constructor(private http : HttpClient) {
     //this.transactions = new Observable<AccTransactionsModel[]>();
     //this.refreshTransactions();
@@ -53,5 +54,6 @@ export class TransactionService {
     };
     return this.http.post<any>(this.createPaymentUrl,body);
   }
+
 
 }

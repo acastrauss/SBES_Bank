@@ -1,23 +1,34 @@
-<table class="content-table" *ngIf="admin">
-    <thead>
-      <tr>
-        <th>Client Name</th>
-        <th>Account Number</th>
-        <th>Date Created</th>
-        <th>Balance</th>
-        <th>State Account</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let account of accounts; let i = index">
-        <td>{{account.clientId.userId.fullName}}</td>
-        <td>{{account.accountNumber}}</td>
-        <td>{{account.dateCreated}}</td>
-        <td>{{account.accountBalance}}  {{" "}} {{account.currency}}</td>
-        <td>
-            <input (change)="checkValue($event,account.accountNumber)" [(ngModel)]="account.blocked" type="checkbox"/>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button class="mod-button" [routerLink]="['/register-admin',]">Register New Admin</button>
+<div class="grid-containerApp ">
+  <div class="item1App">
+    <table class="content-table" *ngIf="admin">
+      <thead>
+        <tr>
+          <th>Client Name</th>
+          <th>Account Number</th>
+          <th>Date Created</th>
+          <th>Balance</th>
+          <th>State Account</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accounts; let i = index">
+          <td>{{account.clientId.userId.fullName}}</td>
+          <td>{{account.accountNumber}}</td>
+          <td>{{account.dateCreated}}</td>
+          <td>{{account.accountBalance}}  {{" "}} {{account.currency}}</td>
+          <td>
+              <input (change)="checkValue($event,account.accountNumber)" [(ngModel)]="account.blocked" type="checkbox"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="item3App">
+    <button class="btn btn-primary" [routerLink]="['/register-admin',]">Register New Admin</button>
+  </div>
+  <div class="item4App">
+    
+  </div>
+  
+
+</div>

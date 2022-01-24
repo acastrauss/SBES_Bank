@@ -1,4 +1,10 @@
-<div class="container" *ngIf="userAccounts !== null">
-    <app-account-spliter [userAccounts]="userAccounts">
-    </app-account-spliter>
- </div>
+<div class="grid-containerApp">
+    <div class="item1App">
+
+    </div>
+    <div class="item3App" *ngIf="logInClient">
+        <app-account-spliter [userAccounts]="userAccounts">
+        </app-account-spliter>
+     </div>
+</div>
+

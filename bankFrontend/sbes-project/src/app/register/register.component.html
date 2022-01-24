@@ -38,9 +38,9 @@
         <div class="error-message" *ngIf="email.errors?.['required']">Email is required</div>
         <div class="error-message" *ngIf="email.errors?.['email']">Email is not correct</div>
         <br>
-        <div class="form-group">
+        <div class="form-group" >
             <label for="birthDate">Birth date</label>
-            <input type="date" id="birthDate" class="form-control" value="2021-07-22" formControlName="birthDate">
+            <input type="date" id="birthDate" class="form-control" max="2004-01-25" formControlName="birthDate">
         </div>
         <div class="error-message" *ngIf="birthDate.errors?.['required']">BirthDate is required</div>
         <br>

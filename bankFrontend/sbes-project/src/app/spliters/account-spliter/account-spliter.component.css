@@ -9,6 +9,7 @@
   border-radius: 1.5em;
   border: 1px solid #030303;
   text-align: center;
+  background-color:rgb(241, 241, 241);
 }
   
   .control {
@@ -59,9 +60,9 @@
     transform: rotate(225deg);
   }
   .carousel.mod-button {
-    background-color: #919192; /* Green */
+    background-color:seagreen; /* Green */
     border: none;
-    color: white;
+    color:salmon;
     display: flex;
     width: 80px;
     position: absolute;

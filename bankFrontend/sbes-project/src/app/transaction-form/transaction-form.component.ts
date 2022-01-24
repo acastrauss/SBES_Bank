@@ -12,6 +12,7 @@ import { TransactionService } from '../services/transaction.service';
 
 import * as CryptoJS from 'crypto-js';
 import {JSEncrypt} from 'jsencrypt';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-transaction-form',
   templateUrl: './transaction-form.component.html',
@@ -26,11 +27,16 @@ export class TransactionFormComponent implements OnInit {
   public transactionForm : FormGroup;
   public account : AccountModel;
   public currency : string;
+  public payment : PaymentCodeFKModel[];
+  public paymentUrl : string="http://127.0.0.1:8000/api/sbesbank/getpaymentcodes";
   public json : any;
   public json2: any;
+  public paymentCode  : PaymentCodeFKModel[];
+  public paymentCodeDesc : PaymentCodeFKModel;
   public cardsAccount : CardModel[] = [];
-  constructor(private formBuilder : FormBuilder,private TransService : TransactionService,private router: Router) {
-    
+  constructor(private formBuilder : FormBuilder,private TransService : TransactionService,private router: Router,private http : HttpClient) {
+    this.getPayments();
+    this.paymentCode = JSON.parse(localStorage.getItem('paymentPurpose')!);
     this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
     this.privateKey = JSON.parse(localStorage.getItem('privateSert')!);
     this.transactionForm = this.formBuilder.group({
@@ -41,7 +47,6 @@ export class TransactionFormComponent implements OnInit {
       accountToName:['',[Validators.required]],
       accountToBillingAdress:['',[Validators.required]],
       modelCode:['',[Validators.required]],
-      code:['',[Validators.required]],
       description:['',[Validators.required]],
       paymentPurpose:['',[Validators.required]],
       amount:['',[Validators.required]],
@@ -87,10 +92,6 @@ export class TransactionFormComponent implements OnInit {
     return this.transactionForm.get('modelCode') ;
   }
 
-  public get code() {
-    return this.transactionForm.get('code');
-  }
-
   public get description() {
     return this.transactionForm.get('description') ;
   }
@@ -111,7 +112,12 @@ export class TransactionFormComponent implements OnInit {
 
     this.transactionObject.amount = data.amount;
     this.transactionObject.modelCode=data.modelCode;
+
+
     this.transactionObject.paymentCodeFK.code = data.code;
+
+    this.paymentCodeDesc = this.paymentCode.filter((pay : PaymentCodeFKModel)=>pay.description === data.description)[0];
+    this.transactionObject.paymentCodeFK.code = this.paymentCodeDesc.code;
     this.transactionObject.paymentCodeFK.description = data.description;
     this.transactionObject.paymentPurpose= data.paymentPurpose;
     this.transactionObject.referenceNumber=data.referenceNumber;
@@ -152,6 +158,18 @@ export class TransactionFormComponent implements OnInit {
     encrypt.setPublicKey(this.publicKey);
     return encrypt.encrypt(String(valueToEncrypt));
   }
+
+  public getPayments():PaymentCodeFKModel[]{
+      this.http.get<PaymentCodeFKModel[]>(this.paymentUrl).subscribe((payments : PaymentCodeFKModel[])=>{
+        this.payment=payments;
+        localStorage.setItem('paymentPurpose',JSON.stringify(this.payment));
+        
+      console.log(this.payment)
+      });
+  return this.payment;
+}
+
+
 
   public authenticate(transaction : AccTransactionsModel, data:any){
  

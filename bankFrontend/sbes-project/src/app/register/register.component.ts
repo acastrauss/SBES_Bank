@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     this.users = JSON.parse(localStorage.getItem('users')!);  /////////
     
     this.publicKey = JSON.parse(localStorage.getItem('sertificate')!); 
-    
+              
 
     this.registerForm = this.formBuilder.group({
       username:['',[Validators.required]],
@@ -40,6 +40,8 @@ export class RegisterComponent implements OnInit {
       jmbg:['',[Validators.required,Validators.pattern]]
     })
 
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("birthDate")?.setAttribute('min', today);
   }
   ngOnInit(): void {
   }

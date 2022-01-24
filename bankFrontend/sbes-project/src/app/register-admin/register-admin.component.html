@@ -26,7 +26,7 @@
         <br>
         <div class="form-group">
             <label for="jmbg">Jmbg</label>
-            <input type="text" pattern="^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[012])[0-9]{9}$" id="jmbg" class="form-control" formControlName="jmbg">
+            <input type="text" pattern="^([0-9]{13})$" id="jmbg" class="form-control" formControlName="jmbg">
         </div>
         <div class="error-message" *ngIf="jmbg.errors?.['required']">Jmbg is required</div>
         <div class="error-message" *ngIf="email.errors?.['pattern']">Jmbg is not correct</div>
@@ -40,7 +40,7 @@
         <br>
         <div class="form-group">
             <label for="birthDate">Birth date</label>
-            <input type="date" id="birthDate" class="form-control" value="2021-07-22" formControlName="birthDate">
+            <input type="date" id="birthDate" class="form-control" max="2004-01-25" formControlName="birthDate">
         </div>
         <div class="error-message" *ngIf="birthDate.errors?.['required']">BirthDate is required</div>
         <br>
