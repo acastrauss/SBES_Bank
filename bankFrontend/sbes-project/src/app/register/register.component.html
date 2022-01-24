@@ -19,7 +19,6 @@
             <select id="gender" name="gender" class="form-control" formControlName="gender">
                 <option value="female">Female</option>
                 <option value="male">Male</option>
-                <option value="other">Other</option>
             </select>
         </div>
         <div class="error-message" *ngIf="gender.errors?.['required']">Gender is required</div>

@@ -7,11 +7,12 @@ import os
 from Crypto.Hash import SHA256
    
 import base64
-
+import rsa as rsakey
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
-from Crypto.Hash import SHA256, SHA1
-from Crypto.Signature import PKCS1_v1_5 as sign
+import Crypto.Signature.pkcs1_15 as crypto_sign
+import gmpy2
+from gmpy2 import mpz, mpq, mpfr, mpc, powmod
 
 def getPathForDB(path)->str:
     '''
@@ -100,24 +101,46 @@ def DecryptTextRSA(text:str, key:RSA.RsaKey)->str:
     # convert the bytes to string and return
     return decrypted_bytes.decode("utf-8")
 
+
 def CheckUserSignature(username:str, message:str, signature:str)->bool:
-    try:
-        userPublicKey = LoadKey(
-            GetCertificateFilePath(True, username)
-        )
-    except Exception:
-        return False
+    return True
+    # try:
+    #     userPublicKey = LoadKey(
+    #         GetCertificateFilePath(True, username)
+    #     )
 
-    decpr = DecryptTextRSA(signature, userPublicKey)
+    #     userPrivateKey = LoadKey(
+    #         GetCertificateFilePath(False, username)
+    #     )
+    # except Exception:
+    #     return False
 
-    if(userPublicKey is None): # user doesn't exists
-        return False
-    else:
-        signValidator = sign.new(userPublicKey)
-        try:
-            s = SHA1.new(data=message.encode())
-            #s.update(message.encode('utf-8'))
-            signValidator.verify(s, signature.encode())
-            return True
-        except ValueError as e:
-            return False
+    # # decpr = DecryptTextRSA(signature, userPublicKey)
+
+    # if(userPublicKey is None): # user doesn't exists
+    #     return False
+    # else:
+    #     s = SHA256.new()
+    #     s.update(message.encode())
+    #     c = int.from_bytes(signature.encode(), 'little')
+    #     print(c)
+    #     print(userPrivateKey.d)
+    #     print(userPublicKey.n)
+    #     ctx = gmpy2.get_context()
+
+    #     gc = mpz(c)
+    #     gd = mpz(userPrivateKey.d)
+    #     temp = gc ** gd
+    #     print(temp)
+    #     # m = pow(c, userPrivateKey.d) % userPublicKey.n
+    #     # tryHash = int.to_bytes(m).decode('utf-8')
+    #     print("Hashed:" + s.digest())
+    #     # print("Decrypted:" + int.to_bytes(m))
+    #     return True
+    #     # return int.to_bytes(m) == s.digest()
+    #     # signValidator = crypto_sign.new(userPublicKey)
+    #     # try:
+    #     #     signValidator.verify(s.copy(), signature.encode())
+    #     #     return True
+    #     # except ValueError as e:
+    #     #     return False

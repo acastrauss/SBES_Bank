@@ -1,6 +1,7 @@
 
 # from tabnanny import check
 # from lib2to3.pgen2.token import CIRCUMFLEXEQUAL
+from asyncio.windows_events import NULL
 from sqlite3 import Cursor, connect
 from django.core import exceptions
 from re import T
@@ -58,7 +59,14 @@ def LogInUser(request):
         else:
             body[k] = requestStr[k]
 
-    if(body['signature'] != 'false'):
+    signatureFlag = True
+    try:
+        signatureFlag = body['signature'] != 'false' and body['signature'] != NULL and body['signature'] != False 
+        signatureFlag = body['message'] != 'false' and body['message'] != NULL and body['message'] != False 
+    except KeyError:
+        signatureFlag = False
+
+    if(signatureFlag):
         # check user signature
         print("Checking for user signature")
         
@@ -179,8 +187,8 @@ def RegisterUser(request):
         cardNumber = BankNumbers.GenerateCardNumber(cardProcessor)
         td = timedelta(days= 365*4)
         validUntil = (datetime.now()+ td).strftime("%Y-%m-%d")
-        pin = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8') #VRATITI NA FRONT PRILIKOM REGISTROVANJA DA BI KORISNIK ZNAO PIN I CVC 
-        cvc = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')
+        pin = BankNumbers.GeneratePIN(cardNumber, accountNumber).encode('utf-8')
+        cvc = BankNumbers.GenerateCVC(cardNumber, accountNumber).encode('utf-8')
         card = CreateModel(Card,{
             'id': GetNextId(Card),
             'cardHolder': body['fullName'],

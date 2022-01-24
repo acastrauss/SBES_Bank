@@ -11,7 +11,8 @@ import { ClientModel } from '../models/client.model';
 import { ClientService } from '../services/client.service';
 import * as CryptoJS from 'crypto-js';
 import {JSEncrypt} from 'jsencrypt';
-import * as rs from 'jsrsasign';
+import { JSEncryptRSAKey } from 'jsencrypt/lib/JSEncryptRSAKey';
+
 
 @Component({
   selector: 'app-login',
@@ -57,31 +58,21 @@ export class LoginComponent implements OnInit {
       return;
     }
     data['password']= CryptoJS.SHA256(data['password']).toString();
-
-    data.message = "bilo sta";
-    data.signature = CryptoJS.SHA256(data.message).toString();
-    this.dataMess = data.signature;
-             //signature kriptovano,mess obicna por
-    data.signature = this.encryptWithPrivateKey(this.dataMess).toString();
-    
-
-    // let pkey = rs.KEYUTIL.getKey(this.privateKey);
-    // var sign = new rs.KJUR.crypto.Signature({
-    //   "alg":"SHA1withRSA"
-    // });
-    // sign.init(pkey);
-    // var signVal = sign.signString(data.signature);
-    // data.signature = signVal;
-
-    localStorage.setItem('signature', data.signature);
+    // data.message = "bilo sta";
+    // data.signature = CryptoJS.SHA256(data.message);
+    // this.dataMess = data.signature;         //signature kriptovano,mess obicna por
+    // data.signature = this.encryptWithPrivateKey(this.dataMess);
+    // localStorage.setItem('signature', data.signature);
     
     for(var i in data){
       if(i != 'signature'){
         data[i]= this.encryptWithPublicKey(data[i]);
       }
+      else {
+        console.log(i);
+      }
     }
 
-    console.log(data);
     this.ClientService.logIn(data).subscribe((client : any) =>{
       console.log(client.userType);
       if(client.userType == "admin"){
@@ -101,14 +92,12 @@ export class LoginComponent implements OnInit {
   }
 
   public encryptWithPublicKey(valueToEncrypt: string): string {
-
     let encrypt = new JSEncrypt();
     encrypt.setPublicKey(this.publicKey);
     return encrypt.encrypt(valueToEncrypt);
   }
 
   public encryptWithPrivateKey(valueToEncrypt: string): string {
-
     let encrypt = new JSEncrypt();
     encrypt.setPrivateKey(this.privateKey);
     return encrypt.encrypt(valueToEncrypt);

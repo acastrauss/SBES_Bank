@@ -18,6 +18,8 @@ export class TransactionInfoComponent implements OnInit {
    // const iDsakri= document.getElementById('iDsakri');
 
     document.addEventListener("keydown", log);
+    document.addEventListener('copy', uncopyable);
+    document.addEventListener('cut', uncopyable);
 
     this.route.paramMap.subscribe(params =>{
       this.transactionsAcc = JSON.parse(localStorage.getItem('transactionsAcc')!);
@@ -25,6 +27,11 @@ export class TransactionInfoComponent implements OnInit {
       this.transaction = this.transactionsAcc.filter((trans : AccTransactionsModel) =>
           trans.id == transId)[0];
     });
+
+    function uncopyable(event:any){
+      event.preventDefault();
+      navigator.clipboard.writeText("Ne mozete kopirati ovaj tekst.");
+    }
 
     function log(event:any) {
       
