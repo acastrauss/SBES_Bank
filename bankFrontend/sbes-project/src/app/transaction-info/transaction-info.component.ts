@@ -17,7 +17,7 @@ export class TransactionInfoComponent implements OnInit {
 
    // const iDsakri= document.getElementById('iDsakri');
 
-    document.addEventListener("keydown", log);
+    document.addEventListener("keyup", log);
     document.addEventListener('copy', uncopyable);
     document.addEventListener('cut', uncopyable);
 
@@ -34,9 +34,9 @@ export class TransactionInfoComponent implements OnInit {
     }
 
     function log(event:any) {
-      
+      console.log(event.keyCode)
       var toHide = document.getElementById("sakrij");
-      if(event.keyCode === 80){
+      if(event.keyCode == 44){
         
         var result = confirm( "Do you want to do this" );
         if(result){
