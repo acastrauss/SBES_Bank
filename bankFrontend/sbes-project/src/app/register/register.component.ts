@@ -40,8 +40,6 @@ export class RegisterComponent implements OnInit {
       jmbg:['',[Validators.required,Validators.pattern]]
     })
 
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementById("birthDate")?.setAttribute('min', today);
   }
   ngOnInit(): void {
   }
